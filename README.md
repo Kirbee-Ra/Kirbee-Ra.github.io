@@ -9,5 +9,6 @@
   <h1>라커비의 공부방</h1>
   <p>Electrical Engineering (Power Electronics) / Physics</p>
   <p>개인 위키입니다.</p>
+  <a href="resume.pdf">이력서 보기</a>
 </body>
 </html>
