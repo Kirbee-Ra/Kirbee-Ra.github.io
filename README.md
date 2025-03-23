@@ -3,12 +3,12 @@
 ---
 
 ## 카테고리
-- [전자공학](category/ElectricalEngineering)
-- [물리학](category/Physics)
-- [기초수학](category/BasicMathematics)
+- [전자공학](./category/ElectricalEngineering)
+- [물리학](./category/Physics)
+- [기초수학](./category/BasicMathematics)
 
 ---
 
 ## 용어 목록
-- [국문 용어](terminology/KIndex.md)
-- [영문 용어](terminology/EIndex.md)
+- [국문 용어](./terminology/KIndex.md)
+- [영문 용어](./terminology/EIndex.md)
