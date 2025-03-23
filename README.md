@@ -9,6 +9,6 @@
   <h1>라커비의 공부방</h1>
   <p>Electrical Engineering (Power Electronics) / Physics</p>
   <p>개인 위키입니다.</p>
-  [테스트](https://Kirbee-Ra.github.io/test.md)</a>
+  [테스트](https://Kirbee-Ra.github.io/test.md)
 </body>
 </html>
