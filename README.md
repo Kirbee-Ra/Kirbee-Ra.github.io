@@ -3,6 +3,6 @@
 ---
 
 ## 📚 카테고리
-- [전자공학](./System-Overview.md)
-- [물리학](./Circuit-Design.md)
-- [기초수학](./test.md)
+- [전자공학](./ElectricalEngineering.md)
+- [물리학](./Physics.md)
+- [기초수학](./BasicMathematics.md)
