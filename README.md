@@ -1,14 +1,10 @@
-<!-- index.html -->
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>라커비의 공부방</h1>
-  <p>Electrical Engineering (Power Electronics) / Physics</p>
-  <p>개인 위키입니다.</p>
-  [테스트](https://Kirbee-Ra.github.io/test.md)
-</body>
-</html>
+# 라커비의 공부방
+
+공부한 내용을 정리하는 공간입니다.
+
+---
+
+## 📚 카테고리
+- [전자공학](./System-Overview.md)
+- [물리학](./Circuit-Design.md)
+- [기초수학](./test.md)
