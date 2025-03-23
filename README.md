@@ -10,6 +10,11 @@
   - [전파공학]
   - [전력전자]
 - [물리학](category/Physics.md)
+  - [고전역학]
+  - [전자기학]
+  - [양자역학]
+  - [열및통계물리학]
+  - [고체물리학]
 - [기초수학](category/BasicMathematics.md)
 
 ---
