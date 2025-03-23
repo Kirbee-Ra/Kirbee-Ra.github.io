@@ -3,9 +3,9 @@
 ---
 
 ## 카테고리
-- [전자공학](./ElectricalEngineering.md)
-- [물리학](./Physics.md)
-- [기초수학](./BasicMathematics.md)
+- [전자공학](./ElectricalEngineering)
+- [물리학](./Physics)
+- [기초수학](./BasicMathematics)
 ---
 ## 용어 목록
 - [국문 용어](./KIndex.md)
