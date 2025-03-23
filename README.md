@@ -4,8 +4,7 @@
 
 ## 카테고리
 - [전자공학](category/ElectricalEngineering.md)
-- [물리학](category/Physics
-- md)
+- [물리학](category/Physics.md)
 - [기초수학](category/BasicMathematics.md)
 
 ---
