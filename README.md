@@ -7,4 +7,4 @@
 - [물리학](./Physics.md)
 - [기초수학](./BasicMathematics.md)
 ## 용어 목록
-- [한글 용어](./Index.md)
+- [한글 용어](./KIndex.md)
