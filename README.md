@@ -2,7 +2,7 @@
 
 ---
 
-## 📚 카테고리
+## 카테고리
 - [전자공학](./ElectricalEngineering.md)
 - [물리학](./Physics.md)
 - [기초수학](./BasicMathematics.md)
