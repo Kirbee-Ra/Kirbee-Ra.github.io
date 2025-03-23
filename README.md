@@ -1,44 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Power Electronics Project</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #f9f9f9;
-    }
-    header {
-      background-color: #ffffff;
-      padding: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    header img {
-      width: 60px;
-      height: auto;
-      cursor: pointer;
-    }
-    main {
-      padding: 24px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <a href="/">
-      <img src="/assets/home_icon.png" alt="Home">
-    </a>
-  </header>
+<a href="./README.md">
+  <img src="./images/home_icon.png" alt="Home" width="30" style="vertical-align: middle;">
+</a>
 
-  <main>
-    <h1>프로젝트 소개</h1>
-    <p>이 페이지는 전력전자 프로젝트 문서의 시작 페이지입니다.</p>
-    <p>이 아래로 시스템 개요, 회로 구성, 설계 파라미터, 시뮬레이션 결과 등을 작성하면 됩니다.</p>
-  </main>
-</body>
-</html>
+# 라커비의 공부방
+
+공부한 내용을 정리하는 공간입니다.
+
+---
+
+## 📚 카테고리
+- [전자공학](./System-Overview.md)
+- [물리학](./Circuit-Design.md)
+- [기초수학](./test.md)
