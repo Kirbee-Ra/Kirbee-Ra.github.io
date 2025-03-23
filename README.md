@@ -1,4 +1,4 @@
-<a href="./Home.md">
+<a href="./README.md">
   <img src="./images/home_icon.png" alt="Home" width="30" style="vertical-align: middle;">
   <span style="margin-left: 6px;">라커비의 공부방</span>
 </a>
