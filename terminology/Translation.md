@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko">
-
 <body>
 <h1>국문/영문 용어 대응표</h1>
 
