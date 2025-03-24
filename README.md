@@ -27,3 +27,4 @@
 ## 용어 목록
 - [국문 용어](./terminology/KIndex.md)
 - [영문 용어](./terminology/EIndex.md)
+- [용어 대응](./terminology/Translation.md)
