@@ -54,7 +54,7 @@
 
 ---
 ## ㅂ
-- [벅 컨버터](/EE/PowerElectronics/BuckConverter.md)  
+- [벅 컨버터](./EE/PowerElectronics/BuckConverter.md)  
 - [벅-부스트 컨버터]()  
 - [벡터]()  
 - [벡터 공간]()  
