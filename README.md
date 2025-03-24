@@ -8,7 +8,7 @@
   - [회로이론]
   - [제어공학]
   - [전파공학]
-  - [전력전자]
+  - [전력전자](./EE/PowerElectronics/PowerElectronics.md)
 - [물리학](./PHY/Physics.md)
   - [고전역학]
   - [전자기학]
