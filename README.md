@@ -6,7 +6,7 @@
 - [전자공학](./EE/ElectricalEngineering.md)
   - [전자기학]
   - [회로이론]
-  - [제어공학]
+  - [제어공학](./EE/ControlEngineering/ControlEngineering.md)
   - [전파공학]
   - [전력전자](./EE/PowerElectronics/PowerElectronics.md)
 - [물리학](./PHY/Physics.md)
