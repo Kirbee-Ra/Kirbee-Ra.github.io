@@ -23,12 +23,14 @@
 | 길이 수축     | length contraction           |
 | 그린 함수     | Green's function             |
 | 그린 정리     | Green's theorem              |
+
 ---
 ## ㄴ
 | 국문 용어         | 영문 용어                |
 |------------------|-------------------------|
 | 나이퀴스트 안정도 | Nyquist stability       |
 | 누설 인덕턴스     | leakage inductance      | 
+
 ---
 ## ㄷ
 | 국문 용어     | 영문 용어                       |
@@ -37,6 +39,7 @@
 | 동기 정류     | synchronous rectification      |
 | 동 특성       | dynamic characteristic         |
 | 디랙 델타 함수 | Dirac delta function           |
+
 ---
 ## ㄹ
 | 국문 용어         | 영문 용어               |
@@ -48,6 +51,7 @@
 | 로런츠 인자       | Lorentz factor         |
 | 로런츠 힘         | Lorentz force          |
 | 루프 이득         | loop gain              | 
+
 ---
 ## ㅁ
 | 국문 용어             | 영문 용어                   |
@@ -58,6 +62,7 @@
 | 미분 방정식           | differential equation      |
 | 민코프스키 다이어그램 | Minkowski diagram          |
 | 민코프스키 힘         | Minkowski force            |
+
 ---
 ## ㅂ
 | 국문 용어             | 영문 용어                           |
@@ -80,6 +85,7 @@
 | 비보존력             | non-conservative force             |
 | 비보존장             | non-conservative field             |
 | 발산 정리             | divergence theorem                 |
+
 ---
 ## ㅅ
 | 국문 용어               | 영문 용어                             |
@@ -93,6 +99,7 @@
 | 스너버 회로             | snubber circuit                      |
 | 시간 지연               | time dilation                           |
 | 시공간 간격             | spacetime interval                   |
+
 ---
 ## ㅇ
 | 국문 용어               | 영문 용어                     |
@@ -112,6 +119,7 @@
 | 인덕턴스               | inductance                   |
 | 임피던스               | impedance                    |
 | 역학적 에너지           | mechanical energy            |
+
 ---
 ## ㅈ
 | 국문 용어         | 영문 용어                     |
@@ -147,6 +155,7 @@
 | 저항             | resistance                   |
 | 진동             | oscillation                  |
 | 중력             | gravity                      |
+
 ---
 ## ㅊ
 | 국문 용어     | 영문 용어         |
@@ -154,6 +163,7 @@
 | 차원         | dimension        |
 | 척력         | repulsive force  |
 | 척 컨버터     | Ćuk converter    |
+
 ---
 ## ㅋ
 | 국문 용어         | 영문 용어              |
@@ -161,6 +171,7 @@
 | 컨덕턴스         | conductance           |
 | 컨버터           | converter             |
 | 켈빈-스토크스 정리 | Kelvin–Stokes theorem |
+
 ---
 ## ㅌ
 | 국문 용어       | 영문 용어            |
@@ -169,6 +180,7 @@
 | 텐서           | tensor              |
 | 특수 상대성 이론 | special relativity  |
 | 트랜지스터     | transistor          |
+
 ---
 ## ㅍ
 | 국문 용어             | 영문 용어                     |
@@ -186,17 +198,20 @@
 | 파장                 | wavelength                   |
 | 파인만 다이어그램     | Feynman diagram              |
 | 플라이백 컨버터       | flyback converter            |
+
 ---
 ## ㅎ
 | 국문 용어             | 영문 용어             |
 |----------------------|----------------------|
 | 하프-브릿지 컨버터    | half-bridge converter |
 | 핵력                 | nuclear force        |
+
 ---
 ## 숫자
 | 국문 용어 | 영문 용어    |
 |----------|-------------|
 | 4-벡터   | four-vector |
+
 ---
 ## 영문
 | 국문 용어 | 영문 용어                                     |
@@ -206,4 +221,4 @@
 | MOSFET   | MOSFET (Metal-Oxide-Semiconductor FET)        |
 | RMS      | RMS (Root Mean Square)                       |
 | WKB 근사 | WKB approximation                             |
----
+
