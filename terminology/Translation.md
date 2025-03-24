@@ -2,190 +2,233 @@
 
 ---
 ## ㄱ
-- [가변 저항]()
-- [가시광선]()
-- [가우스 법칙]()  
-- [강력]()
-- [고유 길이]()
-- [고유 속도]()
-- [고유 시간]()
-- [공진]()
-- [과도 응답]()  
-- [근 궤적]()
-- [기생 소자]()
-- [기생 용량]()
-- [기생 인덕턴스]()
-- [기생 저항]()
-- [기전력]()  
-- [기자력]()
-- [길이 수축]()
-- [그린 함수]()  
-- [그린 정리]()
+| 국문 용어     | 영문 용어                     |
+|--------------|------------------------------|
+| 가변 저항     | variable resistor            |
+| 가시광선      | visible light                |
+| 가우스 법칙   | Gauss's law                  |
+| 강력         | strong force                 |
+| 고유 길이     | proper length                |
+| 고유 속도     | proper velocity              |
+| 고유 시간     | proper time                  |
+| 공진         | resonance                    |
+| 과도 응답     | transient response           |
+| 근 궤적       | root locus                   |
+| 기생 소자     | parasitic component          |
+| 기생 용량     | parasitic capacitance        |
+| 기생 인덕턴스 | parasitic inductance         |
+| 기생 저항     | parasitic resistance         |
+| 기전력       | electromotive force (emf)    |
+| 기자력       | magnetomotive force (mmf)    |
+| 길이 수축     | length contraction           |
+| 그린 함수     | Green's function             |
+| 그린 정리     | Green's theorem              |
+
 
 ---
 ## ㄴ
-- [나이퀴스트 안정도]()
-- [누설 인덕턴스]()
+| 국문 용어         | 영문 용어                |
+|------------------|-------------------------|
+| 나이퀴스트 안정도 | Nyquist stability       |
+| 누설 인덕턴스     | leakage inductance      | 
 
 ---
 ## ㄷ
-- [다이오드]()  
-- [동기 정류]()  
-- [동 특성]()  
-- [디랙 델타 함수]()
+| 국문 용어     | 영문 용어                       |
+|--------------|--------------------------------|
+| 다이오드      | diode                          |
+| 동기 정류     | synchronous rectification      |
+| 동 특성       | dynamic characteristic         |
+| 디랙 델타 함수 | Dirac delta function           |
 
 ---
 ## ㄹ
-- [라플라스 변환]()  
-- [라플라스 방정식]()  
-- [리액턴스]()
-- [로런츠 변환]()
-- [로런츠 인자]()
-- [로런츠 힘]()
-- [루프 이득]()
+| 국문 용어         | 영문 용어               |
+|------------------|------------------------|
+| 라플라스 변환     | Laplace transform      |
+| 라플라스 방정식   | Laplace equation       |
+| 리액턴스         | reactance              |
+| 로런츠 변환       | Lorentz transformation |
+| 로런츠 인자       | Lorentz factor         |
+| 로런츠 힘         | Lorentz force          |
+| 루프 이득         | loop gain              | 
 
 ---
 ## ㅁ
-- [맥스웰 방정식]()
-- [미분]()  
-- [미분 계수]()  
-- [미분 방정식]()
-- [민코프스키 다이어그램]()
-- [민코프스키 힘]()
+| 국문 용어             | 영문 용어                   |
+|----------------------|----------------------------|
+| 맥스웰 방정식         | Maxwell's equations        |
+| 미분                 | differentiation           |
+| 미분 계수             | differential coefficient   |
+| 미분 방정식           | differential equation      |
+| 민코프스키 다이어그램 | Minkowski diagram          |
+| 민코프스키 힘         | Minkowski force            |
 
 ---
 ## ㅂ
-- [벅 컨버터](../EE/PowerElectronics/BuckConverter.md)  
-- [벅-부스트 컨버터]()  
-- [벡터]()  
-- [벡터 공간]()  
-- [벡터 궤적]()  
-- [변분법]()  
-- [변분 원리]()  
-- [변압기]()  
-- [보드 선도]()  
-- [보존력]()  
-- [보존장]()  
-- [복소수]()  
-- [복소 평면]()  
-- [부스트 컨버터]()  
-- [불확정성 원리]()  
-- [비보존력]()  
-- [비보존장]()  
-- [발산 정리]()
+| 국문 용어             | 영문 용어                           |
+|----------------------|------------------------------------|
+| 벅 컨버터             | buck converter                     |
+| 벅-부스트 컨버터      | buck-boost converter               |
+| 벡터                 | vector                             |
+| 벡터 공간             | vector space                       |
+| 벡터 궤적             | vector trajectory                  |
+| 변분법               | calculus of variations             |
+| 변분 원리             | variational principle              |
+| 변압기               | transformer                        |
+| 보드 선도             | Bode plot                          |
+| 보존력               | conservative force                 |
+| 보존장               | conservative field                 |
+| 복소수               | complex number                     |
+| 복소 평면             | complex plane                      |
+| 부스트 컨버터         | boost converter                    |
+| 불확정성 원리         | uncertainty principle              |
+| 비보존력             | non-conservative force             |
+| 비보존장             | non-conservative field             |
+| 발산 정리             | divergence theorem                 |
+ 
 
 ---
 ## ㅅ
-- [상대성 이론]()  
-- [서셉턴스]()
-- [선형 시불변 시스템]()
-- [세픽]()  
-- [소신호 모델]()  
-- [슈뢰딩거 방정식]()
-- [스너버 회로]()
-- [시간 지연]()
-- [시공간 간격]()
+| 국문 용어               | 영문 용어                             |
+|------------------------|--------------------------------------|
+| 상대성 이론             | theory of relativity                 |
+| 서셉턴스               | susceptance                          |
+| 선형 시불변 시스템       | linear time-invariant system (LTI system)     |
+| 세픽                   | SEPIC (Single-Ended Primary Inductor Converter) |
+| 소신호 모델             | small-signal model                   |
+| 슈뢰딩거 방정식         | Schrödinger equation                 |
+| 스너버 회로             | snubber circuit                      |
+| 시간 지연               | time dilation                           |
+| 시공간 간격             | spacetime interval                   |
+ 
 
 ---
 ## ㅇ
-- [안정도]()  
-- [암페어-맥스웰 법칙]()  
-- [어드미턴스]()  
-- [약력]()  
-- [양자장론]()  
-- [엡실론-델타 논법]()  
-- [운동 에너지]()  
-- [위상]()  
-- [위상 여유]()  
-- [일반 상대성 이론]()  
-- [이득]()  
-- [이득 여유]()  
-- [인덕턴스]()  
-- [임피던스]()  
-- [역학적 에너지]()
+| 국문 용어               | 영문 용어                     |
+|------------------------|------------------------------|
+| 안정도                 | stability                    |
+| 암페어-맥스웰 법칙       | Ampère-Maxwell law           |
+| 어드미턴스             | admittance                   |
+| 약력                   | weak force                   |
+| 양자장론               | quantum field theory         |
+| 엡실론-델타 논법        | epsilon-delta definition     |
+| 운동 에너지             | kinetic energy               |
+| 위상                   | phase                        |
+| 위상 여유               | phase margin                 |
+| 일반 상대성 이론        | general relativity           |
+| 이득                   | gain                         |
+| 이득 여유               | gain margin                  |
+| 인덕턴스               | inductance                   |
+| 임피던스               | impedance                    |
+| 역학적 에너지           | mechanical energy            |
+ 
 
 ---
 ## ㅈ
-- [자기 회로]()  
-- [자기장]()
-- [자속]()
-- [자속 밀도]()
-- [자외선]()
-- [자화]()
-- [자화 인덕턴스]()
-- [자화 전류]()
-- [적외선]()
-- [정자기장]()  
-- [정전기장]()  
-- [정전기학]()  
-- [전기역학]()  
-- [전기용량]()  
-- [전기장]()  
-- [전력]()  
-- [전력 반도체]()  
-- [전력전자]()  
-- [전류]()
-- [전류 밀도]()
-- [전압]()  
-- [전위]()
-- [전자공학]()
-- [전자기력]()  
-- [전자기파]()
-- [전하]()  
-- [주파수]()  
-- [주파수 응답]()  
-- [저항]()  
-- [진동]()  
-- [중력]()
+| 국문 용어         | 영문 용어                     |
+|------------------|------------------------------|
+| 자기 회로         | magnetic circuit             |
+| 자기장           | magnetic field               |
+| 자속             | magnetic flux                |
+| 자속 밀도         | magnetic flux density        |
+| 자외선           | ultraviolet (UV)             |
+| 자화             | magnetization                |
+| 자화 인덕턴스     | magnetizing inductance       |
+| 자화 전류         | magnetizing current          |
+| 적외선           | infrared ray (IR)              |
+| 정자기장         | static magnetic field        |
+| 정전기장         | electrostatic field          |
+| 정전기학         | electrostatics               |
+| 전기역학         | electrodynamics              |
+| 전기용량         | capacitance                  |
+| 전기장           | electric field               |
+| 전력             | power                        |
+| 전력 반도체       | power semiconductor          |
+| 전력전자         | power electronics            |
+| 전류             | current                      |
+| 전류 밀도         | current density              |
+| 전압             | voltage                      |
+| 전위             | electric potential           |
+| 전자공학         | electronics                  |
+| 전자기력         | electromagnetic force        |
+| 전자기파         | electromagnetic wave         |
+| 전하             | electric charge              |
+| 주파수           | frequency                    |
+| 주파수 응답       | frequency response           |
+| 저항             | resistance                   |
+| 진동             | oscillation                  |
+| 중력             | gravity                      |
+ 
 
 ---
 ## ㅊ
-- [차원]()
-- [척력]()
-- [척 컨버터]()
+| 국문 용어     | 영문 용어         |
+|--------------|------------------|
+| 차원         | dimension        |
+| 척력         | repulsive force  |
+| 척 컨버터     | Ćuk converter    |
+
 
 ---
 ## ㅋ
-- [컨덕턴스]()  
-- [컨버터]()  
-- [켈빈-스토크스 정리]()
+| 국문 용어         | 영문 용어              |
+|------------------|-----------------------|
+| 컨덕턴스         | conductance           |
+| 컨버터           | converter             |
+| 켈빈-스토크스 정리 | Kelvin–Stokes theorem |
+
 
 ---
 ## ㅌ
-- [터널링 효과]()
-- [텐서]()
-- [특수 상대성 이론]()  
-- [트랜지스터]()
+| 국문 용어       | 영문 용어            |
+|----------------|---------------------|
+| 터널링 효과     | tunneling effect    |
+| 텐서           | tensor              |
+| 특수 상대성 이론 | special relativity  |
+| 트랜지스터     | transistor          |
+
 
 ---
 ## ㅍ
-- [패러데이 법칙]()  
-- [평균화 모델]()  
-- [포워드 컨버터]()  
-- [풀-브릿지 컨버터]()  
-- [푸쉬-풀 컨버터]()  
-- [푸리에 급수]()  
-- [푸리에 변환]()  
-- [푸아송 방정식]()  
-- [파동]()  
-- [파수]()  
-- [파장]()  
-- [파인만 다이어그램]()  
-- [플라이백 컨버터]()
+| 국문 용어             | 영문 용어                     |
+|----------------------|------------------------------|
+| 패러데이 법칙         | Faraday's law                |
+| 평균화 모델           | averaged model               |
+| 포워드 컨버터         | forward converter            |
+| 풀-브릿지 컨버터      | full-bridge converter        |
+| 푸쉬-풀 컨버터        | push-pull converter          |
+| 푸리에 급수           | Fourier series               |
+| 푸리에 변환           | Fourier transform            |
+| 푸아송 방정식         | Poisson's equation           |
+| 파동                 | wave                         |
+| 파수                 | wave number                  |
+| 파장                 | wavelength                   |
+| 파인만 다이어그램     | Feynman diagram              |
+| 플라이백 컨버터       | flyback converter            |
+
 
 ---
 ## ㅎ
-- [하프-브릿지 컨버터]()  
-- [핵력]()
+| 국문 용어             | 영문 용어             |
+|----------------------|----------------------|
+| 하프-브릿지 컨버터    | half-bridge converter |
+| 핵력                 | nuclear force        |
+
 
 ---
 ## 숫자
-- [4-벡터]()
+| 국문 용어 | 영문 용어    |
+|----------|-------------|
+| 4-벡터   | four-vector |
+  
 
 ---
 ## 영문
-- [BJT]()
-- [IGBT]()
-- [MOSFET]()
-- [RMS]()
-- [WKB 근사]()
+| 국문 용어 | 영문 용어                                     |
+|----------|----------------------------------------------|
+| BJT      | BJT (Bipolar Junction Transistor)            |
+| IGBT     | IGBT (Insulated Gate Bipolar Transistor)     |
+| MOSFET   | MOSFET (Metal-Oxide-Semiconductor FET)        |
+| RMS      | RMS (Root Mean Square)                       |
+| WKB 근사 | WKB approximation                             |
