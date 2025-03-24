@@ -10,7 +10,7 @@
   - [전파공학]
   - [전력전자](./EE/PowerElectronics/PowerElectronics.md)
 - [물리학](./PHY/Physics.md)
-  - [고전역학]
+  - [고전역학](./PHY/ClassicalMechanics/ClassicalMechanics.md)
   - [전자기학]
   - [양자역학]
   - [열및통계물리학]
