@@ -4,15 +4,15 @@
 ---
 
 # 벡터 공간
-만약 다음의 연산\
-\
+만약 다음의 연산
+
 $$
 \begin{align*}
 +:V\times V\rightarrow V,\ \ \ \cdot:\mathbb{F}\times V\rightarrow V
 \end{align*}
-$$\
-\
-이 존재하고, 다음의 벡터 공간에 대한 공리\
+$$
+
+이 존재하고, 다음의 벡터 공간에 대한 공리
 
 
 $$
