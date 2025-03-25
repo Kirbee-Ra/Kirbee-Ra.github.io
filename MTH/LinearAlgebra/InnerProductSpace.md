@@ -29,3 +29,12 @@ $$
 $$
 \langle u,v\rangle = \overline{\langle v,u\rangle}
 $$
+
+---
+
+## 노름 공간
+
+### 노름
+
+노름(Norm)이란 
+
