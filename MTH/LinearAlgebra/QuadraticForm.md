@@ -16,8 +16,12 @@ $$
 
 $$
 \begin{align*}
-		Q\left(\alpha v+\beta w\right)=\alpha^2 Q\left(v)+\alpha\beta B\left(v,w\right)+\beta^2 Q\left(w\right)
-	\end{align*}
+Q\left(\alpha v+\beta w\right)=\alpha^2 Q\left(v\right)+\alpha\beta B\left(v,w\right)+\beta^2 Q\left(w\right)
+\end{align*}
 $$
 
-을 만족하는 사상입니다.
+을 만족하는 사상입니다. 이차 형식을 대칭 쌍선형 형식 $$B$$에 대해 다음과 같이 쓸 수 있습니다.
+
+$$
+Q\left(v\right)=B\left(v,v\right)
+$$
