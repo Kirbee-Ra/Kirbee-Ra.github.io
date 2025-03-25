@@ -59,6 +59,8 @@ $$
 
 ## 대칭성 및 반대칭성
 
+### 1. 대칭 쌍선형 형식
+
 쌍선형 형식 $$B$$가 다음을 만족하면 대칭적(Symmetric)이라고 말합니다.
 
 $$
@@ -71,6 +73,8 @@ $$
 \mathbf{M}=\mathbf{M}^T
 $$
 
+### 2. 반대칭 쌍선형 형식
+   
 다음을 만족하면 반대칭적(Skew-Symmetric)이라고 말합니다.
 
 $$
@@ -82,3 +86,46 @@ $$
 $$
 \mathbf{M}=-\mathbf{M}^T
 $$
+
+---
+
+## 특수 형태
+
+- 실수 체 $$\mathbb{R}$$에 대해 대칭 쌍선형 형식은 실대칭 행렬(Real Symmetric Matrix)입니다.
+- 복소수 체  $$\mathbb{C}$$에 대해서는 일반적인 쌍선형 형식보다는 에르미트 형식(Hermitian Form)이나 반쌍선형 형식(Sesquilinear)이 고려되곤 합니다.
+
+---
+
+## 예시
+
+### 실공간에서의 내적
+다음과 같이 $$\mathbb{R}^n$$에서 정의된 내적은 대칭 쌍선형 형식입니다.
+
+$$
+\mathbf{x}\cdot\mathbf{y}=\mathbf{y}\cdot\mathbf{x}
+$$
+
+### 2차원에서의 면적
+$$2\times2$$ 행렬의 행렬식은 면적을 의미합니다.
+
+$$
+B\left(\mathbf{x},\mathbf{y}\right)=\begin{vmatrix}
+x_1&y_1\\
+x_2&y_2
+\end{vmatrix}=x_1y_2-x_2y_1
+$$
+
+두 벡터의 위치를 바꾸면 다음과 같습니다.
+
+$$
+B\left(\mathbf{y},\mathbf{x}\right)=\begin{vmatrix}
+y_1&x_1\\
+y_2&x_2
+\end{vmatrix}=y_1x_2-y_2x_1=-\left(x_1y_2-x_2y_1\right)=-B\left(\mathbf{x},\mathbf{y}\right)
+$$
+
+따라서 이는 반대칭 쌍선형 형식임을 알 수 있습니다.
+
+### 계량 텐서
+
+일반 상대성 이론에서 등장하는 계량 텐서(Metric Tensor) $$g_{\mu\nu}$$는 공간을 기술할 때 쓰입니다. 이 또한 쌍선형 형식입니다.
