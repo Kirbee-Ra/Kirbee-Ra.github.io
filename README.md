@@ -17,7 +17,7 @@
   - [고체물리학]
 - [기초수학](./MTH/BasicMathematics.md)
   - [미적분학]
-  - [선형대수학]
+  - [선형대수학](./MTH/LinearAlgebra/LinearAlgebra.md)
   - [미분방정식]
   - [푸리에해석]
   - [복소함수론]
