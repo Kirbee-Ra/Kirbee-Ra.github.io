@@ -21,9 +21,9 @@ $$
 {2. }\forall u,v\in V:u+v=v+u\\
 {3. }\exists0\in V:v+0=v\ \forall v\in V\\
 {4. }\forall v\in V,\exists-v\in V:v+\left(-v\right)=0\\
-{5. }\forall\alpha\beta\in\mathbb{F},\forall v\in V:\left(\alpha\beta\right)v=\alpha\left(\beta v\right)\\
+{5. }\forall\alpha,\beta\in\mathbb{F},\forall v\in V:\left(\alpha\beta\right)v=\alpha\left(\beta v\right)\\
 {6. }1\cdot v=v\\
-{7. }\forall\alpha\beta\in \mathbb{F},\forall v\in V:\left(\alpha+\beta\right)v=\alpha v+\beta v\\
+{7. }\forall\alpha,\beta\in \mathbb{F},\forall v\in V:\left(\alpha+\beta\right)v=\alpha v+\beta v\\
 {8. }\forall\alpha\in\mathbb{F},\forall u,v\in V:\alpha\left(u+v\right)=\alpha u+\alpha v
 \end{align*}
 $$
