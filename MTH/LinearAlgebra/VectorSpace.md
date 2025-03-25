@@ -16,6 +16,6 @@ $$\
 \
 $$
 \begin{gather*}
-1. \forall u,v,w \in V:\left(u+v\right)
+{1.} \forall u,v,w \in V:\left(u+v\right)
 \end{gather*}
 $$
