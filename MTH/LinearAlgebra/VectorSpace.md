@@ -4,9 +4,15 @@
 ---
 
 # 벡터 공간
-다음을 만족하는 집합 $V$를 체 $F$ 위의 벡터 공간이라고 합니다.
+만약 다음의 연산
 $$
-\begin{align*}
-d
-\end{align*}
+\begin{gather*}
++:V\times V\rightarrow V,\ \ \ \cdot:\mathbb{F}\times V\rightarrow V
+\end{gather*}
+$$
+이 존재하고, 다음의 벡터 공간에 대한 공리
+$$
+\begin{gather*}
+1. \forall u,v,w \in V:\left(u+v\right)
+\end{gather*}
 $$
