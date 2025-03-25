@@ -181,7 +181,7 @@
 <tbody>
 <tr><td>차원</td><td>dimension</td></tr>
 <tr><td>척력</td><td>repulsive force</td></tr>
-<tr><td>척 컨버터</td><td>Ćuk converter</td></tr>
+<tr><td>척 컨버터</td><td>Cúk converter</td></tr>
 </tbody>
 </table>
 
