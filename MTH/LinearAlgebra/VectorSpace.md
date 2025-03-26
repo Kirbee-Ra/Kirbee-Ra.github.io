@@ -21,14 +21,14 @@ $$
 
 $$
 \begin{align*}
-&{1. }\forall u,v,w \in V:\left(u+v\right)+w=u+\left(v+w\right)\\
-&{2. }\forall u,v\in V:u+v=v+u\\
-&{3. }\exists0\in V:v+0=v\ \forall v\in V\\
-&{4. }\forall v\in V,\exists-v\in V:v+\left(-v\right)=0\\
-&{5. }\forall\alpha,\beta\in\mathbb{F},\forall v\in V:\left(\alpha\beta\right)v=\alpha\left(\beta v\right)\\
-&{6. }1\cdot v=v\\
-&{7. }\forall\alpha,\beta\in \mathbb{F},\forall v\in V:\left(\alpha+\beta\right)v=\alpha v+\beta v\\
-&{8. }\forall\alpha\in\mathbb{F},\forall u,v\in V:\alpha\left(u+v\right)=\alpha u+\alpha v
+&\text{1. }\forall u,v,w \in V:\left(u+v\right)+w=u+\left(v+w\right)\\
+&\text{2. }\forall u,v\in V:u+v=v+u\\
+&\text{3. }\exists0\in V:v+0=v\ \forall v\in V\\
+&\text{4. }\forall v\in V,\exists-v\in V:v+\left(-v\right)=0\\
+&\text{5. }\forall\alpha,\beta\in\mathbb{F},\forall v\in V:\left(\alpha\beta\right)v=\alpha\left(\beta v\right)\\
+&\text{6. }1\cdot v=v\\
+&\text{7. }\forall\alpha,\beta\in \mathbb{F},\forall v\in V:\left(\alpha+\beta\right)v=\alpha v+\beta v\\
+&\text{8. }\forall\alpha\in\mathbb{F},\forall u,v\in V:\alpha\left(u+v\right)=\alpha u+\alpha v
 \end{align*}
 $$
 
