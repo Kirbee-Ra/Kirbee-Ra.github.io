@@ -5,7 +5,7 @@
 ## 카테고리
 - [전자공학](./EE/ElectricalEngineering.md)
   - [전자기학]
-  - [회로이론]
+  - [회로이론])(./EE/CircuitTheory/CircuitTheory.md)
   - [제어공학](./EE/ControlEngineering/ControlEngineering.md)
   - [전파공학]
   - [전력전자](./EE/PowerElectronics/PowerElectronics.md)
