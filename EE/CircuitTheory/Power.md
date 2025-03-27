@@ -51,7 +51,7 @@ $$
 	\end{align*}
 $$
 
-계산상의 편의를 위해 $\theta_i$만큼 평행 이동 시켜봅시다.
+계산상의 편의를 위해 $$\theta_i$$만큼 평행 이동 시켜봅시다.
 
 $$
 \begin{align*}
@@ -60,7 +60,7 @@ $$
 	\end{align*}
 $$
 
-위상차를 $\theta=\theta_v-\theta_i$라고 하고, 전력을 구하면 다음과 같습니다.
+위상차를 $$\theta=\theta_v-\theta_i$$라고 하고, 전력을 구하면 다음과 같습니다.
 
 $$
 \begin{align*}
