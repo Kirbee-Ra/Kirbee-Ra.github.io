@@ -85,8 +85,8 @@ $$
 
 위상자 변환은 시간 영역에서 주파수 영역으로의 변환이라고 볼 수 있습니다. 이를 다시 시간 영역으로 변환하려면 **위상자 역변환(Inverse Phasor Transform)**을 이용하면 됩니다.
 
-
-&&
+$$
 \mathcal{P}^{-1}\left[\mathbf{X}\right]=X_m\cos\left(\omega t+\theta_x\right)
-&&
+$$
 
+위상자 표현은 정상 상태에서만 이용할 수 있습니다. 주파수가 변하는 
