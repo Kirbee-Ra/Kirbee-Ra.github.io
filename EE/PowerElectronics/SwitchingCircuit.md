@@ -21,14 +21,14 @@
 
 위와 같은 회로는 효율이 다음과 같습니다.
 
-\[
-\begin{aligned}
-P_{in} &= v_{in}i_{in} \\
-P_o &= v_o i_o \\
-i_{in} &= i_o \quad \text{(직렬 연결)} \\
-\eta &= \frac{P_o}{P_{in}} = \frac{v_o i_o}{v_{in} i_{in}} = \frac{v_o}{v_{in}}
-\end{aligned}
-\]
+$$
+\begin{align*}
+&P_{in} = v_{in}i_{in} \\
+&P_o = v_o i_o \\
+&i_{in} = i_o \quad \text{(직렬 연결)} \\
+&\eta = \frac{P_o}{P_{in}} = \frac{v_o i_o}{v_{in} i_{in}} = \frac{v_o}{v_{in}}
+\end{align*}
+$$
 
 
 이와 같이 두 전압의 비로 나타납니다. 높은 입력 전압으로부터 낮은 출력을 얻는 상황에서는 효율이 저하됩니다.
@@ -56,3 +56,8 @@ i_{in} &= i_o \quad \text{(직렬 연결)} \\
 ---
 
 ## 스위칭 파워-폴
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
