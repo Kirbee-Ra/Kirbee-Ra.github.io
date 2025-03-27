@@ -1,3 +1,10 @@
 # title: "라커비 위키"
 # description: "공부 내용 정리"
 theme: jekyll-theme-minimal
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
