@@ -94,7 +94,7 @@ $$
 이 전력의 평균을 구하면 다음과 같습니다.
 
 $$
-P=\int_T p\left(t\right)dt=\frac{V_mI_m}{2}\cos\theta
+P=\frac{1}{T}\int_T p\left(t\right)dt=\frac{V_mI_m}{2}\cos\theta
 $$
 
 삼각 함수 항의 평균은 $$0$$이므로 위와 같습니다. 이 양을 **평균 전력(Average Power)**이라고 합니다. 실제로 부하로 공급되는 전력을 의미합니다. **유효 전력(Real Power)**이라고도 합니다.
