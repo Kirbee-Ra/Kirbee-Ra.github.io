@@ -89,4 +89,78 @@ $$
 \mathcal{P}^{-1}\left[\mathbf{X}\right]=X_m\cos\left(\omega t+\theta_x\right)
 $$
 
-위상자 표현은 정상 상태에서만 이용할 수 있습니다. 주파수가 변하는 
+위상자 표현은 주파수가 일정한 상황에서만 사용할 수 있습니다. 따라서 정상 상태에서만 이용할 수 있고, 주파수가 변하기도 하는 과도 응답 상태에서는 사용할 수 없습니다.
+
+---
+
+## 위상자 다이어그램
+
+위상자는 진폭과 위상을 가지는 복소 물리량입니다. 이는 복소 평면에서 다음과 같이 벡터로 나타낼 수 있습니다.
+
+$$
+\mathbf{X}=X_m\angle\theta_x
+$$
+
+(PhasorDiagram)
+
+실수 부분의 크기는 진폭에 코사인을 취하면 되고, 허수 부분의 크기는 진폭에 사인을 취하면 됩니다.
+
+---
+
+## 위상자 연산
+
+위상자의 연산에 대해서 소개하겠습니다. 지수 함수와 삼각 함수 기반이고, 벡터로 표현할 수 있으니 연관 지어 생각하시면 됩니다.
+
+### 덧셈 및 뺄셈
+
+
+### 곱셈
+
+밑이 같은 두 지수 함수의 곱셈의 결과를 떠올려 봅시다. 진폭은 곱해지고, 지수 부분은 더해집니다. 위상자 또한 동일합니다.
+
+$$
+\begin{align*}
+&\mathbf{X}=X_m\angle\theta_x\\
+    &\mathbf{Y}=Y_m\angle\theta_y\\
+    &\mathbf{X}\mathbf{Y}=X_mY_m\angle\left(\theta_x+\theta_y\right)
+\end{align*}
+$$
+
+### 나눗셈
+
+밑이 같은 두 지수 함수의 나눗셈의 결과를 떠올려 봅시다. 진폭은 나눠지고, 지수 부분은 빼집니다. 위상자 또한 동일합니다.
+
+$$
+\begin{align*}
+&\mathbf{X}=X_m\angle\theta_x\\
+    &\mathbf{Y}=Y_m\angle\theta_y\\
+    &\frac{\mathbf{X}}{\mathbf{Y}}=\frac{X_m}{Y_m}\angle\left(\theta_x-\theta_y\right)
+\end{align*}
+$$
+
+### 시간 미분
+
+다음으로 시간 미분입니다. 우선 주파수 부분까지 고려해서 표기를 해봅시다.
+
+$$
+x\left(t\right)=X_me^{j\omega t}e^{j\theta_x}
+$$
+
+양 변을 시간으로 미분하면 다음과 같습니다.
+
+$$
+\dot{x}\left(t\right)=j\omega X_me^{j\omega t}e^{j\theta_x}
+$$
+
+위상자 표기법을 이용하면 다음과 같습니다.
+
+$$
+\begin{align*}
+\dot{\mathbf{X}}&=j\omega X_me^{j\theta_x}\\
+&=j\omega X_m\angle\theta_x
+\end{align*}
+$$
+
+$$
+\rightarrow \dot{\mathbf{X}}=j\omega\mathbf{X}
+$$
