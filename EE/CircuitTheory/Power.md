@@ -77,6 +77,8 @@ $$
 	\end{align*}
 $$
 
+
+
 ([위상자](./Phasor.md) 표현이 익숙하지 않으신 분은 해당 문서를 참고 바랍니다.)
 
 $$
@@ -86,6 +88,12 @@ $$
 	\end{align*}
 $$
 
+두번째 항을 다음의 삼각 함수 공식을 이용하여 전개해봅시다.
+
+$$
+&\cos\left(\alpha+\beta\right)=\cos\alpha\cos\beta-\sin\alpha\sin\beta\\
+    &p\left(t\right)=\frac{V_mI_m}{2}\cos\theta+\frac{V_mI_m}{2}\left(\cos\theta\cos\left(2\omega t\right)-\sin\theta\sin\left(2\omega t\right)\right)
+$$
 
 ### 피상 전력
 
