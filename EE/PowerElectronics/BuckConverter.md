@@ -32,5 +32,3 @@
 
 ## 관련 문서
 - [스위칭 회로](./SwitchingCircuit.md)
-
-
