@@ -164,3 +164,6 @@ $$
 $$
 \rightarrow \dot{\mathbf{X}}=j\omega\mathbf{X}
 $$
+
+### 시간 적분
+
