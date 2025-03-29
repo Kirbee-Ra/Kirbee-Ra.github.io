@@ -96,7 +96,22 @@ $$
 
 이 양을 통해 특정 시각에서의 전력을 확인할 수 있고, 이를 **순시 전력(Instantaneous Power)**이라고 합니다.
 
-### 평균 전력(유효 전력)
+---
+
+## RMS (제곱-평균-제곱근)
+
+
+---
+
+## 유효 전력과 무효 전력
+
+### 유효 전력
+
+순시 전력을 다시 살펴봅시다.
+
+$$
+p\left(t\right)=\frac{V_mI_m}{2}\cos\theta\left(1+\cos\left(2\omega t\right)\right)-\frac{V_mI_m}{2}\sin\theta\sin\left(2\omega t\right)
+$$
 
 순시 전력의 평균을 구하면 다음과 같습니다.
 
@@ -105,9 +120,10 @@ P=\frac{1}{T}\int_T p\left(t\right)dt=\frac{V_mI_m}{2}\cos\theta
 $$
 
 삼각 함수 항의 평균은 $$0$$이므로 위와 같습니다.
-이 양을 **평균 전력(Average Power)**이라고 합니다.
+이 양을 **유효 전력(Real Power)**이라고 합니다.
 실제로 부하로 공급되는 전력을 의미합니다.
-**유효 전력(Real Power)**이라고도 합니다.
+다른 형태의 에너지로 전환될 수 있는 양입니다.
+**평균 전력(Average Power)**이라고도 합니다.
 
 ### 무효 전력
 
@@ -132,8 +148,11 @@ $$
 
 단위는 [VAR]입니다.
 이 양은 부하에 전달되지 않고, 회로 내에서 전원과 에너지 저장 소자(인덕터, 축전기) 사이에서 계속 순환하는 양입니다.
+유효 전력과 무효 전력을 이용하면 순시 전력을 다음과 같이 나타낼 수 있습니다.
 
-### 전력
+$$
+p\left(t\right)=P\left(1+\cos\left(2\omega t\right)\right)-Q\sin\left(2\omega t\right)
+$$
 
 ---
 
