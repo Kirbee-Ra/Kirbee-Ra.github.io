@@ -2,12 +2,60 @@
 
 ---
 
-## 다이오드 도통 손실
+## 다이오드의 도통 손실
 
-### 
+실제 다이오드는 순방향 전압 강하$$V_F$$가 존재합니다.
+따라서 다이오드에 전류가 흐르면 손실이 발생합니다.
+
+$$
+p\left(t\right)=V_Fi_{diode}\left(t\right)
+$$
+
+스위칭 주기에 대해 평균을 내면 다음과 같습니다.
+
+$$
+\begin{align*}
+P&=\frac{1}{T_s}\int_{T_s}p\left(t\right)dt=\frac{1}{T_s}\int_{T_s}V_Fi_{diode}\left(t\right)dt\\
+&=V_Ff_sArea\left(i_{diode}\right)
+\end{align*}
+$$
+
+순방향 전압 강하는 정해진 값입니다.
+부하 전류가 클수록 다이오드로 인한 손실은 커집니다.
+실제로 다이오드의 도통 손실이 전체 손실 중에서 많은 비중을 차지합니다.
 
 ---
 
 ## MOSFET을 통한 동기 정류
 
-### 동기 정류 회로
+다이오드와 같은 타이밍에 도통되도록 동작하면서, 다이오드보다 도통 손실이 작도록 하는 방법이 있습니다.
+MOSFET을 다이오드가 도통되는 타이밍에만 구동하는 것입니다.
+MOSFET은 양방향 도
+이러한 방식을 **동기 정류(Synchronous Rectification)**라고 합니다.
+다이오드의 도통 타이밍에 맞춰 MOSFET의 스위칭을 동기화한다는 의미입니다.
+이때 사용되는 MOSFET을 **동기 정류기(Synchronous Rectifier)**라고 합니다.
+
+### MOSFET의 도통 손실
+
+MOSFET은 구동시, $$R_{DS,(on)}$$만큼의 저항이 있습니다.
+이로 인해 도통 손실이 발생합니다.
+
+$$
+p\left(t\right)=i_{D}^2\left(t\right)R_{DS(on)}
+$$
+
+스위칭 주기에 대해 평균을 내면 다음과 같습니다.
+
+$$
+\begin{align*}
+P&=\frac{1}{T_s}\int_{T_s}p\left(t\right)dt=\frac{1}{T_s}\int_{T_s}i_{D}^2\left(t\right)R_{DS(on)}dt\\
+&=i_{D,rms}^2R_{DS(on)}
+\end{align*}
+$$
+
+$$R_{DS(on)}$$은 보통 수~수십 mΩ 입니다.
+다이오드를 사용했을 때보다 도통 손실이 더 줄어듭니다.
+
+---
+
+## 동기 정류 회로 설계
