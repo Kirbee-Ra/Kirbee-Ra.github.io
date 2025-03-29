@@ -102,5 +102,13 @@ $$
 \begin{align*}
 &i=\sum_k i_k\\
 &\dot{i}=\sum_k \dot{i}_k\ \ \ \text{(미분은 선형 연산)}\\
+&\frac{v}{L_{eq,p}}=\sum_k\frac{v}{L_k}\\
+&\frac{1}{L_{eq,p}}=\sum_k\frac{1}{L_k}
 \end{align*}
+$$
+
+병렬 연결된 인덕터들의 등가 인덕턴스는 다음과 같습니다.
+
+$$
+L_{eq,p}=\frac{1}{\sum_k\frac{1}{L_k}}
 $$
