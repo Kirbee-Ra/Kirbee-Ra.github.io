@@ -29,12 +29,10 @@
 스위치가 켜진 상태(온-타임)에서 컨버터의 상태 공간 표현식은 다음과 같습니다.
 
 $$
-\begin{align*}
 		\begin{cases}
 			\dot{\mathbf{x}}(t)=\mathbf{A}_{on}\mathbf{x}(t)+\mathbf{B}_{on}v_{in}(t)\\
 			v_o(t)=\mathbf{C}_{on}\mathbf{x}(t)
 		\end{cases}
-  \end{align*}
 $$
 
 $$\mathbf{x}(t),v_{in}(t),v_o(t)$$는 각각 상태 벡터, 입력 전압, 출력 전압입니다.
@@ -45,12 +43,10 @@ $$\mathbf{A}_{on},\mathbf{B}_{on},\mathbf{C}_{on}$$는 각각 온-타임에서�
 스위치가 꺼진 상태(오프-타임)에서 컨버터의 상태 공간 표현식은 다음과 같습니다.
 
 $$
-\begin{align*}
 		\begin{cases}
 			\dot{\mathbf{x}}(t)=\mathbf{A}_{off}\mathbf{x}(t)+\mathbf{B}_{off}v_{in}(t)\\
 			v_o(t)=\mathbf{C}_{off}\mathbf{x}(t)
 		\end{cases}
-  \end{align*}
 $$
 
 $$\mathbf{A}_{off},\mathbf{B}_{off},\mathbf{C}_{off}$$는 각각 오프-타임에서의 상태 행렬, 입력 행렬, 출력 행렬입니다.
@@ -60,12 +56,10 @@ $$\mathbf{A}_{off},\mathbf{B}_{off},\mathbf{C}_{off}$$는 각각 오프-타임�
 다음의 스위칭 함수를 생각해봅시다.
 
 $$
-\begin{align*}
 q(t)=\begin{cases}
 			1\ \ \ \text{(on-time)}\\
 			0\ \ \ \text{(off-time)}
 		\end{cases}
-  \end{align*}
 $$
 
 이를 이용해서 온-타임 표현식과 오프-타임 표현식을 하나의 식으로 나타낼 수 있습니다.
@@ -74,7 +68,6 @@ $$
 따라서 다음과 같이 표현할 수 있습니다.
 
 $$
-\begin{align*}
 \begin{cases}
 			\dot{\mathbf{x}}(t)=\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)\\
 			v_o(t)=\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)
@@ -89,7 +82,24 @@ $$
 ### 듀티 비 함수
 
 다음으로 스위칭 함수를 평균화해야 합니다.
-이는 다음과 같이 이동 평균(Moving Average)**
+이는 다음과 같이 **이동 평균(Moving Average)**을 통해 구할 수 있습니다.
+
+$$
+d(t)=\frac{1}{T_s}\int_{t-T_s}^tq(t)dt
+$$
+
+이 값은 그림과 같이 약간의 오차(지연)가 존재합니다.
+
+(conti duty)
+
+현재 시각 $$t$$에서의 듀티 정보를 $$T_s$$만큼의 과거로부터의 적분을 통하여 구하기 때문에 그렇습니다.
+하지만 이정도 오차는 공학에서 용인되는 범위 내입니다.
+
+### 상태 공간 표현식 평균화
+
+다음으로 상태 공간 표현식을 평균화하면 다음과 같습니다.
+
+
 
 ---
 
