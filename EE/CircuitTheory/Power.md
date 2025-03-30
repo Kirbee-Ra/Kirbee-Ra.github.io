@@ -158,8 +158,6 @@ $$
 
 ## 피상 전력
 
-### 피상 전력
-
 앞서 살펴본 유효 전력과 무효 전력은 각각 다음 **피상 전력(Apparent Power)**의 실수 부분과 허수 부분입니다.
 
 $$S=P+jQ$$
@@ -171,11 +169,13 @@ $$S=P+jQ$$
 $$
 \begin{align*}
 		S&=P+jQ\\
-		&=\frac{V_mI_m}{2}\cos\theta+j\frac{V_mI_m}{2}\sin\theta
+		&=\frac{V_mI_m}{2}\cos\theta+j\frac{V_mI_m}{2}\sin\theta\\
+		&=\frac{V_mI_m}{2}e^{j\theta}\\
+		&=\frac{V_mI_m}{2}\angle\theta
 	\end{align*}
 $$
 
-([위상자](./Phasor.md) 표현이 익숙하지 않으신 분은 해당 문서를 참고 바랍니다.)
+앞서 가정한 전압 및 전류는 다음과 같이 [위상자](./Phasor.md)로 표현할 수 있습니다.
 
 $$
 \begin{align*}
@@ -183,6 +183,30 @@ $$
 		&\mathbf{I}=I_m\angle\theta_i
 	\end{align*}
 $$
+
+전압 위상자에 전류 위상자의 켤레를 곱한 뒤, $$2$$로 나누면 다음과 같습니다.
+
+$$
+\begin{align*}
+		\frac{1}{2}\mathbf{V}\mathbf{I}^*=\frac{1}{2}V_mI_m\angle\left(\theta_v-\theta_i\right)
+	\end{align*}
+$$
+
+앞서 위상차를 $$\theta=\theta_v-\theta_i$$로 두었으므로, 피상 전력을 다음과 같이 쓸 수 있습니다.
+
+$$
+S=\frac{1}{2}\mathbf{V}\mathbf{I}^*
+$$
+
+### 피상 전력 다른 표현
+
+위상자로 표현한 옴의 법칙을 떠올려봅시다.
+
+$$
+\mathbf{V}=Z\mathbf{I}
+$$
+
+
 
 ### 역률
 
@@ -246,6 +270,11 @@ $$
 $$
 
 따라서 회로의 테브난 등가 저항과 부하 저항이 같을 때, 부하로 전달되는 전력이 최대가 되는 것을 알 수 있습니다.
+이때 전달되는 전력은 다음과 같습니다.
+
+$$
+P_{max}=\frac{V_m^2}{8R_L}
+$$
 
 ### 임피던스 부하
 
