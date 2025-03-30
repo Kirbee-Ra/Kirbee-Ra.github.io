@@ -14,8 +14,8 @@ $$
 
 $$
 \begin{align*}
-	&\text{1. }\text{det}\left(\mathbf{I}\right)=1\\
-	&\text{2. }\text{det}\left(\mathbf{AB}\right)=\text{det}\left(\mathbf{A}\right)\text{det}\left(\mathbf{B}\right)\\
+	&\text{1. }\text{det}(\mathbf{I})=1\\
+	&\text{2. }\text{det}(\mathbf{AB})=\text{det}(\mathbf{A})\text{det}(\mathbf{B})\\
 	&\text{3. Determinant is a multilinear function in the rows (or columns) of the matrix.}\\
 	&\text{4. Swapping any two rows (or columns) of the matrix multiplies the determinant by }-1.
 \end{align*}
