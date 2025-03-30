@@ -16,7 +16,7 @@ $$
 $$
 \begin{align*}
 P&=\frac{1}{T_s}\int_{T_s}p\left(t\right)dt=\frac{1}{T_s}\int_{T_s}V_Fi_{diode}\left(t\right)dt\\
-&=V_Ff_sArea\left(i_{diode}\right)
+&=V_FI_{diode}
 \end{align*}
 $$
 
