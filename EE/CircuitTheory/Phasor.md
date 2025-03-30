@@ -22,13 +22,13 @@ $$
 
 $$
 \begin{align*}
-		e^{j x}&=\sum_{k=0}^{\infty}\frac{\left(j x\right)^k}{k!}\\
-		&=\frac{1}{0!}+\frac{jx}{1!}+\frac{-x^2}{2!}+\frac{-jx^3}{3!}+\frac{x^4}{4!}+\frac{jx^5}{5!}\cdots\\
-		&=\left(\frac{1}{0!}+\frac{-x^2}{2!}+\frac{x^4}{4!}+\cdots\right)+\left(\frac{jx}{1!}+\frac{-jx^3}{3!}+\frac{jx^5}{5!}+\cdots\right)\\
-		&=\left(\frac{1}{0!}+\frac{-x^2}{2!}+\frac{x^4}{4!}+\cdots\right)+j\left(\frac{x}{1!}+\frac{-x^3}{3!}+\frac{x^5}{5!}+\cdots\right)\\
-		&=\sum_{k=0}^{\infty}\frac{\left(-1\right)^k x^{2k}}{\left(2k\right)!}+j\sum_{k=0}^{\infty}\frac{\left(-1\right)^k x^{2k+1}}{\left(2k+1\right)!}\\
-		&=\cos x+j\sin x\\
-	\end{align*}
+e^{jx}&=\sum_{k=0}^{\infty}\frac{\left(j x\right)^k}{k!}\\
+&=\frac{1}{0!}+\frac{jx}{1!}+\frac{-x^2}{2!}+\frac{-jx^3}{3!}+\frac{x^4}{4!}+\frac{jx^5}{5!}\cdots\\
+&=\left(\frac{1}{0!}+\frac{-x^2}{2!}+\frac{x^4}{4!}+\cdots\right)+\left(\frac{jx}{1!}+\frac{-jx^3}{3!}+\frac{jx^5}{5!}+\cdots\right)\\
+&=\left(\frac{1}{0!}+\frac{-x^2}{2!}+\frac{x^4}{4!}+\cdots\right)+j\left(\frac{x}{1!}+\frac{-x^3}{3!}+\frac{x^5}{5!}+\cdots\right)\\
+&=\sum_{k=0}^{\infty}\frac{\left(-1\right)^k x^{2k}}{\left(2k\right)!}+j\sum_{k=0}^{\infty}\frac{\left(-1\right)^k x^{2k+1}}{\left(2k+1\right)!}\\
+&=\cos x+j\sin x\\
+\end{align*}
  $$
 
  $$
@@ -45,21 +45,21 @@ $$
 앞서 살펴본 오일러 공식에서 $$e^{jx}$$의 실수 부분과 허수 부분은 다음과 같습니다.
 
 $$\begin{align*}
-		&\text{Re}\left[e^{jx}\right]=\cos x\\
-		&\text{Im}\left[e^{jx}\right]=\sin x
-	\end{align*}
+&\text{Re}\left[e^{jx}\right]=\cos x\\
+&\text{Im}\left[e^{jx}\right]=\sin x
+\end{align*}
 $$
 
 여기서 우리는 한 가지를 선택할 수 있습니다. 어느 것을 선택해도 좋습니다. 보통은 실수 부분인 코사인 함수를 선택합니다. 저는 사인형 변수의 기본형을 코사인으로 기술할 것이기 때문에 실수 부분을 선택하겠습니다. 다음과 같은 사인형 변수를 생각해봅시다.
 
 $$
-x\left(t\right)=X_m\cos\left(\omega t+\theta_x\right)
+x(t)=X_m\cos\left(\omega t+\theta_x\right)
 $$
 
 이는 다음 식의 실수 부분입니다.
 
 $$
-x\left(t\right)=\text{Re}\left[X_me^{j\left(\omega t+\theta_x\right)}\right]\ \ \ \text{(}X_m\text{ 은 실수라고 가정)}
+x(t)=\text{Re}\left[X_me^{j\left(\omega t+\theta_x\right)}\right]\ \ \ \text{(}X_m\text{ 은 실수라고 가정)}
 $$
 
 괄호 속 식은 다음과 같이 쓸 수 있습니다.
@@ -143,13 +143,13 @@ $$
 다음으로 시간 미분입니다. 우선 주파수 부분까지 고려해서 표기를 해봅시다.
 
 $$
-x\left(t\right)=X_me^{j\omega t}e^{j\theta_x}
+x(t)=X_me^{j\omega t}e^{j\theta_x}
 $$
 
 양 변을 시간으로 미분하면 다음과 같습니다.
 
 $$
-\dot{x}\left(t\right)=j\omega X_me^{j\omega t}e^{j\theta_x}
+\dot{x}(t)=j\omega X_me^{j\omega t}e^{j\theta_x}
 $$
 
 위상자 표기법을 이용하면 다음과 같습니다.
