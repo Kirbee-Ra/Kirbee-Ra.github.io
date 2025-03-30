@@ -70,7 +70,7 @@ $$
 
 $$
 \begin{align*}
-&p(t)=v(t)i\left(t\right)=V_mI_m\cos\left(\omega t+\theta\right)\cos\left(\omega t\right)\\
+&p(t)=v(t)i(t)=V_mI_m\cos\left(\omega t+\theta\right)\cos\left(\omega t\right)\\
 \end{align*}
 $$
 
@@ -228,7 +228,7 @@ $$
 $$
 \begin{align*}
 	S&=\frac{1}{2}\mathbf{V}\frac{\mathbf{V}^*}{Z^*}\\
-	&=\frac{1}{2}\frac{V_m^2}{Z^*}
+	&=\frac{V_m^2}{2Z^*}
 	\end{align*}
 $$
 
