@@ -13,7 +13,7 @@ $$
 영벡터가 아닌 벡터 $$v\in V$$에 대해
 
 $$
-T\left(v\right)=\lambda v
+T(v)=\lambda v
 $$
 
 를 만족하는 스칼라 $$\lambda\in\mathbb{F}$$가 존재한다면, $$v$$는 선형 연산자 $$T$$의 **고유 벡터(Eigenvector)**라 하고, 이때 스칼라 $$\lambda$$를 선형 연산자 $$T$$의 **고윳값(Eigenvalue)**이라고 합니다. 기하학적으로, $$v$$는 선형 연산자 $$T$$에 의해 $$\lambda$$배 만큼 늘거나 줄었습니다.
