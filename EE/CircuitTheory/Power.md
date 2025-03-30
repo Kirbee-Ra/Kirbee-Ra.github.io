@@ -57,7 +57,8 @@ $$
 
 $$
 \begin{align*}
-&v(t)=V_m\cos\left(\omega t+\theta_v-\theta_i\right)\\		&i(t)=I_m\cos\left(\omega t\right)\\
+&v(t)=V_m\cos\left(\omega t+\theta_v-\theta_i\right)\\
+&i(t)=I_m\cos\left(\omega t\right)
 \end{align*}
 $$
 
@@ -170,3 +171,153 @@ $$
 	\end{align*}
 $$
 
+---
+
+## 최대 전력 전달 조건
+
+테브난 정리에 따라 회로를 다음과 같이 변환할 수 있습니다.
+이 상황에서 부하로 전달되는 전력이 최대가 되려면 어떤 조건이 필요한지 알아봅시다.
+
+### 저항성 부하
+
+먼저 저항으로만 구성된 부하에 대한 상황입니다.
+전원의 전압을 정현파 전압이라고 가정해봅시다.
+
+$$
+\mathbf{V}=V_m\angle\theta
+$$
+
+부하에 걸리는 전압은 전압 분배에 의해 다음과 같습니다.
+
+$$
+\mathbf{V}_L=\frac{R_L}{R_{Th}+R_L}\mathbf{V}
+$$
+
+부하에 흐르는 전류는 다음과 같습니다.
+
+$$
+\mathbf{I}_L=\frac{\mathbf{V}_L}{R_{Th}+R_L}
+$$
+
+부하로 전달되는 피상 전력은 다음과 같습니다.
+
+$$
+\begin{align*}
+		\mathbf{S}_L&=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*\\
+		&=\frac{1}{2}\frac{R_L}{R_{Th}+R_L}\mathbf{V}_L\frac{\mathbf{V}_L^*}{R_{Th}+R_L}\\
+		&=\frac{V_m^2R_L}{2\left(R_{Th}+R_L\right)^2}
+	\end{align*}
+$$
+
+이 양은 실수이므로 유효 전력과 같습니다.
+
+$$
+P_L=\frac{V_m^2R_L}{2\left(R_{Th}+R_L\right)^2}
+$$
+
+이 식이 바로 부하로 전달되는 전력입니다.
+이 식이 언제 최소가 되는지 알아내기 위해 양 변을 부하 저항에 대해 미분하면 다음과 같습니다.
+
+$$
+\frac{dP_L}{dR_L} = \frac{V_m^2 \left(R_{Th} - R_L\right)}{2 \left(R_{Th} + R_L\right)^3}
+$$
+
+이 식이 $$0$$인 조건은 다음과 같습니다.
+
+$$
+\frac{dP_L}{dR_L}=0\ \ \ \text{if }\ R_L=R_{Th}
+$$
+
+따라서 회로의 테브난 등가 저항과 부하 저항이 같을 때, 부하로 전달되는 전력이 최대가 되는 것을 알 수 있습니다.
+
+### 임피던스 부하
+
+다음으로 일반적인 임피던스 부하에 대해 살펴봅시다.
+부하에 걸리는 전압은 다음과 같습니다.
+
+$$
+\mathbf{V}_L=\frac{R_L+jX_L}{R_{Th}+R_L+j\left(X_{Th}+X_L\right)}\mathbf{V}
+$$
+
+부하에 흐르는 전류는 다음과 같습니다.
+
+$$
+\mathbf{I}_L=\frac{\mathbf{V}}{R_{Th}+R_L+j\left(X_{Th}+X_L\right)}
+$$
+
+부하로 전달되는 피상 전력은 다음과 같습니다.
+
+$$
+\begin{align*}
+		\mathbf{S}_L&=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*\\
+		&=\frac{1}{2}\frac{R_L+jX_L}{R_{Th}+R_L+j\left(X_{Th}+X_L\right)}\mathbf{V}\frac{\mathbf{V}^*}{R_{Th}+R_L-j\left(X_{Th}+X_L\right)}\\
+		&=\frac{V_m^2\left(R_L+jX_L\right)}{2\left(\left(R_{Th}+R_L\right)^2+\left(X_{Th}+X_L\right)^2\right)}
+	\end{align*}
+$$
+
+이 식에서 유효 전력은 다음과 같습니다.
+
+$$
+P=\frac{V_m^2R_L}{2\left(\left(R_{Th}+R_L\right)^2+\left(X_{Th}+X_L\right)^2\right)}
+$$
+
+이 식에 언제 최소가 되는지 알아보기 위해 부하 저항 및 부하 리액턴스에 대해 각각 편미분하면 다음과 같습니다.
+
+$$
+\begin{cases}
+		\frac{\partial P_L}{\partial R_L}
+		= \frac{V_m^2 \left(\left(R_{Th} + R_L\right)^2 + \left(X_{Th} + X_L\right)^2 - 2R_L(R_{Th} + R_L) \right)}{2\left(\left(R_{Th} + R_L\right)^2 + \left(X_{Th} + X_L\right)^2\right)^2}\\
+		\frac{\partial P_L}{\partial X_L}
+		= \frac{-V_m^2 R_L (X_{Th} + X_L)}{\left(\left(R_{Th} + R_L\right)^2 + \left(X_{Th} + X_L\right)^2\right)^2}
+		\end{cases}
+$$
+
+각 식이 $$0$$이 될 조건은 다음과 같습니다.
+
+$$
+\begin{cases}
+		R_L=\sqrt{R_{Th}^2+\left(X_{Th}+X_L\right)^2}\\
+		X_L=-X_{Th}
+		\end{cases}
+$$
+
+두 조건을 종합하여 정리하면 다음과 같습니다.
+
+$$
+\begin{align*}
+&R_L=R_{Th}\ \ \ \text{since }X_L=-X_{Th}\\
+&\rightarrow Z_L=Z_{Th}^*
+\end{align*}
+$$
+
+일반적인 임피던스 부하에 대해서는 부하 임피던스를 등가 임피던스의 켤레 값으로 조정하면 부하에 전달되는 전력이 최대가 되는 것을 알 수 있습니다.
+
+### 제약 조건이 있는 경우
+
+제약 조건에 의해 부하 임피던스를 우리가 원하는 값으로 맞추지 못하는 경우가 있습니다.
+
+(1) 부하 저항 및 리액턴스의 범위가 제한된 경우
+
+이런 경우는 우선, $$X_L$$를 $$-X_{Th}$$에 최대한 가깝게 조정합니다.
+이후에 $$R_L$$을 $$\sqrt{R_{Th}^2+\left(X_{Th}+X_L\right)^2}$$에 최대한 가깝게 조정합니다.
+
+(2) 부하 임피던스의 위상을 바꿀 수 없는 경우
+임피던스를 극형식으로 나타내면 다음과 같습니다.
+
+$$
+\begin{align*}
+		Z_L&=R_L+jX_L\\
+		&=\sqrt{R_L^2+X_L^2}\exp\left(j\tan^{-1}\left(\frac{X_L}{R_L}\right)\right)
+	\end{align*}
+$$
+
+
+
+크기$$\left(\sqrt{R_L^2+X_L^2\right})$$는 조정 가능하고, 비율$$\left(\frac{X_L}{R_L}\right)$$은 고정된 경우입니다.
+이 경우는 $$\left|Z_L\right|$$을 $$\left|Z_{Th}\right|$$와 같도록 조정합니다.
+
+### 임피던스 정합
+
+이러한 튜닝 과정을 일반적으로 **[임피던스 정합]()**이라고 합니다.
+부하로 전달되는 전력을 최대화하는 것이 목적입니다.
+자세한 내용은 해당 문서 참고 바랍니다.
