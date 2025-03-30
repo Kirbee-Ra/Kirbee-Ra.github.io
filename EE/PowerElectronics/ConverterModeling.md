@@ -30,10 +30,10 @@
 
 $$
 \begin{align*}
-		\begin{cases*}
+		\begin{cases}
 			\dot{\mathbf{x}}(t)=\mathbf{A}_{on}\mathbf{x}(t)+\mathbf{B}_{on}v_{in}(t)\\
 			v_o(t)=\mathbf{C}_{on}\mathbf{x}(t)
-		\end{cases*}
+		\end{cases}
   \end{align*}
 $$
 
@@ -46,10 +46,10 @@ $$\mathbf{A}_{on},\mathbf{B}_{on},\mathbf{C}_{on}$$는 각각 온-타임에서�
 
 $$
 \begin{align*}
-		\begin{cases*}
+		\begin{cases}
 			\dot{\mathbf{x}}(t)=\mathbf{A}_{off}\mathbf{x}(t)+\mathbf{B}_{off}v_{in}(t)\\
 			v_o(t)=\mathbf{C}_{off}\mathbf{x}(t)
-		\end{cases*}
+		\end{cases}
   \end{align*}
 $$
 
@@ -61,10 +61,10 @@ $$\mathbf{A}_{off},\mathbf{B}_{off},\mathbf{C}_{off}$$는 각각 오프-타임�
 
 $$
 \begin{align*}
-q(t)=\begin{cases*}
+q(t)=\begin{cases}
 			1\ \ \ \text{(on-time)}\\
 			0\ \ \ \text{(off-time)}
-		\end{cases*}
+		\end{cases}
   \end{align*}
 $$
 
@@ -75,12 +75,21 @@ $$
 
 $$
 \begin{align*}
-\begin{cases*}
+\begin{cases}
 			\dot{\mathbf{x}}(t)=\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)\\
 			v_o(t)=\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)
-		\end{cases*}
+		\end{cases}
   \end{align*}
 $$
+
+컨버터에서 상태 변수는 주로 인덕터 전류와 축전기 전압이 이용됩니다.
+두 양은 시간 미분을 통해 각각 인덕터 전압과 축전기 전류를 표현할 수 있습니다.
+시간 미분 항이 표현식에 포함돼있기 때문에 이 두 변수가 주로 이용됩니다.
+
+### 듀티 비 함수
+
+다음으로 스위칭 함수를 평균화해야 합니다.
+이는 다음과 같이 이동 평균(Moving Average)**
 
 ---
 
