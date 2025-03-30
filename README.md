@@ -46,5 +46,5 @@
 
 오타나 내용에 대한 피드백은 하단의 링크를 통해 부탁드립니다.
 
-https://open.kakao.com/me/Kirbee
+[라커비(카카오톡 오픈채팅)](https://open.kakao.com/me/Kirbee)
 
