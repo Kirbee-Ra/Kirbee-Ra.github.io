@@ -176,8 +176,7 @@ $$
 \begin{align*}
 		S&=P+jQ\\
 		&=\frac{V_mI_m}{2}\cos\theta+j\frac{V_mI_m}{2}\sin\theta\\
-		&=\frac{V_mI_m}{2}e^{j\theta}\\
-		&=\frac{V_mI_m}{2}\angle\theta
+		&=\frac{V_mI_m}{2}e^{j\theta}
 	\end{align*}
 $$
 
