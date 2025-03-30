@@ -16,7 +16,7 @@ $$
 
 $$
 \begin{align*}
-Q\(\alpha v+\beta w)=\alpha^2 Q(v)+\alpha\beta B\(v,w)+\beta^2 Q(w)
+Q(\alpha v+\beta w)=\alpha^2 Q(v)+\alpha\beta B(v,w)+\beta^2 Q(w)
 \end{align*}
 $$
 
