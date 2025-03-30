@@ -72,7 +72,6 @@ $$
 			\dot{\mathbf{x}}(t)=\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)\\
 			v_o(t)=\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)
 		\end{cases}
-  \end{align*}
 $$
 
 컨버터에서 상태 변수는 주로 인덕터 전류와 축전기 전압이 이용됩니다.
@@ -88,17 +87,28 @@ $$
 d(t)=\frac{1}{T_s}\int_{t-T_s}^tq(t)dt
 $$
 
+이 식이 바로 듀티 비를 연속적으로 나타낸 함수입니다.
 이 값은 그림과 같이 약간의 오차(지연)가 존재합니다.
 
 (conti duty)
 
-현재 시각 $$t$$에서의 듀티 정보를 $$T_s$$만큼의 과거로부터의 적분을 통하여 구하기 때문에 그렇습니다.
+현재 시각 $$t$$에서의 듀티 비 정보를 $$T_s$$만큼의 과거로부터의 적분을 통하여 구하기 때문에 그렇습니다.
 하지만 이정도 오차는 공학에서 용인되는 범위 내입니다.
 
 ### 상태 공간 표현식 평균화
 
 다음으로 상태 공간 표현식을 평균화하면 다음과 같습니다.
 
+$$
+\begin{cases}
+			\dot{\overline{\mathbf{x}}}(t)=\overline{\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)}\\
+			\overline{v_o}(t)=\overline{\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)}
+		\end{cases}
+$$
+
+우선 평균화는 적분을 통해 수행되므로 선형적인 연산입니다.
+또한 각 행렬들은 모두 상수입니다.
+그리고 
 
 
 ---
