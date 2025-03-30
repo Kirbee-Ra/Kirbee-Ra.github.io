@@ -165,5 +165,37 @@ $$
 \rightarrow \dot{\mathbf{X}}=j\omega\mathbf{X}
 $$
 
+$$j\omega$$를 원래의 위상자에 곱한 값이 바로 시간 미분입니다.
+
 ### 시간 적분
 
+다음으로 시간 적분입니다. 이 또한 주파수 부분까지 고려해서 표기를 해봅시다.
+
+$$
+x(t)=X_me^{j\omega t}e^{j\theta_x}
+$$
+
+양 변을 구간 $$(-\infty,t]$$에서 적분하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		\int_{-\infty}^t x(t')dt'&=\int_{-\infty}^tX_me^{j\omega t'}e^{j\theta_x}dt'\\
+  &=\left[\frac{X_me^{j\omega t'}e^{j\theta_x}}{j\omega}\right]_{-\infty}^t\\
+		&=\frac{X_me^{j\omega t}e^{j\theta_x}}{j\omega}
+	\end{align*}
+$$
+
+위상자 표기법을 이용하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		\int_{-\infty}^t \mathbf{X}dt'&=\frac{X_me^{j\theta_x}}{j\omega}\\
+		&=\frac{X_m\angle\theta_x}{j\omega}
+	\end{align*}
+$$
+
+$$
+\rightarrow\int_{-\infty}^t \mathbf{X}dt'=\frac{\mathbf{X}}{j\omega}
+$$
+
+$$j\omega$$를 원래의 위상자에 나눈 값이 바로 시간 적분입니다.
