@@ -156,13 +156,26 @@ $$
 
 ---
 
-## 복소 전력
+## 피상 전력
 
 ### 피상 전력
 
+앞서 살펴본 유효 전력과 무효 전력은 각각 다음 **피상 전력(Apparent Power)**의 실수 부분과 허수 부분입니다.
+
+$$S=P+jQ$$
+
+또는 **복소 전력(Complex Power)**이라고도 합니다.
+단위는 [VA]입니다.
+피상 전력을 앞서 구한 유효 전력과 무효 전력을 이용하여 표현하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		S&=P+jQ\\
+		&=\frac{V_mI_m}{2}\cos\theta+j\frac{V_mI_m}{2}\sin\theta
+	\end{align*}
+$$
+
 ([위상자](./Phasor.md) 표현이 익숙하지 않으신 분은 해당 문서를 참고 바랍니다.)
-
-
 
 $$
 \begin{align*}
@@ -170,6 +183,10 @@ $$
 		&\mathbf{I}=I_m\angle\theta_i
 	\end{align*}
 $$
+
+### 역률
+
+
 
 ---
 
