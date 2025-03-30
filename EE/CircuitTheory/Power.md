@@ -415,7 +415,7 @@ $$
 
 
 
-크기$$\left(\sqrt{R_L^2+X_L^2\right})$$는 조정 가능하고, 비율$$\left(\frac{X_L}{R_L}\right)$$은 고정된 경우입니다.
+크기$$\left(\sqrt{R_L^2+X_L^2}\right)$$는 조정 가능하고, 비율$$\left(\frac{X_L}{R_L}\right)$$은 고정된 경우입니다.
 이 경우는 $$\left|Z_L\right|$$을 $$\left|Z_{Th}\right|$$와 같도록 조정합니다.
 
 ### 임피던스 정합
