@@ -1,8 +1,12 @@
 공부한 내용을 정리하는 공간입니다.
 
+# 프로필
+- 전공: 전기전자공학, 물리학
+- 관심분야: 전력전자
+
 ---
 
-## 카테고리
+# 카테고리
 - [전자공학](./EE/ElectricalEngineering.md)
   - [전자기학]
   - [회로이론](./EE/CircuitTheory/CircuitTheory.md)
@@ -24,15 +28,23 @@
 
 ---
 
-## 용어 목록
+# 용어 목록
 - [국문 용어](./terminology/KIndex.md)
 - [영문 용어](./terminology/EIndex.md)
 - [용어 대응](./terminology/Translation.md)
 
 ---
 
-
-## 표기법
+# 표기법
 - [물리량](./Notation/Quantity.md)
 - [연산](./Notation/Operation.md)
 - [관습](./Notation/Convention.md)
+
+---
+
+# 문의
+
+오타나 내용에 대한 피드백은 하단의 링크를 통해 부탁드립니다.
+
+https://open.kakao.com/me/Kirbee
+
