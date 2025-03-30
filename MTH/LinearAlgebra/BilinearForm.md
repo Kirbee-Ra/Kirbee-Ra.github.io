@@ -16,9 +16,9 @@ $$
 
 $$
 \begin{gather*}
-B\left(\alpha u+\beta v,w\right)=\alpha B\left(u,w\right)+\beta B\left(v,w\right)\\
+B(\alpha u+\beta v,w)=\alpha B(u,w)+\beta B(v,w)\\
 \text{and}\\
-B\left(u,\alpha v+\beta w\right)=\alpha B\left(u,v\right)+\beta B\left(u,w\right)
+B(u,\alpha v+\beta w)=\alpha B(u,v)+\beta B(u,w)
 \end{gather*}
 $$
 
@@ -39,7 +39,7 @@ $$
 $$n$$차원 벡터 공간 $$V$$이 $$\left\{\hat{e}_i\right\}$$를 기저로 갖는다고 해봅시다. 모든 쌍선형 형식 $$B$$는 다음과 같이 $$n\times n$$ 행렬 $$\mathbf{M}$$으로 나타낼 수 있습니다.
 
 $$
-B\left(x,y\right)=\mathbf{x}^T\mathbf{M}\mathbf{y}=\begin{bmatrix}
+B(x,y)=\mathbf{x}^T\mathbf{M}\mathbf{y}=\begin{bmatrix}
 		x_1&\cdots&x_n
 	\end{bmatrix}\begin{bmatrix}
 	M_{11}&\cdots&M_{1n}\\
@@ -64,7 +64,7 @@ $$
 쌍선형 형식 $$B$$가 다음을 만족하면 대칭적(Symmetric)이라고 말합니다.
 
 $$
-B\left(u,v\right)=B\left(v,u\right)
+B(u,v)=B(v,u)
 $$
 
 행렬로 표현하면 다음과 같습니다.
@@ -78,7 +78,7 @@ $$
 다음을 만족하면 반대칭적(Skew-Symmetric)이라고 말합니다.
 
 $$
-B\left(u,v\right)=-B\left(v,u\right)
+B(u,v)=-B(v,u)
 $$
 
 행렬로 표현하면 다음과 같습니다.
@@ -109,7 +109,7 @@ $$
 $$2\times2$$ 행렬의 행렬식은 면적을 의미합니다.
 
 $$
-B\left(\mathbf{x},\mathbf{y}\right)=\begin{vmatrix}
+B(\mathbf{x},\mathbf{y})=\begin{vmatrix}
 x_1&y_1\\
 x_2&y_2
 \end{vmatrix}=x_1y_2-x_2y_1
@@ -118,10 +118,10 @@ $$
 두 벡터의 위치를 바꾸면 다음과 같습니다.
 
 $$
-B\left(\mathbf{y},\mathbf{x}\right)=\begin{vmatrix}
+B(\mathbf{y},\mathbf{x})=\begin{vmatrix}
 y_1&x_1\\
 y_2&x_2
-\end{vmatrix}=y_1x_2-y_2x_1=-\left(x_1y_2-x_2y_1\right)=-B\left(\mathbf{x},\mathbf{y}\right)
+\end{vmatrix}=y_1x_2-y_2x_1=-\left(x_1y_2-x_2y_1\right)=-B(\mathbf{x},\mathbf{y})
 $$
 
 따라서 이는 반대칭 쌍선형 형식임을 알 수 있습니다.
