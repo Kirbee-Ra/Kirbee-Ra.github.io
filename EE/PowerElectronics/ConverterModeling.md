@@ -84,7 +84,7 @@ $$
 이는 다음과 같이 **이동 평균(Moving Average)**을 통해 구할 수 있습니다.
 
 $$
-d(t)=\frac{1}{T_s}\int_{t-T_s}^tq(t)dt
+d(t)=\frac{1}{T_s}\int_{t-T_s}^tq(t')dt'
 $$
 
 이 식이 바로 듀티 비를 연속적으로 나타낸 함수입니다.
