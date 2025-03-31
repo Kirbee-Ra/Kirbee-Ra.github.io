@@ -8,15 +8,15 @@
 따라서 다이오드에 전류가 흐르면 손실이 발생합니다.
 
 $$
-p\left(t\right)=V_Fi_{diode}\left(t\right)
+p(t)=V_Fi_{diode}(t)
 $$
 
 스위칭 주기에 대해 평균을 내면 다음과 같습니다.
 
 $$
 \begin{align*}
-P&=\frac{1}{T_s}\int_{T_s}p\left(t\right)dt\\
-&=\frac{1}{T_s}\int_{T_s}V_Fi_{diode}\left(t\right)dt\\
+P&=\frac{1}{T_s}\int_{T_s}p(t)dt\\
+&=\frac{1}{T_s}\int_{T_s}V_Fi_{diode}(t)dt\\
 &=V_FI_{diode}
 \end{align*}
 $$
@@ -42,15 +42,15 @@ MOSFET은 구동시, $$R_{DS(on)}$$만큼의 저항이 있습니다.
 이로 인해 도통 손실이 발생합니다.
 
 $$
-p\left(t\right)=i_{D}^2\left(t\right)R_{DS(on)}
+p(t)=i_{D}^2(t)R_{DS(on)}
 $$
 
 스위칭 주기에 대해 평균을 내면 다음과 같습니다.
 
 $$
 \begin{align*}
-P&=\frac{1}{T_s}\int_{T_s}p\left(t\right)dt\\
-&=\frac{1}{T_s}\int_{T_s}i_{D}^2\left(t\right)R_{DS(on)}dt\\
+P&=\frac{1}{T_s}\int_{T_s}p(t)dt\\
+&=\frac{1}{T_s}\int_{T_s}i_{D}^2(t)R_{DS(on)}dt\\
 &=i_{D,rms}^2R_{DS(on)}
 \end{align*}
 $$
