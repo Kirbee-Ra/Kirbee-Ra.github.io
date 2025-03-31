@@ -30,7 +30,7 @@
 ---
 ## ㄷ
 - [다이오드]
-- [동기 정류](./EE/PowerElectronics/SynchronousRectification.md)
+- [동기 정류](EE/PowerElectronics/SynchronousRectification.md)
 - [동 특성]
 - [디랙 델타 함수]
 
