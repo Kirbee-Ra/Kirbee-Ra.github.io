@@ -99,3 +99,4 @@ $$
 			v_o(t)=\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)
 		\end{cases}
 $$
+
