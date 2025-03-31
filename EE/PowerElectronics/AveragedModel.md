@@ -27,7 +27,7 @@
 
 ---
 
-## 스위칭 상태 공간 모델
+## 상태 공간 평균화
 먼제 온-타임과 오프-타임에서의 상태 공간 표현식을 구해야 합니다.
 일반적인 상태 공간 표현식은 다음의 형태입니다.
 
@@ -77,3 +77,25 @@ $$
 $$
 
 $$off$$는 오프-타임을 의미합니다.
+
+### 스위칭 상태 공간 모델
+이제 두 식을 하나의 식으로 나타내야 합니다.
+이는 다음의 스위칭 함수를 이용하면 됩니다.
+
+$$
+q(t)=\begin{cases}
+			1\ \ \ \text{(on-time)}\\
+			0\ \ \ \text{(off-time)}
+		\end{cases}
+$$
+
+온-타임에서는 $$1$$이 출력되고, 오프-타임에서는 $$0$$이 출력됩니다. 온-타임 표현식은 스위칭 함수가 $$1$$일 때 나타나야하고 이때 오프-타임 표현식은 나타나면 안 됩니다.
+따라서 온-타임 식에는 $$q(t)$$가 곱해지고, 오프-타임 식에는 $$1-q(t)$$가 곱해져야 하는 것을 알 수 있습니다.
+이는 다음과 같이 나타납니다.
+
+$$
+\begin{cases}
+			\dot{\mathbf{x}}(t)=\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)\\
+			v_o(t)=\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)
+		\end{cases}
+$$
