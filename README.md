@@ -42,7 +42,7 @@
 
 ---
 
-# [참고 문헌](./Reference.md)
+# [참고 문헌](./Reference/Reference.md)
 
 ---
 
