@@ -103,11 +103,57 @@ $$
 온-타임 식과 오프-타임 식을 하나의 식으로 나타냈습니다.
 
 ### 듀티 함수
-스위칭 상태 공간 모델은 
+스위칭 상태 공간 모델을 평균화하려면 우선 평균화된 스위칭 함수를 구해야 합니다.
+스위칭은 듀티 비를 나타냅니다.
+따라서 다음과 같이 스위칭 함수의 **이동 평균(Moving Average)**을 구하면 연속 듀티 함수를 구할 수 있습니다.
+
+$$
+d(t)=\frac{1}{T_s}\int_{t-T_s}^tq(t')dt'
+$$
+
+다음은 스위칭 함수를 듀티 함수로 바꾸는 과정을 그래프로 나타낸 것입니다.
+평균화 과정에서 약간의 지연이 발생하는 것을 알 수 있습니다.
+이동 평균은 적분을 통해 현재 시각에서의 듀티 비를 구하는 것입니다.
+이 적분은 현재 시각에서 $$T_s$$만큼의 과거로부터 현재 시각까지 값을 누적합니다.
+과거의 정보가 담겨있으므로, 지연이 발생할 수밖에 없습니다.
+하지만 이 정도의 오차는 공학에서 용인됩니다.
+
+### 평균화 상태 공간 모델
+
+이제 스위칭 상태 공간 모델을 평균화해봅시다.
+
+$$
+\begin{cases}
+			\dot{\overline{\mathbf{x}}}(t)=\overline{\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)}\\
+			\overline{v}_o(t)=\overline{\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)}
+		\end{cases}
+$$
+
+여기서 3가지의 가정을 합니다.
+1. 평균화는 선형 연산입니다.
+2. 행렬들은 모두 상수입니다.
+3. 상태 벡터와 입력 변수가 평균으로부터의 편차가 크지 않다면, $$\overline{q(t)\mathbf{x}(t)}\approx\overline{q(t)}\overline{\mathbf{x}(t)},\overline{q(t)v_{in}(t)}\approx\overline{q(t)}\overline{v_{in}(t)}$$와 같이 근사할 수 있습니다.
+
+이 가정을 통해 구한 평균화 상태 공간 모델은 다음과 같습니다.
+
+$$
+\begin{align*}
+	&\begin{cases}
+		\dot{\overline{\mathbf{x}}}(t)=\overline{\left(q(t)\mathbf{A}_{on}+\left(1-q(t)\right)\mathbf{A}_{off}\right)\mathbf{x}(t)+\left(q(t)\mathbf{B}_{on}+\left(1-q(t)\right)\mathbf{B}_{off}\right)v_{in}(t)}\\
+		\overline{v}_o(t)=\overline{\left(q(t)\mathbf{C}_{on}+\left(1-q(t)\right)\mathbf{C}_{off}\right)\mathbf{x}(t)}
+	\end{cases}\\
+	&\rightarrow\begin{cases}
+		\dot{\overline{\mathbf{x}}}(t)=\left(d(t)\mathbf{A}_{on}+\left(1-d(t)\right)\mathbf{A}_{off}\right)\overline{\mathbf{x}}(t)+\left(d(t)\mathbf{B}_{on}+\left(1-d(t)\right)\mathbf{B}_{off}\right)\overline{v}_{in}(t)\\
+		\overline{v}_o(t)=\left(d(t)\mathbf{C}_{on}+\left(1-d(t)\right)\mathbf{C}_{off}\right)\overline{\mathbf{x}}(t)
+	\end{cases}
+		\end{align*}
+$$
 
 ---
 
 ## 회로 평균화
+
+
 
 ---
 
