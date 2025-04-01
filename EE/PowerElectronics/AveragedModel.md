@@ -132,7 +132,7 @@ $$
 여기서 3가지의 가정을 합니다.
 1. 평균화는 선형 연산입니다.
 2. 행렬들은 모두 상수입니다.
-3. 상태 벡터와 입력 변수가 평균으로부터의 편차가 크지 않다면, $$\overline{q(t)\mathbf{x}(t)}\approx\overline{q(t)}\overline{\mathbf{x}(t)},\overline{q(t)v_{in}(t)}\approx\overline{q(t)}\overline{v_{in}(t)}$$와 같이 근사할 수 있습니다.
+3. 상태 벡터와 입력 변수가 평균으로부터의 편차가 크지 않다면, $$\overline{q(t)\mathbf{x}(t)}\approx\overline{q}(t)\overline{\mathbf{x}}(t),\overline{q(t)v_{in}(t)}\approx\overline{q}(t)\overline{v}_{in}(t)$$와 같이 근사할 수 있습니다.
 
 이 가정을 통해 구한 평균화 상태 공간 모델은 다음과 같습니다.
 
