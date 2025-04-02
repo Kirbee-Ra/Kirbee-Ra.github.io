@@ -90,20 +90,21 @@ $$
 T(s)=\frac{K\Pi_k\left(s+z_k\right)\Pi_k\left(s^2+a_ks+b_k\right)\cdots}{\Pi_k\left(s+p_k\right)\Pi_k\left(s^2+c_ks+d_k\right)\cdots}
 $$
 
+일반적인 전달 함수는 이와 같이 1차, 2차 및 그 이상 차수에 대한 식으로 인수분해되어 나타낼 수 있습니다.
 보드 선도는 주파수에 대한 응답을 분석하는 것이 목적이므로 다음과 같이 $$s=j\omega$$를 대입하여 그립니다.
 
 $$
 T(j\omega)=\frac{K\Pi_k\left(j\omega+z_k\right)\Pi_k\left(-\omega^2+ja_k\omega+b_k\right)\cdots}{\Pi_k\left(j\omega+p_k\right)\Pi_k\left(-\omega^2+jc_k\omega+d_k\right)\cdots}
 $$
 
-일반적인 전달 함수는 다음과 같이 1차, 2차 및 그 이상 차수에 대한 식으로 인수분해되어 나타낼 수 있습니다.
 하지만 이렇게 곱으로 나타낸 식은 그리기 어렵습니다.
-곱으로 된 식을 합으로 표현하는 방법이 바로 다음과 같이 로그를 취하는 것입니다.
+곱으로 된 식을 합으로 표현하는 방법이 있습니다.
+바로 다음과 같이 로그를 취하는 것입니다.
 
 $$
 \begin{align*}
-		\log\left\vert T(j\omega)\right\vert=&\ \log \left\vert K\right\vert+\sum_k\log\left\vert j\omega+z_k\right\vert-\sum_k\log\left\vert j\omega+p_k\right\vert\\
-  &+\sum_k\log\left\vert -\omega^2+ja_k\omega+b_k\right\vert-\sum_k\log\left\vert -\omega^2+jc_k\omega+d_k\right\vert+\cdots
+		\log\left\vert T(j\omega)\right\vert=&\ \log \left\vert K\right\vert+\sum_k\log\left\vert j\omega+z_k\right\vert+\sum_k\log\left\vert \frac{1}{j\omega+p_k}\right\vert\\
+  &+\sum_k\log\left\vert \frac{1}{-\omega^2+ja_k\omega+b_k}\right\vert+\sum_k\log\left\vert\frac{1}{-\omega^2+jc_k\omega+d_k}\right\vert+\cdots
 	\end{align*}
 $$
 
@@ -111,8 +112,8 @@ $$
 
 $$
 \begin{align*}
-		20\log\left\vert T(j\omega)\right\vert=&\ 20\log \left\vert K\right\vert+\sum_k20\log\left\vert j\omega+z_k\right\vert-\sum_k20\log\left\vert j\omega+p_k\right\vert\\
-  &+\sum_k20\log\left\vert -\omega^2+ja_k\omega+b_k\right\vert-\sum_k20\log\left\vert -\omega^2+jc_k\omega+d_k\right\vert+\cdots
+		20\log\left\vert T(j\omega)\right\vert=&\ 20\log \left\vert K\right\vert+\sum_k20\log\left\vert j\omega+z_k\right\vert+\sum_k20\log\left\vert \frac{1}{j\omega+p_k}\right\vert\\
+  &+\sum_k20\log\left\vert\frac{1}{-\omega^2+ja_k\omega+b_k}\right\vert+\sum_k20\log\left\vert\frac{1}{ -\omega^2+jc_k\omega+d_k}\right\vert+\cdots
 \ \text{[dB]}
 \end{align*}
 $$
