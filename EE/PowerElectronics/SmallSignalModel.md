@@ -26,13 +26,10 @@ $$
 f:\mathbb{R}\rightarrow\mathbb{R}
 $$
 
-그리고 다음과 같이 동작점 $$\left(X,Y\right)$$에서 소신호 $$\hat{x},\hat{y}$$만큼을 가했다고 해봅시다.
+그리고 다음과 같이 동작점 $$\left(X,f(X)\right)$$에서 소신호 $$\hat{x}$$를 가했다고 해봅시다.
 
 $$
-\begin{align*}
-		&x=X+\hat{x}\\
-		&y=Y+\hat{y}
-	\end{align*}
+x=X+\hat{x}
 $$
 
 여기서 소신호는 $$1$$에 비해 매우 작다고 가정합니다.
@@ -47,7 +44,7 @@ $$
 		\end{align*}
 $$
 
-$$y=Y+\hat{y}$$를 이용하여 표현하면 다음과 같습니다.
+출력 신호를 $$y=Y+\hat{y}$$와 같이 표현하면 다음과 같습니다.
 
 $$
 Y+\hat{y}=f(X)+\frac{df}{dx}\Big\vert_{x=X}\hat{x}+\frac{1}{2}\frac{d^2f}{dx^2}\Big\vert_{x=X}\hat{x}+\cdots
