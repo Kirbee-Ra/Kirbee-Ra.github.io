@@ -15,7 +15,7 @@
 **벨(B, bel)**은 기준 전력에 대한 전력 비의 상용로그 값입니다.
 
 $$
-L_B=\log_{10}\left(\frac{p}{p_0}\right)\ \text{[B]}
+L_B=\log\left(\frac{p}{p_0}\right)\ \text{[B]}
 $$
 
 전력이 기준치 대비 $$n\text{ B}$$만큼 상승하면 $$10^n$$만큼 상승했다는 의미입니다.
@@ -28,7 +28,7 @@ $$
 벨에 $$1/10$$을 의미하는 접두어 데시(deci)가 붙어서 벨에 비해 작은 단위입니다.
 
 $$
-L_{dB}=10\log_{10}\left(\frac{p}{p_0}\right)\ \text{[dB]}
+L_{dB}=10\log\left(\frac{p}{p_0}\right)\ \text{[dB]}
 $$
 
 전력이 기준치 대비 $$n\text{ dB}$$만큼 상승하면 $$10^{n/10}$$만큼 상승했다는 의미입니다.
@@ -45,9 +45,9 @@ $$
 
 $$
 \begin{align*}
-		L_{dB}&=10\log_{10}\left(\frac{v^2/R}{v_0^2/R}\right)\\
-		&=10\log_{10}\left(\frac{v^2}{v_0^2}\right)\\
-		&=20\log_{10}\left(\frac{v}{v_0}\right)
+		L_{dB}&=10\log\left(\frac{v^2/R}{v_0^2/R}\right)\\
+		&=10\log\left(\frac{v^2}{v_0^2}\right)\\
+		&=20\log\left(\frac{v}{v_0}\right)
 	\end{align*}
 $$
 
@@ -56,9 +56,9 @@ $$
 
 $$
 \begin{align*}
-		L_{dB}&=10\log_{10}\left(\frac{i^2R}{i_0^2R}\right)\\
-		&=10\log_{10}\left(\frac{i^2}{i_0^2}\right)\\
-		&=20\log_{10}\left(\frac{i}{i_0}\right)
+		L_{dB}&=10\log\left(\frac{i^2R}{i_0^2R}\right)\\
+		&=10\log\left(\frac{i^2}{i_0^2}\right)\\
+		&=20\log\left(\frac{i}{i_0}\right)
 	\end{align*}
 $$
 
