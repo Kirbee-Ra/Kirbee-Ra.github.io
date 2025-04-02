@@ -96,7 +96,7 @@ $$
 			\overline{v}_{cp}=V_{cp}+\hat{v}_{cp}\\
 			\overline{i}_{a}=I_{a}+\hat{i}_{a}\\
 			\overline{i}_{c}=I_{c}+\hat{i}_{c}\\
-   \overline{d}(t)=D+\hat{d}
+   \overline{d}=D+\hat{d}
 		\end{cases}
 $$
 
