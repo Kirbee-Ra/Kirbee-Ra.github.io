@@ -67,3 +67,51 @@ $$
 
 ---
 
+## 보드 선도
+
+**보드 선도(Bode Plot)**는 전달 함수의 크기와 위상을 주파수 값에 따라 그래프로 나타낸 것입니다.
+시스템의 주파수 응답을 분석할 때 유용하게 이용됩니다.
+
+(Bode Plot)
+
+### 점근적 근사
+
+예시로 보여드린 보드 선도는 언뜻 보면 복잡해 보입니다.
+이 보드 선도를 전달 함수를 통해 손으로 직접 그리는 방법 또한 있습니다.
+바로 **점근적 근사(Asymptotic Approximation)**를 통해 그리는 것입니다.
+시스템의 세세한 변화는 무시하고, 특정 주파수들을 중심으로 시스템의 응답이 어떻게 변화하는지 어림잡아 그리는 방법입니다.
+몇 가지 가정 하에서는 정확한 보드 선도와 비교할 때, 오차가 매우 적습니다.
+
+### 로그 스케일
+
+보드 선도의 크기 그래프는 전달 함수에 로그를 취한 뒤 그립니다.
+다음의 전달 함수를 살펴봅시다.
+
+$$
+T(s)=\frac{K_T\Pi_k\left(s+z_k\right)\Pi_k\left(s^2+a_ks+b_k\right)\cdots}{\Pi_k\left(s+p_k\right)\Pi_k\left(s^2+c_ks+d_k\right)\cdots}
+$$
+
+일반적인 전달 함수는 다음과 같이 1차, 2차 및 그 이상 차수에 대한 식으로 인수분해되어 나타낼 수 있습니다.
+하지만 이렇게 곱으로 나타낸 식은 그리기 어렵습니다.
+곱으로 된 식을 합으로 표현하는 방법이 바로 다음과 같이 로그를 취하는 것입니다.
+
+$$
+\begin{align*}
+		\log T(s)&=\log\frac{K_T\Pi_k\left(s+z_k\right)\Pi_k\left(s^2+a_ks+b_k\right)\cdots}{\Pi_k\left(s+p_k\right)\Pi_k\left(s^2+c_ks+d_k\right)\cdots}\\
+		&=\log K_T+\sum_k\log\left(s+z_k\right)-\sum_k\log\left(s+p_k\right)+\sum_k\log\left(s^2+a_ks+b_k\right)-\sum_k\log\left(s^2+c_ks+d_k\right)+\cdots
+	\end{align*}
+$$
+
+이 식에 이전에 언급했듯이 $$20$$을 곱하면 데시벨 스케일로 볼 수 있습니다.
+
+$$
+\begin{align*}
+		20\log T(s)=&20\log K_T+\sum_k20\log\left(s+z_k\right)-\sum_k20\log\left(s+p_k\right)\\
+  &+\sum_k20\log\left(s^2+a_ks+b_k\right)-\sum_k20\log\left(s^2+c_ks+d_k\right)+\cdots\ \text{[dB]}
+	\end{align*}
+$$
+
+이제 각 항에 대해 그래프를 그린 뒤, 모두 더하면 원래 전달 함수의 크기에 대한 정보를 얻을 수 있습니다.
+
+---
+
