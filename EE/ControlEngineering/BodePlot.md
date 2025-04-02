@@ -82,13 +82,18 @@ $$
 시스템의 세세한 변화는 무시하고, 특정 주파수들을 중심으로 시스템의 응답이 어떻게 변화하는지 어림잡아 그리는 방법입니다.
 몇 가지 가정 하에서는 정확한 보드 선도와 비교할 때, 오차가 매우 적습니다.
 
-### 로그 스케일
+### 크기 스케일
 
-보드 선도의 크기 그래프는 전달 함수에 로그를 취한 뒤 그립니다.
 다음의 전달 함수를 살펴봅시다.
 
 $$
 T(s)=\frac{K\Pi_k\left(s+z_k\right)\Pi_k\left(s^2+a_ks+b_k\right)\cdots}{\Pi_k\left(s+p_k\right)\Pi_k\left(s^2+c_ks+d_k\right)\cdots}
+$$
+
+보드 선도는 주파수에 대한 응답을 분석하는 것이 목적이므로 다음과 같이 $$s=j\omega$$를 대입하여 그립니다.
+
+$$
+T(j\omega)=\frac{K\Pi_k\left(j\omega+z_k\right)\Pi_k\left(-\omega^2+ja_k\omega+b_k\right)\cdots}{\Pi_k\left(j\omega+p_k\right)\Pi_k\left(-\omega^2+jc_k\omega+d_k\right)\cdots}
 $$
 
 일반적인 전달 함수는 다음과 같이 1차, 2차 및 그 이상 차수에 대한 식으로 인수분해되어 나타낼 수 있습니다.
@@ -97,8 +102,8 @@ $$
 
 $$
 \begin{align*}
-		\log T(s)&=\log\frac{K\Pi_k\left(s+z_k\right)\Pi_k\left(s^2+a_ks+b_k\right)\cdots}{\Pi_k\left(s+p_k\right)\Pi_k\left(s^2+c_ks+d_k\right)\cdots}\\
-		&=\log K+\sum_k\log\left(s+z_k\right)-\sum_k\log\left(s+p_k\right)+\sum_k\log\left(s^2+a_ks+b_k\right)-\sum_k\log\left(s^2+c_ks+d_k\right)+\cdots
+		\log\left\vert T(j\omega)\right\vert=&\log \left\vert K\right\vert+\sum_k\log\left\vert j\omega+z_k\right\vert-\sum_k\log\left\vert j\omega+p_k\right\vert\\
+  &+\sum_k\log\left\vert -\omega^2+ja_k\omega+b_k\right\vert-\sum_k\log\left\vert -\omega^2+jc_k\omega+d_k\right\vert+\cdots
 	\end{align*}
 $$
 
@@ -106,12 +111,17 @@ $$
 
 $$
 \begin{align*}
-		20\log T(s)=&20\log K+\sum_k20\log\left(s+z_k\right)-\sum_k20\log\left(s+p_k\right)\\
-  &+\sum_k20\log\left(s^2+a_ks+b_k\right)-\sum_k20\log\left(s^2+c_ks+d_k\right)+\cdots\ \text{[dB]}
-	\end{align*}
+		20\log\left\vert T(j\omega)\right\vert=&20\log \left\vert K\right\vert+\sum_k20\log\left\vert j\omega+z_k\right\vert-\sum_k20\log\left\vert j\omega+p_k\right\vert\\
+  &+\sum_k20\log\left\vert -\omega^2+ja_k\omega+b_k\right\vert-\sum_k20\log\left\vert -\omega^2+jc_k\omega+d_k\right\vert+\cdots
+\ \text{[dB]}
+\end{align*}
 $$
 
 이제 각 항에 대해 그래프를 그린 뒤, 모두 더하면 원래 전달 함수의 크기에 대한 정보를 얻을 수 있습니다.
+
+### 주파수 스케일
+
+
 
 ---
 
@@ -124,8 +134,71 @@ $$
 ### 양수
 
 먼저 양수입니다.
-양수를 크기와 위상으로 표현하면 다음과 같습니다.
 
 $$
-K=\left\vert K\right\vert\angle0
+F(s)=K
+$$
+
+$$s=j\omega$$를 대입하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		F(j\omega)&=K\\
+  		&=\left\vert K\right\vert\\
+		&=\left\vert K\right\vert\angle0^{\circ}
+	\end{align*}
+$$
+
+나눠서 표현하면 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(s)\right\vert=20\log\left\vert K\right\vert\\
+			\angle\left\vert F(s)\right\vert=0^{\circ}
+		\end{cases}
+$$
+
+### 음수
+
+다음으로 음수입니다.
+
+$$
+F(s)=K
+$$
+
+$$s=j\omega$$를 대입하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		F(j\omega)&=K\\
+  		&=-\left\vert K\right\vert\\
+		&=\left\vert K\right\vert\angle\left(-180^{\circ}\right)
+	\end{align*}
+$$
+
+나눠서 표현하면 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(s)\right\vert=20\log\left\vert K\right\vert\\
+			\angle\left\vert F(s)\right\vert=-180^{\circ}
+		\end{cases}
+$$
+
+---
+
+## 미분과 적분
+
+### 미분
+
+미분에 대한 식은 다음과 같습니다.
+
+$$
+F(s)=K_ds
+$$
+
+$$s=j\omega$$를 대입하면 다음과 같습니다.
+
+$$
+F(j\omega)=jK_d\omega
 $$
