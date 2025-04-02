@@ -298,7 +298,7 @@ $$
 
 $$
 \begin{align*}
-		\mathbf{S}_L&=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*\\
+		S_L&=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*\\
 		&=\frac{1}{2}\frac{R_L}{R_{Th}+R_L}\mathbf{V}_L\frac{\mathbf{V}_L^*}{R_{Th}+R_L}\\
 		&=\frac{V_m^2R_L}{2\left(R_{Th}+R_L\right)^2}
 	\end{align*}
@@ -349,7 +349,7 @@ $$
 
 $$
 \begin{align*}
-		\mathbf{S}_L&=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*\\
+		S_L&=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*\\
 		&=\frac{1}{2}\frac{R_L+jX_L}{R_{Th}+R_L+j\left(X_{Th}+X_L\right)}\mathbf{V}\frac{\mathbf{V}^*}{R_{Th}+R_L-j\left(X_{Th}+X_L\right)}\\
 		&=\frac{V_m^2\left(R_L+jX_L\right)}{2\left(\left(R_{Th}+R_L\right)^2+\left(X_{Th}+X_L\right)^2\right)}
 	\end{align*}
