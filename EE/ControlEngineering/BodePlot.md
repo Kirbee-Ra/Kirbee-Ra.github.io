@@ -104,7 +104,7 @@ $$
 $$
 \begin{align*}
 		\log\left\vert T(j\omega)\right\vert=&\ \log \left\vert K\right\vert+\sum_k\log\left\vert j\omega+z_k\right\vert+\sum_k\log\left\vert \frac{1}{j\omega+p_k}\right\vert\\
-  &+\sum_k\log\left\vert \frac{1}{-\omega^2+ja_k\omega+b_k}\right\vert+\sum_k\log\left\vert\frac{1}{-\omega^2+jc_k\omega+d_k}\right\vert+\cdots
+  &+\sum_k\log\left\vert-\omega^2+ja_k\omega+b_k\right\vert+\sum_k\log\left\vert\frac{1}{-\omega^2+jc_k\omega+d_k}\right\vert+\cdots
 	\end{align*}
 $$
 
@@ -113,7 +113,7 @@ $$
 $$
 \begin{align*}
 		20\log\left\vert T(j\omega)\right\vert=&\ 20\log \left\vert K\right\vert+\sum_k20\log\left\vert j\omega+z_k\right\vert+\sum_k20\log\left\vert \frac{1}{j\omega+p_k}\right\vert\\
-  &+\sum_k20\log\left\vert\frac{1}{-\omega^2+ja_k\omega+b_k}\right\vert+\sum_k20\log\left\vert\frac{1}{ -\omega^2+jc_k\omega+d_k}\right\vert+\cdots
+  &+\sum_k20\log\left\vert-\omega^2+ja_k\omega+b_k\right\vert+\sum_k20\log\left\vert\frac{1}{ -\omega^2+jc_k\omega+d_k}\right\vert+\cdots
 \ \text{[dB]}
 \end{align*}
 $$
