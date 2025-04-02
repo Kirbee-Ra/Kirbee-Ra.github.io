@@ -24,6 +24,7 @@ $$
 \begin{align*}
 P&=\frac{1}{T_s}\int_{T_s}p(t)dt\\
 &=\frac{1}{T_s}\int_{T_s}V_Fi_{diode}(t)dt\\
+&=V_F\left(\frac{1}{T_s}\int_{T_s}i_{diode}(t)dt\right)\\
 &=V_FI_{diode}
 \end{align*}
 $$
@@ -58,6 +59,7 @@ $$
 \begin{align*}
 P&=\frac{1}{T_s}\int_{T_s}p(t)dt\\
 &=\frac{1}{T_s}\int_{T_s}i_{D}^2(t)R_{DS(on)}dt\\
+&=\left(\frac{1}{T_s}\int_{T_s}i_{D}^2(t)dt\right)R_{DS(on)}\\
 &=i_{D,rms}^2R_{DS(on)}
 \end{align*}
 $$
