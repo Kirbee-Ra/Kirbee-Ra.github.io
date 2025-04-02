@@ -110,7 +110,7 @@
 <tr><td>소신호 모델</td><td>small-signal model</td></tr>
 <tr><td>슈뢰딩거 방정식</td><td>Schrödinger equation</td></tr>
 <tr><td>스너버 회로</td><td>snubber circuit</td></tr>
-<tr><td>시간 지연</td><td>time delay</td></tr>
+<tr><td>시간 지연</td><td>time dilation</td></tr>
 <tr><td>시공간 간격</td><td>spacetime interval</td></tr>
 </tbody>
 </table>
