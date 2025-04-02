@@ -113,8 +113,8 @@ $$
 
 $$
 \begin{cases}
-			V_{cp}+\hat{v}_{cp}=DV_{ap}+\hat{d}V_{ap}+D\hat{v}_{ap}+\hat{d}\hat{v}_{ap}\\
-			I_a+\hat{i}_a=DI_c+\hat{d}I_c+D\hat{i}_c+\hat{d}\hat{i}_c
+			V_{cp}+\hat{v}_{cp}=V_{ap}D+V_{ap}\hat{d}+\hat{v}_{ap}D+\hat{v}_{ap}\hat{d}\\
+			I_a+\hat{i}_a=I_cD+I_c\hat{d}+\hat{i}_cD+\hat{i}_c\hat{d}
 		\end{cases}
 $$
 
@@ -123,8 +123,8 @@ $$
 
 $$
 \begin{cases}
-			\hat{v}_{cp}=\hat{d}V_{ap}+D\hat{v}_{ap}\\
-			\hat{i}_a=\hat{d}I_c+D\hat{i}_c
+			\hat{v}_{cp}=V_{ap}\hat{d}+\hat{v}_{ap}D\\
+			\hat{i}_a=I_c\hat{d}+\hat{i}_cD
 		\end{cases}
 $$
 
