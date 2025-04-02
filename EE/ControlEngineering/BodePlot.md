@@ -102,7 +102,7 @@ $$
 
 $$
 \begin{align*}
-		\log\left\vert T(j\omega)\right\vert=&\log \left\vert K\right\vert+\sum_k\log\left\vert j\omega+z_k\right\vert-\sum_k\log\left\vert j\omega+p_k\right\vert\\
+		\log\left\vert T(j\omega)\right\vert=&\ \log \left\vert K\right\vert+\sum_k\log\left\vert j\omega+z_k\right\vert-\sum_k\log\left\vert j\omega+p_k\right\vert\\
   &+\sum_k\log\left\vert -\omega^2+ja_k\omega+b_k\right\vert-\sum_k\log\left\vert -\omega^2+jc_k\omega+d_k\right\vert+\cdots
 	\end{align*}
 $$
@@ -111,7 +111,7 @@ $$
 
 $$
 \begin{align*}
-		20\log\left\vert T(j\omega)\right\vert=&20\log \left\vert K\right\vert+\sum_k20\log\left\vert j\omega+z_k\right\vert-\sum_k20\log\left\vert j\omega+p_k\right\vert\\
+		20\log\left\vert T(j\omega)\right\vert=&\ 20\log \left\vert K\right\vert+\sum_k20\log\left\vert j\omega+z_k\right\vert-\sum_k20\log\left\vert j\omega+p_k\right\vert\\
   &+\sum_k20\log\left\vert -\omega^2+ja_k\omega+b_k\right\vert-\sum_k20\log\left\vert -\omega^2+jc_k\omega+d_k\right\vert+\cdots
 \ \text{[dB]}
 \end{align*}
@@ -196,7 +196,7 @@ $$
 
 ### 미분
 
-미분에 대한 식은 다음과 같습니다.
+양수 $$K_d$$에 대해 미분에 대한 식은 다음과 같습니다.
 
 $$
 F(s)=K_ds
@@ -209,5 +209,14 @@ $$
 		F(j\omega)&=jK_d\omega\\
 		&=K_d\omega\angle90^{\circ}
 	\end{align*}
+$$
+
+나눠서 표현하면 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega)\right\vert=20\log\left(K_d\omega\right)\\
+			\angle\left\vert F(j\omega)\right\vert=90^{\circ}
+		\end{cases}
 $$
 
