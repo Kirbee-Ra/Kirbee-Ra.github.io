@@ -153,8 +153,8 @@ $$
 
 $$
 \begin{cases}
-			20\log\left\vert F(s)\right\vert=20\log\left\vert K\right\vert\\
-			\angle\left\vert F(s)\right\vert=0^{\circ}
+			20\log\left\vert F(j\omega)\right\vert=20\log\left\vert K\right\vert\\
+			\angle\left\vert F(j\omega)\right\vert=0^{\circ}
 		\end{cases}
 $$
 
@@ -180,8 +180,8 @@ $$
 
 $$
 \begin{cases}
-			20\log\left\vert F(s)\right\vert=20\log\left\vert K\right\vert\\
-			\angle\left\vert F(s)\right\vert=-180^{\circ}
+			20\log\left\vert F(j\omega)\right\vert=20\log\left\vert K\right\vert\\
+			\angle\left\vert F(j\omega)\right\vert=-180^{\circ}
 		\end{cases}
 $$
 
@@ -200,5 +200,9 @@ $$
 $$s=j\omega$$를 대입하면 다음과 같습니다.
 
 $$
-F(j\omega)=jK_d\omega
+\begin{align*}
+		F(j\omega)&=jK_d\omega\\
+		&=K_d\omega\angle90^{\circ}
+	\end{align*}
 $$
+
