@@ -31,13 +31,25 @@ LTI 시스템으로 바꾼 후에는 선형 제어론을 이용하여 컨버터�
 
 다음의 함수 $$y=f(x)$$를 생각해봅시다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/선형화 함수.png" alt="선형화 함수" width="80%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 함수 $$y=f(x)$$)
+  </figcaption>
+</figure>
+
 $$
 f:\mathbb{R}\rightarrow\mathbb{R}
 $$
 
-(y=f(x))
-
 그리고 다음과 같이 동작점 $$\left(X,f(X)\right)$$에서 소신호 $$\hat{x}$$를 가했다고 해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/소신호 근사.png" alt="소신호 근사" width="80%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 함수의 선형 근사)
+  </figcaption>
+</figure>
 
 $$
 x=X+\hat{x}
