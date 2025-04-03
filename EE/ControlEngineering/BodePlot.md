@@ -295,6 +295,6 @@ $$s=j\omega$$를 대입하면 다음과 같습니다.
 
 \begin{align*}
 		F(s)&=\frac{1}{1+\frac{j\omega}{\omega_p}}\\
-        &=\frac{1}{\sqrt{1+\left(\frac{\omega}{\omega_p}\right)^2}}\angle\left(-\tan^{-1}\frac{\omega}{\omega_p}\right)
+        &=\frac{1}{\sqrt{1+\left(\frac{\omega}{\omega_p}\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega}{\omega_p}\right)\right)
 	\end{align*}
 
