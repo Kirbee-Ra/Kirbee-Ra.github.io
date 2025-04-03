@@ -218,7 +218,7 @@ $$
 제어가 완료됐다는 것은 우변의 괄호 안에 있는 식이 다음과 같이 $$0$$이 됐다는 의미입니다.
 
 $$
-V_o-V_{ref}\left(1+\frac{\left\vert Z_1(j0)\right\vert}{R_x}=0
+V_o-V_{ref}\left(1+\frac{\left\vert Z_1(j0)\right\vert}{R_x}\right)=0
 $$
 
 하지만 좌변은 $$0$$이 아닌 상수입니다.
@@ -231,7 +231,7 @@ $$
 따라서 정상 상태에서 출력 전압은 다음과 같습니다.
 
 $$
-V_o=V_{ref}\left(1+\frac{\left\vert Z_1(j0)\right\vert}{R_x}
+V_o=V_{ref}\left(1+\frac{\left\vert Z_1(j0)\right\vert}{R_x}\right)
 $$
 
 출력 전압이 $$Z_1,R_x$$에 의존하는 것을 알 수 있습니다.
@@ -258,7 +258,7 @@ $$
 $$
 \begin{align*}
 		&\frac{v_{ctrl}}{v_o}=-\frac{Z_2}{Z_1}=-F_v\\
-		&F_v=\frac{Z_2}{Z_1}
+		&\rightarrow F_v=\frac{Z_2}{Z_1}
 	\end{align*}
 $$
 
@@ -282,7 +282,26 @@ q(t)=\begin{cases}
 		\end{cases}
 $$
 
+듀티 비는 다음과 같이 결정됩니다.
 
+$$
+\begin{align*}
+		&d_kT_s:T_s=v_{ctrl}(t_k):V_m\\
+		&\rightarrow d_k=\frac{v_{ctrl}(t_k)}{V_m}
+	\end{align*}
+$$
+
+제어 전압이 스위칭 주기에 비해 매우 천천히 변화한다고 가정하면 다음과 같이 쓸 수 있습니다.
+
+$$
+d(t)=\frac{v_{ctrl}}{V_m}
+$$
+
+평균화를 하면 다음과 같습니다.
+
+$$
+\overline{d}(t)=\frac{\overline{v}_{ctrl}}{V_m}
+$$
 
 ## 같이 보기
 
