@@ -189,7 +189,7 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 <figure style="text-align: center;">
   <img src="./PEFigure/VMC 기본.png" alt="VMC 기본" width="80%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 컨버터의 전압 피드백 회로)
+    (그림. 컨버터의 전압 모드 제어 회로)
   </figcaption>
 </figure>
 
@@ -201,6 +201,14 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 ### 출력 전압 제어
 
 먼저 전압 피드백 회로를 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="80%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 컨버터의 전압 피드백 회로 및 PWM 블록)
+  </figcaption>
+</figure>
+
 Op-Amp의 두 단자는 가상 단락되어 있으므로 반전 단자에서 KCL을 적용하면 다음과 같습니다.
 
 $$
@@ -273,6 +281,14 @@ $$F_v$$가 바로 **전압 피드백 보상기(Voltage Feedback Compensator)**�
 ### PWM 블록의 소신호 모델
 
 다음으로 PWM 블록을 소신호 모델링해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="80%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 컨버터의 전압 피드백 회로 및 PWM 블록)
+  </figcaption>
+</figure>
+
 PWM은 기본적으로 다음과 같이 제어 전압$$(v_{ctrl})$$과 기준 신호$$(v_{ramp})$$를 비교하는 방식으로 듀티 비를 결정합니다.
 
 $$
@@ -302,6 +318,53 @@ $$
 $$
 \overline{d}(t)=\frac{\overline{v}_{ctrl}}{V_m}
 $$
+
+선형화를 하면 다음과 같습니다.
+
+$$
+D+\hat{d}=\frac{V_{ctrl}+\hat{v}_{ctrl}}{V_m}
+$$
+
+소신호 표현식은 다음과 같습니다.
+
+$$
+\hat{d}=\frac{hat{v}_{ctrl}}{V_m}
+$$
+
+전압 피드백 보상기는 $$v_{ctrl}$$를 출력합니다.
+PWM 블록은 듀티 정보를 출력하므로 다음의 전달 함수를 구해야 합니다.
+
+$$
+F_m=\frac{\hat{d}}{hat{v}_{ctrl}}
+$$
+
+이는 소신호 표현식을 통해 다음과 같이 구할 수 있습니다.
+
+$$
+F_m=\frac{1}{V_m}
+$$
+
+이 전달 함수를 **PWM 이득(PWM Gain)**이라고 합니다.
+
+---
+
+## 폐루프 컨버터의 소신호 모델
+
+파워 스테이지, 전압 피드백 보상기, PWM 블록까지 모두 소신호 모델링을 마쳤습니다.
+전체 시스템을 다음과 같이 나타낼 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/SMPS 소신호.png" alt="SMPS 소신호" width="80%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 폐루프 컨버터의 소신호 모델)
+  </figcaption>
+</figure>
+
+블록 다이어그램으로 나타내면 다음과 같습니다.
+
+(BD)
+
+---
 
 ## 같이 보기
 
