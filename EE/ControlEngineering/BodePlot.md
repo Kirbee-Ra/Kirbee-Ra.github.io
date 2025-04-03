@@ -321,18 +321,78 @@ $$
 
 $$
 \begin{cases}
-			20\log\left\vert F(j\omega_c)\right\vert=20\log\frac{1}{\sqrt{2}}=-3\ \text{dB}\\
-			\angle\left\vert F(j\omega_c)\right\vert=-\tan^{-1}1=-45^{\circ}
+			20\log\left\vert F(j\omega_p)\right\vert=20\log\frac{1}{\sqrt{2}}=-3\ \text{dB}\\
+			\angle\left\vert F(j\omega_p)\right\vert=-\tan^{-1}1=-45^{\circ}
 		\end{cases}
 $$
 
-$$-3 \text{dB}$$는 무시하기로 했고, 위상 정보는 그대로 취합니다.
+$$-3\ \text{dB}$$는 무시하기로 했고, 위상 정보는 그대로 취합니다.
 따라서 다음과 같습니다.
 
 $$
 \begin{cases}
-			20\log\left\vert F(j\omega_c)\right\vert=0\ \text{dB}\\
-			\angle\left\vert F(j\omega_c)\right\vert=-45^{\circ}
+			20\log\left\vert F(j\omega_p)\right\vert=0\ \text{dB}\\
+			\angle\left\vert F(j\omega_p)\right\vert=-45^{\circ}
 		\end{cases}
 $$
 
+이제 차단 주파수 전후로 어떻게 근사할지 설명하겠습니다.
+주파수가 차단 주파수보다 매우 작은 경우는 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega)\right\vert=20\log\frac{1}{\sqrt{1+0}}=0\ \text{dB}\\
+			\angle\left\vert F(j\omega)\right\vert=-\tan^{-1}0=0^{\circ}
+		\end{cases}\ \ \ \text{for }\omega<<\omega_c
+$$
+
+주파수가 차단 주파수보다 매우 큰 경우는 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega)\right\vert=20\log\frac{1}{\sqrt{\left(\frac{\omega}{\omega_p}\right)^2}}=20\log\left(\frac{\omega_p}{\omega}\right)\\
+			\angle\left\vert F(j\omega)\right\vert=-\tan^{-1}\left(\frac{\omega}{\omega_p}\right)
+		\end{cases}\ \ \ \text{for }\omega>>\omega_c
+$$
+
+이전에 언급했듯이 주파수 축은 $$10$$배마다 눈금을 표기합니다.
+주파수가 차단 주파수보다 $$10$$배 작은 지점에서는 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j0.1\omega_p)\right\vert=20\log\frac{1}{\sqrt{1+\left(\frac{0.1\omega_p}{\omega_p}\right)^2}}=-0.04\ \text{dB}\\
+			\angle\left\vert F(j0.1\omega_p)\right\vert=-\tan^{-1}\left(\frac{0.1\omega_p}{\omega_p}\right)=-5.71^{\circ}
+		\end{cases}
+$$
+
+이 값들을 다음과 같이 근사합니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j0.1\omega_p)\right\vert=0\ \text{dB}\\
+			\angle\left\vert F(j0.1\omega_p)\right\vert=0^{\circ}
+		\end{cases}
+$$
+
+이보다 작은 주파수 값에서도 동일한 값을 갖습니다.
+주파수가 차단 주파수보다 $$10$$배 큰 지점에서는 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j0.1\omega_p)\right\vert=20\log\frac{1}{\sqrt{1+\left(\frac{10\omega_p}{\omega_p}\right)^2}}=-20.04\ \text{dB}\\
+			\angle\left\vert F(j0.1\omega_p)\right\vert=-\tan^{-1}\left(\frac{10\omega_p}{\omega_p}\right)=-84.29^{\circ}
+		\end{cases}
+$$
+
+이 값들을 다음과 같이 근사합니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j0.1\omega_p)\right\vert=-20\ \text{dB}\\
+			\angle\left\vert F(j0.1\omega_p)\right\vert=-90^{\circ}
+		\end{cases}
+$$
+
+이보다 큰 주파수 값에서는 크기의 경우, 계속 감소하고, 위상은 동일합니다.
+크기는 주파수가 $$10$$배 늘어날 때마다 $$20\ \text{dB}$$씩 떨어집니다.
+이럴 때 기울기는 $$-20\ \text{dB/dec}$$라고 하거나 간단히 $$-1$$이라고 합니다.
