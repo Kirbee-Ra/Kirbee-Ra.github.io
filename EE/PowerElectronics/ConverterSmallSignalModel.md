@@ -79,7 +79,12 @@ $$
 
 PWM 스위치의 평균화 모델을 떠올려 봅시다.
 
-(PWM Switch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/평균화 스위치.png" alt="PWM 스위치의 평균화 모델" width="80%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    그림. PWM 스위치의 평균화 모델
+  </figcaption>
+</figure>
 
 $$
 \begin{cases}
