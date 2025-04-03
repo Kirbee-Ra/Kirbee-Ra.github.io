@@ -293,8 +293,46 @@ $$
 
 $$s=j\omega$$를 대입하면 다음과 같습니다.
 
+$$
 \begin{align*}
-		F(s)&=\frac{1}{1+\frac{j\omega}{\omega_p}}\\
+		F(j\omega)&=\frac{1}{1+\frac{j\omega}{\omega_p}}\\
         &=\frac{1}{\sqrt{1+\left(\frac{\omega}{\omega_p}\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega}{\omega_p}\right)\right)
 	\end{align*}
+$$
+
+나눠서 표현하면 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega)\right\vert=20\log\frac{1}{\sqrt{1+\left(\frac{\omega}{\omega_p}\right)^2}}\\
+			\angle\left\vert F(j\omega)\right\vert=-\tan^{-1}\left(\frac{\omega}{\omega_p}\right)
+		\end{cases}
+$$
+
+우선 차단 주파수를 찾아봅시다.
+크기 표현식에서 로그 속 분모가 $$\sqrt{2}$$가 돼야 합니다.
+따라서 차단 주파수는 다음과 같습니다.
+
+$$
+\omega_c=\omega_p
+$$
+
+이때 크기와 위상은 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega_c)\right\vert=20\log\frac{1}{\sqrt{2}}=-3\ \text{dB}\\
+			\angle\left\vert F(j\omega_c)\right\vert=-\tan^{-1}1=-45^{\circ}
+		\end{cases}
+$$
+
+$$-3 \text{dB}$$는 무시하기로 했고, 위상 정보는 그대로 취합니다.
+따라서 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega_c)\right\vert=0\ \text{dB}\\
+			\angle\left\vert F(j\omega_c)\right\vert=-45^{\circ}
+		\end{cases}
+$$
 
