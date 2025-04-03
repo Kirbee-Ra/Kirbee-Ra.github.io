@@ -355,12 +355,7 @@ $$
 파워 스테이지, 전압 피드백 보상기, PWM 블록까지 모두 소신호 모델링을 마쳤습니다.
 전체 시스템을 다음과 같이 나타낼 수 있습니다.
 
-<figure style="text-align: center;">
-  <img src="./PEFigure/SMPS 소신호.png" alt="SMPS 소신호" width="80%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 폐루프 컨버터의 소신호 모델)
-  </figcaption>
-</figure>
+(SMPS)
 
 블록 다이어그램으로 나타내면 다음과 같습니다.
 
