@@ -34,7 +34,7 @@ LTI 시스템으로 바꾼 후에는 선형 제어론을 이용하여 컨버터�
 <figure style="text-align: center;">
   <img src="./PEFigure/선형화 함수.png" alt="선형화 함수" width="80%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 함수 $$y=f(x)$$)
+    (그림. 함수 $y=f(x)$)
   </figcaption>
 </figure>
 
