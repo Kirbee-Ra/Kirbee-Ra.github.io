@@ -135,11 +135,10 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 
 <figure style="text-align: center;">
   <img src="./PEFigure/소신호 스위치.png" alt="PWM 스위치의 소신호 모델" width="80%"/>
-  <figcaption style="margin-top: 6px; font-size: 0.9em; color: #555;">
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     그림. PWM 스위치의 소신호 모델
   </figcaption>
 </figure>
-
 
 ---
 
