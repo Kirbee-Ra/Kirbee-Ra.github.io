@@ -85,6 +85,34 @@ $$
 시스템의 세세한 변화는 무시하고, 특정 주파수들을 중심으로 시스템의 응답이 어떻게 변화하는지 어림잡아 그리는 방법입니다.
 몇 가지 가정 하에서는 정확한 보드 선도와 비교할 때, 오차가 매우 적습니다.
 
+### 차단 주파수
+
+앞서 보드 선도를 특정 주파수를 중심으로 어림잡아 그린다고 했습니다.
+그 특정 주파수가 바로 **차단 주파수(Cut-Off Frequency)** 혹은 **코너 주파수(Corner Frequency)**라고 합니다.
+이는 전력이 기준 전력 대비 절반이 되는 주파수 값입니다.
+
+$$
+\begin{align*}
+		L_{dB}&=10\log\left(\frac{p}{p_0}\right)\\
+        &=10\log\left(\frac{0.5p_0}{p_0}\right)\\
+        &=10\log0.5\\
+        &\approx-3\ \text{dB}
+	\end{align*}
+$$
+
+약 $$-3\ \text{dB}$$만큼 값이 낮아집니다. 계수가 $$20$$인 데시벨 스케일로 표현하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		L_{dB}&=10\log0.5\\
+  &=20\log\frac{1}{\sqrt{2}}
+	\end{align*}
+$$
+
+이와 같이 차단 주파수는 전달 함수의 크기가 $$1/\sqrt{2}$$배가 될 때의 주파수이기도 합니다.
+하지만 점근적 근사에서는 이를 무시합니다.
+차단 주파수 전후로만 어떻게 변하는지 그립니다.
+
 ### 크기 스케일
 
 다음의 전달 함수를 살펴봅시다.
@@ -223,4 +251,50 @@ $$
 			\angle\left\vert F(j\omega)\right\vert=90^{\circ}
 		\end{cases}
 $$
+
+### 적분
+
+양수 $$K_i$$에 대해 미분에 대한 식은 다음과 같습니다.
+
+$$
+F(s)=\frac{K_i}{s}
+$$
+
+$$s=j\omega$$를 대입하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		F(j\omega)&=\frac{K_i}{j\omega}\\
+  		&=-j\frac{K_i}{\omega}\\
+		&=\frac{K_i}{\omega}\angle\left(-90^{\circ}\right)
+	\end{align*}
+$$
+
+나눠서 표현하면 다음과 같습니다.
+
+$$
+\begin{cases}
+			20\log\left\vert F(j\omega)\right\vert=20\log\left(\frac{K_i}{\omega}\right)\\
+			\angle\left\vert F(j\omega)\right\vert=-90^{\circ}
+		\end{cases}
+$$
+
+---
+
+## 좌반면 극점과 영점의 보드 선도
+
+### 좌반면 극점
+
+좌반면 극점에 대한 식은 다음과 같습니다.
+
+$$
+F(s)=\frac{1}{1+\frac{s}{\omega_p}}
+$$
+
+$$s=j\omega$$를 대입하면 다음과 같습니다.
+
+\begin{align*}
+		F(s)&=\frac{1}{1+\frac{j\omega}{\omega_p}}\\
+        &=\frac{1}{\sqrt{1+\left(\frac{\omega}{\omega_p}\right)^2}}\angle\left(-\tan^{-1}\frac{\omega}{\omega_p}\right)
+	\end{align*}
 
