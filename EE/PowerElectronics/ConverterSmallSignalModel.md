@@ -189,7 +189,7 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 다음은 가장 기본적인 **전압 모드 제어(Voltage Mode Control)**를 이용한 폐루프 컨버터입니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC 기본.png" alt="VMC 기본" width="80%"/>
+  <img src="./PEFigure/VMC 기본.png" alt="VMC 기본" width="90%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 컨버터의 전압 모드 제어 회로)
   </figcaption>
