@@ -39,7 +39,7 @@ $$F_m,-F_v$$는 [컨버터의 소신호 모델](./ConverterSmallSignalModel.md)�
 단, 이 기생 저항들은 부하 저항에 비해 매우 작은 값을 가집니다.
 
 $$
-R_l,R_c << R
+R_l,R_c\ll R
 $$
 
 ---
