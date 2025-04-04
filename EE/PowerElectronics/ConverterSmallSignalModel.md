@@ -205,7 +205,7 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 먼저 전압 피드백 회로를 살펴봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="80%"/>
+  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="90%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 컨버터의 전압 피드백 회로 및 PWM 블록)
   </figcaption>
@@ -285,7 +285,7 @@ $$F_v$$가 바로 **전압 피드백 보상기(Voltage Feedback Compensator)**�
 다음으로 PWM 블록을 소신호 모델링해봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="80%"/>
+  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="90%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 컨버터의 전압 피드백 회로 및 PWM 블록)
   </figcaption>
