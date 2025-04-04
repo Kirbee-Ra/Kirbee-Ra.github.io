@@ -189,7 +189,7 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 다음은 가장 기본적인 **전압 모드 제어(Voltage Mode Control)**를 이용한 폐루프 컨버터입니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC 기본.png" alt="VMC 기본" width="90%"/>
+  <img src="./PEFigure/VMC 기본.png" alt="VMC 기본" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 컨버터의 전압 모드 제어 회로)
   </figcaption>
@@ -205,7 +205,7 @@ PWM 스위치의 소신호 모델은 다음과 같습니다.
 먼저 전압 피드백 회로를 살펴봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="90%"/>
+  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 컨버터의 전압 피드백 회로 및 PWM 블록)
   </figcaption>
@@ -285,7 +285,7 @@ $$F_v$$가 바로 **전압 피드백 보상기(Voltage Feedback Compensator)**�
 다음으로 PWM 블록을 소신호 모델링해봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="90%"/>
+  <img src="./PEFigure/VMC 파트.png" alt="VMC 파트" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 컨버터의 전압 피드백 회로 및 PWM 블록)
   </figcaption>
