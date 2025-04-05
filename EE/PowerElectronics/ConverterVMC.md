@@ -7,70 +7,17 @@
 
 ---
 
-## 폐루프 컨버터
+## 컨버터의 전압 모드 제어
 
-### 컨버터의 전압 피드백 회로
+**전압 모드 제어(Voltage Mode Control, VMC)**는 출력 전압의 정보를 바탕으로 피드백을 하여 출력 전압을 제어하는 기법입니다.
+전압 모드 제어에 활용되는 회로는 다음과 같은 형태입니다.
 
-### 폐루프 컨버터의 블록 다이어그램
+(VMC)
 
----
-
-## 점근적 분석
-
-이전에는 폐루프 컨버터의 전달 함수를 모두 구했습니다.
-앞으로 분석할 전달 함수의 기본 형태는 다음과 같습니다.
-
-$$
-F(s)=\frac{G(s)}{1+T(s)}
-$$
-
-$$G(S)$$는 개루프 전달 함수이고, $$T(s)$$는 루프 이득입니다.
-이제 **점근적 분석(Asymptotic Analysis)**을 통해 컨버터의 성능을 판단하고, 제어기의 설계 방향을 어떻게 정해야 하는지 설명하겠습니다.
-
-### 근사로 인한 오차
-
-점근적 근사는 말 그대로 근사이기 때문에 오차가 존재합니다.
-오차가 어느 정도인지 예시를 들어 알아봅시다.
-
-### 보드 선도 그리기
-
-주어진 전달 함수 $$F(s)$$는 루프 이득의 크기에 따라 다음과 같이 쓸 수 있습니다.
-
-$$
-F(s)=\frac{G(s)}{1+T(s)}=\begin{cases}
-			\frac{G(s)}{T_m(s)}\ \ \ \text{for }\left\vert T(s)\right\vert\gg1\\
-			G(s)\ \ \ \text{for }\left\vert T(s)\right\vert \ll1
-		\end{cases}
-$$
-
-이를 데시벨 스케일로 나타내면 다음과 같습니다.
-
-$$
-20\log\left\vert F(j\omega)\right\vert=\begin{cases}
-			20\log\left\vert G(j\omega)\right\vert-20\log\left\vert T(j\omega)\right\vert\ \ \ \text{for }\left\vert T(j\omega)\right\vert\gg1\\
-			20\log\left\vert G(j\omega)\right\vert\ \ \ \text{for }\left\vert T(j\omega)\right\vert \ll1
-\end{cases}
-$$
-
-먼저 $$20\log\left\vert G(j\omega)\right\vert$$와 $$20\log\left\vert T(j\omega)\right\vert$$를 그립니다.
-
-(G, T)
-
-다음으로 $$20\log\left\vert F(j\omega)\right\vert$$를 고주파 대역부터 그려야 합니다.
-차단 주파수 이상의 대터의 전압 모드 제어
-=
-
----
-
-## 목차
-
----
-
-## 폐루프 컨버터
-
-### 컨버터의 전압 피드백 회로
-
-### 폐루프 컨버터의 블록 다이어그램
+이와 같이 출력 전압이 전압 분배기에 입력됩니다.
+그리고 기준 전압과 비교하여 출력된 제어 전압이 PWM 비교기에 입력됩니다.
+그리고 듀티 비가 조정되어 출력 전압이 제어되는 방식입니다.
+전압 모드 제어 회로를 구체적으로 어떻게 설계해야 하는지 설명하겠습니다.
 
 ---
 
@@ -136,7 +83,7 @@ $$G(s)$$와 $$T(s)$$만을 이용해서 보드 선도를 다 그렸습니다.
 우선 다음과 같이 $$F(s)$$를 시간 상수 형식으로 나타냅니다.
 
 $$
-T(s)=\frac{K\Pi_k\left(1+\frac{s}{\omega_{z,k}}\right)\Pi_k\left(1+\frac{s}{Q_{z,k}\omega_{0z,k}}+\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\Pi_k\left(1+\frac{s}{\omega_{p,k}}\right)\Pi_k\left(1+\frac{s}{Q_{p,k}\omega_{0p,k}}+\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
+T(s)=\frac{K\prod_k\left(1+\frac{s}{\omega_{z,k}}\right)\prod_k\left(1+\frac{s}{Q_{z,k}\omega_{0z,k}}+\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\prod_k\left(1+\frac{s}{\omega_{p,k}}\right)\prod_k\left(1+\frac{s}{Q_{p,k}\omega_{0p,k}}+\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
 $$
 
 이 식은 저주파 항부터 작성하는 것이 좋습니다.
@@ -152,7 +99,7 @@ $$K$$는 저주파 대역, 고주파 대역, 차단 주파수 등의 정보를 �
 
 ---
 
-## 루프 이득 설계
+## 점근적 분석을 통한 루프 이득 설계
 
 점근적 분석은 이름에서 알 수 있듯이 보드 선도의 점근적 근사를 통해 시스템을 분석하는 것입니다.
 각 폐루프 전달 함수는 루프 이득의 크기에 따라 다음과 같이 근사할 수 있습니다.
@@ -218,4 +165,12 @@ $$
 
 ---
 
-## 
+## 전압 피드백 보상기 설계
+
+루프 이득은 다음과 같습니다.
+
+$$
+T(s)=F_v(s)F_mG_{vd}(s)
+$$
+
+$$G_{vd}(s)$$는 분모가 2차식이고, 분자는 
