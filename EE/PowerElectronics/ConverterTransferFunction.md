@@ -68,6 +68,10 @@ $$
 
 따라서 벅 컨버터의 개루프 입력-출력 전달 함수는 다음과 같습니다.
 
+$$
+G_{vs}(s)=D\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
+
 ### 벅 컨버터의 $$G_{vd}(s)$$
 
 우리가 관심을 갖는 변수는 $$\hat{d},\hat{v}_o$$입니다.
@@ -88,6 +92,10 @@ $$
 
 따라서 벅 컨버터의 개루프 듀티 비-출력 전달 함수는 다음과 같습니다.
 
+$$
+G_{vd}(s)=V_{in}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
+
 ### 벅 컨버터의 $$Z_p(s)$$
 
 우리가 관심을 갖는 변수는 $$\hat{i}_o,\hat{v}_o$$입니다.
@@ -107,6 +115,10 @@ $$
 기생 저항들은 부하 저항에 비해 매우 작으므로 다음과 같이 근사할 수 있습니다.
 
 따라서 벅 컨버터의 개루프 출력 임피던스 전달 함수는 다음과 같습니다.
+
+$$
+Z_p(s)=R_l\frac{\left(1+\frac{s}{\omega_z}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
 
 ---
 
@@ -133,6 +145,10 @@ $$
 
 따라서 부스트 컨버터의 개루프 입력-출력 전달 함수는 다음과 같습니다.
 
+$$
+G_{vs}(s)=\frac{1}{D'}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
+
 ### 부스트 컨버터의 $$G_{vd}(s)$$
 
 우리가 관심을 갖는 변수는 $$\hat{d},\hat{v}_o$$입니다.
@@ -152,6 +168,10 @@ $$
 
 따라서 부스트 컨버터의 개루프 듀티 비-출력 전달 함수는 다음과 같습니다.
 
+$$
+G_{vd}(s)=\frac{V_{in}}{D'^2}\frac{\left(1-\frac{s}{\omega_{rhp}}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
+
 ### 부스트 컨버터의 $$Z_p(s)$$
 
 우리가 관심을 갖는 변수는 $$\hat{i}_o,\hat{v}_o$$입니다.
@@ -170,6 +190,10 @@ $$
 기생 저항들은 부하 저항에 비해 매우 작으므로 다음과 같이 근사할 수 있습니다.
 
 따라서 부스트 컨버터의 개루프 출력 임피던스 전달 함수는 다음과 같습니다.
+
+$$
+Z_p(s)=\frac{R_l}{D'^2}\frac{\left(1+\frac{s}{\omega_z}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
 
 
 ---
@@ -197,6 +221,10 @@ $$
 
 따라서 부스트 컨버터의 개루프 입력-출력 전달 함수는 다음과 같습니다.
 
+$$
+G_{vs}(s)=\frac{D}{D'}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
+
 ### 벅-부스트 컨버터의 $$G_{vd}(s)$$
 
 우리가 관심을 갖는 변수는 $$\hat{d},\hat{v}_o$$입니다.
@@ -216,6 +244,10 @@ $$
 
 따라서 벅-부스트 컨버터의 개루프 듀티 비-출력 전달 함수는 다음과 같습니다.
 
+$$
+G_{vd}(s)=\frac{V_{in}}{D'^2}\frac{\left(1-\frac{s}{\omega_{rhp}}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
+
 ### 벅-부스트 컨버터의 $$Z_p(s)$$
 
 우리가 관심을 갖는 변수는 $$\hat{i}_o,\hat{v}_o$$입니다.
@@ -234,6 +266,10 @@ $$
 기생 저항들은 부하 저항에 비해 매우 작으므로 다음과 같이 근사할 수 있습니다.
 
 따라서 벅-부스트 컨버터의 개루프 출력 임피던스 전달 함수는 다음과 같습니다.
+
+$$
+Z_p(s)=\frac{R_l}{D'^2}\frac{\left(1+\frac{s}{\omega_z}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+$$
 
 ---
 
