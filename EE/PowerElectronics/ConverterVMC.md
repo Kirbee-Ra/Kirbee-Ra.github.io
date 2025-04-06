@@ -300,7 +300,7 @@ $$Z_1$$은 저항과의 병렬 연결, $$Z_2$$는 축전기와의 병렬 연결�
 따라서 전압 피드백 보상기는 다음과 같습니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/3P2Z.png" alt="3P2Z" width="80%"/>
+  <img src="./PEFigure/3P2Z.png" alt="3P2Z" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 3P2Z 전압 피드백 보상기)
   </figcaption>
@@ -365,7 +365,7 @@ $$Z_1$$은 저항과의 병렬 연결, $$Z_2$$는 축전기와의 병렬 연결�
 따라서 전압 피드백 보상기는 다음과 같습니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/3P2Z.png" alt="3P2Z" width="80%"/>
+  <img src="./PEFigure/3P2Z.png" alt="3P2Z" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 3P2Z 전압 피드백 보상기)
   </figcaption>
