@@ -65,9 +65,9 @@
 ## 컨버터 제어
 
 컨버터를 제어하는 방법입니다.
-- [폐루프 컨버터의 성능](./ConverterDynamics.md)
-- [전압 모드 제어](./ConverterVMC.md)
-- [전류 모드 제어]
+- [컨버터의 성능](./ConverterDynamics.md)
+- [컨버터의 전압 모드 제어](./ConverterVMC.md)
+- [컨버터의 전류 모드 제어]
 
 ---
 
