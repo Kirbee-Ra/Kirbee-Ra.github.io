@@ -160,6 +160,56 @@ $$
 따라서 일정한 간격마다 $$10$$(상용로그의 밑)배씩 증가하는 스케일을 써야 합니다.
 $$10$$배를 [dec]으로 표현하고 [dB/dec]를 기울기에서 단위로 활용합니다.
 
+### 직선의 방정식
+
+점근적 근사를 활용할 때, 직선의 방정식을 이용하는 경우가 있습니다.
+다음과 같은 직선을 생각해봅시다.
+
+$$
+20\log M=a\log\omega+b
+$$
+
+(line)
+
+이 직선의 기울기가 $$20n\ \text{dB/dec}$$이고, 교차 주파수가 $$\omega_c$$라고 해봅시다.
+교차 주파수를 이용하면 $$a$$와 $$b$$의 관계식이 다음과 같이 나타납니다.
+
+$$
+\begin{align*}
+		&0=a\log\omega_c+b\\
+		&b=-a\log\omega_c\\
+		&20\log M=a\log\omega-a\log\omega_c=a\log\left(\frac{\omega}{\omega_c}\right)
+	\end{align*}
+$$
+
+주파수가 $$10$$배 늘면 기울기 조건에 의해 크기가 $$20n\ \text{dB}$$만큼 늘어야하므로 다음과 같습니다.
+
+\begin{align*}
+		&20\log M_0=a\log\left(\frac{\omega}{\omega_c}\right)\\
+		&20\log M'=a\log\left(\frac{10\omega}{\omega_c}\right)=a+a\log\left(\frac{\omega}{\omega_c}\right)=a\log\left(\frac{\omega}{\omega_c}\right)+20n\\
+		&a=20n
+	\end{align*}
+
+따라서 직선의 방정식은 다음과 같습니다.
+
+$$
+20\log M=20n\log\left(\frac{\omega}{\omega_c}\right)
+$$
+
+이제 이 직선이 다음과 같이 두 점 $$\left(\omega_1,20\log M_1\right),\left(\omega_2,20\log M_2\right)$$를 지난다고 해봅시다.
+
+(line)
+
+두 지점간 크기의 차이는 다음과 같습니다.
+
+$$
+\begin{align*}
+		&20\log M_1=20n\log\left(\frac{\omega_1}{\omega_c}\right)\\
+		&20\log M_2=20n\log\left(\frac{\omega_2}{\omega_c}\right)\\
+		&\Delta=20n\log\left(\frac{\omega_2}{\omega_c}\right)-20n\log\left(\frac{\omega_1}{\omega_c}\right)=20n\log\left(\frac{\omega_2}{\omega_1}\right)
+	\end{align*}
+$$
+
 ---
 
 ## 상수항의 보드 선도
