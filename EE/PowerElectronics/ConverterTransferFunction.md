@@ -22,9 +22,9 @@
 컨버터를 분석하기 위해 각 부분의 개루프 전달 함수를 알아야 합니다.
 $$F_m,-F_v$$는 [컨버터의 소신호 모델](./ConverterSmallSignalModel.md)에서 다뤘습니다.
 이제 구해야 하는 전달 함수는 다음과 같습니다.
-1. 개루프 입력-출력 전달 함수 $$G_{vs}(s)=\frac{\hat{v}_o(s)}{\hat{v}_{in}(s)}$$
-2. 개루프 듀티 비-출력 전달 함수 $$G_{vd}(s)=\frac{\hat{v}_o(s)}{\hat{d}(s)}$$
-3. 개루프 출력 임피던스 전달 함수 $$Z_p(s)=\frac{\hat{v}_o(s)}{\hat{i}_o(s)}$$
+1. 개루프 입력-출력 전달 함수 $$G_{vs}(s)=\displaystyle\frac{\hat{v}_o(s)}{\hat{v}_{in}(s)}$$
+2. 개루프 듀티 비-출력 전달 함수 $$G_{vd}(s)=\displaystyle\frac{\hat{v}_o(s)}{\hat{d}(s)}$$
+3. 개루프 출력 임피던스 전달 함수 $$Z_p(s)=\displaystyle\frac{\hat{v}_o(s)}{\hat{i}_o(s)}$$
    
 이 전달 함수들을 모두 구하면 컨버터의 전달 함수를 구하여 제어기를 설계할 수 있습니다.
 
@@ -69,7 +69,7 @@ $$
 따라서 벅 컨버터의 개루프 입력-출력 전달 함수는 다음과 같습니다.
 
 $$
-G_{vs}(s)=D\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vs}(s)=D\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ### 벅 컨버터의 $$G_{vd}(s)$$
@@ -93,7 +93,7 @@ $$
 따라서 벅 컨버터의 개루프 듀티 비-출력 전달 함수는 다음과 같습니다.
 
 $$
-G_{vd}(s)=V_{in}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vd}(s)=V_{in}\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ### 벅 컨버터의 $$Z_p(s)$$
@@ -117,7 +117,7 @@ $$
 따라서 벅 컨버터의 개루프 출력 임피던스 전달 함수는 다음과 같습니다.
 
 $$
-Z_p(s)=R_l\frac{\left(1+\frac{s}{\omega_z}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+Z_p(s)=R_l\frac{\left(1+\displaystyle\frac{s}{\omega_z}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ---
@@ -146,7 +146,7 @@ $$
 따라서 부스트 컨버터의 개루프 입력-출력 전달 함수는 다음과 같습니다.
 
 $$
-G_{vs}(s)=\frac{1}{D'}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vs}(s)=\frac{1}{D'}\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ### 부스트 컨버터의 $$G_{vd}(s)$$
@@ -169,7 +169,7 @@ $$
 따라서 부스트 컨버터의 개루프 듀티 비-출력 전달 함수는 다음과 같습니다.
 
 $$
-G_{vd}(s)=\frac{V_{in}}{D'^2}\frac{\left(1-\frac{s}{\omega_{rhp}}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vd}(s)=\frac{V_{in}}{D'^2}\frac{\left(1-\displaystyle\frac{s}{\omega_{rhp}}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ### 부스트 컨버터의 $$Z_p(s)$$
@@ -192,7 +192,7 @@ $$
 따라서 부스트 컨버터의 개루프 출력 임피던스 전달 함수는 다음과 같습니다.
 
 $$
-Z_p(s)=\frac{R_l}{D'^2}\frac{\left(1+\frac{s}{\omega_z}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+Z_p(s)=\frac{R_l}{D'^2}\frac{\left(1+\displaystyle\frac{s}{\omega_z}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 
@@ -222,7 +222,7 @@ $$
 따라서 부스트 컨버터의 개루프 입력-출력 전달 함수는 다음과 같습니다.
 
 $$
-G_{vs}(s)=\frac{D}{D'}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vs}(s)=\frac{D}{D'}\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ### 벅-부스트 컨버터의 $$G_{vd}(s)$$
@@ -245,7 +245,7 @@ $$
 따라서 벅-부스트 컨버터의 개루프 듀티 비-출력 전달 함수는 다음과 같습니다.
 
 $$
-G_{vd}(s)=\frac{V_{in}}{D'^2}\frac{\left(1-\frac{s}{\omega_{rhp}}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vd}(s)=\frac{V_{in}}{D'^2}\frac{\left(1-\displaystyle\frac{s}{\omega_{rhp}}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ### 벅-부스트 컨버터의 $$Z_p(s)$$
@@ -268,7 +268,7 @@ $$
 따라서 벅-부스트 컨버터의 개루프 출력 임피던스 전달 함수는 다음과 같습니다.
 
 $$
-Z_p(s)=\frac{R_l}{D'^2}\frac{\left(1+\frac{s}{\omega_z}\right)\left(1+\frac{s}{\omega_{esr}}\right)}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+Z_p(s)=\frac{R_l}{D'^2}\frac{\left(1+\displaystyle\frac{s}{\omega_z}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 ---
