@@ -327,7 +327,38 @@ $$
 \end{align*}
 $$
 
+$$s=j\omega_0$$와 $$s=j\omega_{z2}$$ 사이에서 크기의 변화량은 다음과 같습니다.
 
+$$
+\Delta_1=20\cdot(-2)\log\left(\frac{\omega_{z2}}{\omega_0}\right)=40\log\left(\frac{\omega_0}{\omega_{z2}}\right)
+$$
+
+$$s=j\omega_{z2}$$와 $$s=j\omega_c$$ 사이에서 크기의 변화량은 다음과 같습니다.
+
+$$
+\Delta_2=20\cdot(-1)\log\left(\frac{\omega_c}{\omega_{z2}}\right)=20\log\left(\frac{\omega_{z2}}{\omega_c}\right)
+$$
+
+$$20\log\left\vert (j\omega_{z1})\right\vert$$에 $$\Delta_1$$과 $$\Delta_2$$를 모두 더한 값이 $$0$$이어야 합니다.
+따라서 다음과 같습니다.
+
+$$
+\begin{align*}
+	0&=20\log\left\vert (j\omega_{z1})\right\vert-\Delta_1-\Delta_2\\
+	&=20\log\left(\frac{V_{in}K_v}{\omega_{z1}V_m}\right)+40\log\left(\frac{\omega_0}{\omega_{z2}}\right)+20\log\left(\frac{\omega_{z2}}{\omega_c}\right)\\
+	&=20\log\left(\frac{V_{in}K_v\omega_0^2\omega_{z2}}{\omega_{z1}V_m\omega_{z2}^2\omega_c}\right)\\
+	&=20\log\left(\frac{V_{in}K_v\omega_0^2}{\omega_{z1}V_m\omega_{z2}\omega_c}\right)
+	\end{align*}
+$$
+
+적분 이득은 다음과 같이 계산할 수 있습니다.
+
+$$
+\begin{align*}
+	&\frac{V_{in}K_v\omega_0^2}{\omega_{z1}V_m\omega_{z2}\omega_c}=1\\
+	&\rightarrow K_v=\frac{V_m}{V_{in}}\frac{\omega_{z1}\omega_{z2}\omega_c}{\omega_0^2}
+	\end{align*}
+$$
 
 ### 구현
 
