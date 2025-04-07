@@ -58,7 +58,7 @@ $$G(s)$$는 개루프 전달 함수이고, $$T(s)$$는 루프 이득입니다.
 
 $$
 F(s)=\frac{G(s)}{1+T(s)}=\begin{cases}
-			\frac{G(s)}{T_m(s)}\ \ \ \text{for }\left\vert T(s)\right\vert\gg1\\
+			\displaystyle\frac{G(s)}{T_m(s)}\ \ \ \text{for }\left\vert T(s)\right\vert\gg1\\
 			G(s)\ \ \ \text{for }\left\vert T(s)\right\vert \ll1
 		\end{cases}
 $$
@@ -97,7 +97,7 @@ $$G(s)$$와 $$T(s)$$만을 이용해서 보드 선도를 다 그렸습니다.
 우선 다음과 같이 $$F(s)$$를 시간 상수 형식으로 나타냅니다.
 
 $$
-T(s)=\frac{K\prod_k\left(1+\frac{s}{\omega_{z,k}}\right)\prod_k\left(1+\frac{s}{Q_{z,k}\omega_{0z,k}}+\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\prod_k\left(1+\frac{s}{\omega_{p,k}}\right)\prod_k\left(1+\frac{s}{Q_{p,k}\omega_{0p,k}}+\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
+T(s)=\frac{K\prod_k\left(1+\displaystyle\frac{s}{\omega_{z,k}}\right)\prod_k\left(1+\displaystyle\frac{s}{Q_{z,k}\omega_{0z,k}}+\displaystyle\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\prod_k\left(1+\displaystyle\frac{s}{\omega_{p,k}}\right)\prod_k\left(1+\displaystyle\frac{s}{Q_{p,k}\omega_{0p,k}}+\displaystyle\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
 $$
 
 이 식은 저주파 항부터 작성하는 것이 좋습니다.
@@ -121,7 +121,7 @@ $$K$$는 저주파 대역, 고주파 대역, 교차 주파수 등의 정보를 �
 $$
 \begin{align*}
 		&A_u(s)=\frac{G_{vs}(s)}{1+T_m(s)}=\begin{cases}
-			\frac{G_{vs}(s)}{T_m(s)}\ \ \ \text{for }\left\vert T_m(s)\right\vert\gg1\\
+			\displaystyle\frac{G_{vs}(s)}{T_m(s)}\ \ \ \text{for }\left\vert T_m(s)\right\vert\gg1\\
 			G_{vs}(s)\ \ \ \text{for }\left\vert T_m(s)\right\vert \ll1
 		\end{cases}\\
 		&Z_o(s)=\frac{Z_p(s)}{1+T_m(s)}=\begin{cases}
@@ -190,7 +190,7 @@ $$
 벅 컨버터의 $$G_{vd}(s)$$는 다음과 같습니다.
 
 $$
-G_{vd}(s)=V_{in}\frac{1+\frac{s}{\omega_{esr}}}{1+\frac{s}{Q\omega_0}+\frac{s^2}{\omega_0^2}}
+G_{vd}(s)=V_{in}\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
 $$
 
 PWM 블록의 경우는 다음과 같습니다.
@@ -245,7 +245,7 @@ $$
 따라서 전압 피드백 보상기는 다음의 형태로 나타납니다.
 
 $$
-F_v(s)=\frac{K_v}{s}\frac{\left(1+\frac{s}{\omega_{z1}}\right)\left(1+\frac{s}{\omega_{z2}}\right)}{\left(1+\frac{s}{\omega_{p1}}\right)\left(1+\frac{s}{\omega_{p2}}\right)}
+F_v(s)=\frac{K_v}{s}\frac{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)}{\left(1+\displaystyle\frac{s}{\omega_{p1}}\right)\left(1+\displaystyle\frac{s}{\omega_{p2}}\right)}
 $$
 
 이 보상기는 극점이 3개이고 영점이 2개이므로 **3P2Z 보상기(3-Pole-2-Zero Compensator)**라고 합니다.
@@ -274,8 +274,8 @@ $$
 
 $$
 \begin{align*}
-Z_s\vert\vert R'&=\frac{\left(R+\frac{1}{sC}\right)R'}{R+\frac{1}{sC}+R'}\\
-&=\frac{RR'+\frac{R'}{sC}}{R+R'+\frac{1}{sC}}
+Z_s\vert\vert R'&=\frac{\left(R+\displaystyle\frac{1}{sC}\right)R'}{R+\displaystyle\frac{1}{sC}+R'}\\
+&=\frac{RR'+\displaystyle\frac{R'}{sC}}{R+R'+\displaystyle\frac{1}{sC}}
 \end{align*}
 $$
 
@@ -284,8 +284,8 @@ $$
 
 $$
 \begin{align*}
-Z_s\vert\vert \frac{1}{sC'}&=\frac{\left(R+\frac{1}{sC}\right)\frac{1}{sC'}}{R+\frac{1}{sC}+\frac{1}{sC'}}\\
-&=\frac{1}{sC'}\frac{\left(R+\frac{1}{sC}\right)}{\left(R+\frac{1}{s}\left(\frac{1}{C}+\frac{1}{C'}\right)\right)}
+Z_s\vert\vert \frac{1}{sC'}&=\frac{\left(R+\displaystyle\frac{1}{sC}\right)\displaystyle\frac{1}{sC'}}{R+\displaystyle\frac{1}{sC}+\displaystyle\frac{1}{sC'}}\\
+&=\frac{1}{sC'}\frac{\left(R+\displaystyle\frac{1}{sC}\right)}{\left(R+\displaystyle\frac{1}{s}\left(\displaystyle\frac{1}{C}+\displaystyle\frac{1}{C'}\right)\right)}
 \end{align*}
 $$
 
@@ -293,7 +293,7 @@ $$
 $$F_v(s)$$를 다시 살펴봅시다.
 
 $$
-F_v(s)=\frac{Z_2(s)}{Z_1(s)}=\frac{K_v}{s}\frac{\left(1+\frac{s}{\omega_{z1}}\right)\left(1+\frac{s}{\omega_{z2}}\right)}{\left(1+\frac{s}{\omega_{p1}}\right)\left(1+\frac{s}{\omega_{p2}}\right)}
+F_v(s)=\frac{Z_2(s)}{Z_1(s)}=\frac{K_v}{s}\frac{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)}{\left(1+\displaystyle\frac{s}{\omega_{p1}}\right)\left(1+\displaystyle\frac{s}{\omega_{p2}}\right)}
 $$
 
 $$Z_1$$은 저항과의 병렬 연결, $$Z_2$$는 축전기와의 병렬 연결을 이용해야하는 것을 알 수 있습니다.
@@ -317,8 +317,8 @@ $$Z_1$$은 저항과의 병렬 연결, $$Z_2$$는 축전기와의 병렬 연결�
 
 $$
 \begin{align*}
-		&Z_1(s)=\left(R_1+\frac{1}{sC_1}\right)\vert\vert R_2=R_2\frac{1+\frac{s}{1/R_1C_1}}{1+\frac{s}{1/\left(R_1+R_2\right)C_1}}\\
-		&Z_2(s)=\left(R_3+\frac{1}{sC_3}\right)\vert\vert \frac{1}{sC_2}=\frac{1}{s\left(C_2+C_3\right)}\frac{1+\frac{s}{1/R_3C_3}}{1+\frac{s}{1/R_3C_2C_3/\left(C_2+C_3\right)}}
+		&Z_1(s)=\left(R_1+\frac{1}{sC_1}\right)\vert\vert R_2=R_2\frac{1+\displaystyle\frac{s}{1/R_1C_1}}{1+\displaystyle\frac{s}{1/\left(R_1+R_2\right)C_1}}\\
+		&Z_2(s)=\left(R_3+\frac{1}{sC_3}\right)\vert\vert \frac{1}{sC_2}=\frac{1/\left(C_2+C_3\right)}{s}\frac{1+\displaystyle\frac{s}{1/R_3C_3}}{1+\displaystyle\frac{s}{1/R_3C_2C_3/\left(C_2+C_3\right)}}
 	\end{align*}
 $$
 
@@ -336,7 +336,7 @@ $$
 		&\omega_{z1}=\frac{1}{R_3C_3}\\
 		&\omega_{z2}=\frac{1}{\left(R_1+R_2\right)C_1}\\
 		&\omega_{p1}=\frac{1}{R_1C_1}\\
-		&\omega_{p2}=\frac{1}{\frac{R_3C_2C_3}{C_2+C_3}}
+		&\omega_{p2}=\frac{1}{\displaystyle\frac{R_3C_2C_3}{C_2+C_3}}
 	\end{align*}
 $$
 
