@@ -507,3 +507,37 @@ $$
 $$
 A_u(s)=K_as\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)\left(1+\displaystyle\frac{s}{\omega_c}\right)}
 $$
+
+마지막으로 미분 이득을 구해봅시다.
+$$s=j\omega_{z1}$$에서는 음파 민감도가 다음과 같습니다.
+
+$$
+A_u(s)=\frac{G_{vs}(s)}{T_m(s)}
+$$
+
+$$G_{vs}$$에는 계수 $$D$$가 곱해져있고, $$T_m(s)$$에는 적분 이득 $$K_t$$가 곱해져 있습니다.
+따라서 다음과 같이 쓸 수 있습니다.
+
+$$
+20\log\left\vert A_u(j\omega_{z1})\right\vert=20\log K_a\omega_{z1}=20\log\left(\frac{D}{\displaystyle\frac{K_t}{\omega_{z1}}}\right)
+$$
+
+미분 이득은 다음과 같습니다.
+
+$$
+	\begin{align*}
+ &K_a\omega_{z1}=\frac{D}{\displaystyle\frac{K_t}{\omega_{z1}}}\\
+ &\rightarrow K_a=\frac{D}{K_t}=\frac{V_mD}{V_{in}K_v}
+	\end{align*}
+$$
+
+그리고 최댓값 또한 $$s=j\omega_{z1}$$에서 나타납니다.
+최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+20\log\left\vert A_u(j\omega)\right\vert_{max}&=20\log\left\vert A_u(j\omega_{z1})\right\vert\\
+&=20\log K_a\omega_{z1}\\
+&=20\log \frac{V_mD\omega_{z1}}{V_{in}K_v}
+	\end{align*}
+$$
