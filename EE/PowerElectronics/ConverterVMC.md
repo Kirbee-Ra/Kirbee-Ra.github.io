@@ -494,7 +494,12 @@ $$
 
 그리고 교차 주파수를 중심으로 고주파 대역부터 보드 선도를 그립니다.
 
-(Au)
+<figure style="text-align: center;">
+  <img src="./PEFigure/AS보드선도.png" alt="AS보드선도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 음파 민감도의 보드 선도)
+  </figcaption>
+</figure>
 
 보드 선도를 살펴봅시다.
 우선 기울기 $$+1$$의 미분으로 시작합니다.
@@ -538,6 +543,76 @@ $$
 \begin{align*}
 20\log\left\vert A_u(j\omega)\right\vert_{max}&=20\log\left\vert A_u(j\omega_{z1})\right\vert\\
 &=20\log K_a\omega_{z1}\\
-&=20\log \frac{V_mD\omega_{z1}}{V_{in}K_v}
+&=20\log\left(\frac{V_mD\omega_{z1}}{V_{in}K_v}\right)
+	\end{align*}
+$$
+
+### 출력 임피던스
+
+출력 임피던스는 다음과 같습니다.
+
+$$
+Z_o(s)=\frac{Z_p(s)}{1+T_m(s)}=\begin{cases}
+			\displaystyle\frac{Z_p(s)}{T_m(s)}\ \ \ \text{for }\left\vert T_m(s)\right\vert\gg1\\
+			Z_p(s)\ \ \ \text{for }\left\vert T_m(s)\right\vert \ll1
+		\end{cases}
+$$
+
+먼저 각 전달 함수들의 보드 선도를 그립니다.
+
+(BP)
+
+그리고 교차 주파수를 중심으로 고주파 대역부터 보드 선도를 그립니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/OI보드선도.png" alt="OI보드선도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 출력 임피던스의 보드 선도)
+  </figcaption>
+</figure>
+
+보드 선도를 살펴봅시다.
+우선 기울기 $$+1$$의 미분으로 시작합니다.
+다음으로 영점 $$\omega_z$$를 지나면서 기울기가 $$+2$$가 됩니다.
+그리고 극점 $$\omega_{z1}$$을 지나면서 기울기가 $$+1$$이 됩니다.
+그 다음 극점 $$\omega_{z2}$$를 지나면서 기울기가 $$0$$이 됩니다.
+이후에 극점 $$\omega_c$$를 지나면서 기울기가 $$-1$$이 됩니다.
+마지막으로 영점 $$\omega_{esr}$$을 지나면서 기울기가 $$0$$이 됩니다.
+따라서 출력 임피던스의 전달 함수는 다음과 같습니다.
+
+$$
+Z_o(s)=K_zs\frac{\left(1+\displaystyle\frac{s}{\omega_z}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)\left(1+\displaystyle\frac{s}{\omega_c}\right)}
+$$
+
+마지막으로 미분 이득을 구해봅시다.
+$$s\rightarrow j\infty$$에서는 출력 임피던스의 크기가 다음과 같습니다.
+
+$$
+\lim_{s\rightarrow j\infty}20\log\left|Z_o(s)\right|=20\log\left(\frac{K_z\omega_{z1}\omega_{z2}\omega_c}{\omega_z\omega_{esr}}\right)
+$$
+
+이 값은 $$s\rightarrow j\infty$$에서의 $$Z_p(s)$$의 값과 같습니다.
+
+$$
+20\log\left(\frac{K_z\omega_{z1}\omega_{z2}\omega_c}{\omega_z\omega_{esr}}\right)=20\log R_c
+$$
+
+따라서 미분 이득은 다음과 같습니다.
+
+$$
+	\begin{align*}
+&\frac{K_z\omega_{z1}\omega_{z2}\omega_c}{\omega_z\omega_{esr}}=R_c\\
+&\rightarrow K_z=\frac{R_c\omega_z\omega_{esr}}{\omega_{z1}\omega_{z2}\omega_c}
+	\end{align*}
+$$
+
+최댓값은 $$s=j\omega_c$$에서 나타납니다.
+따라서 최댓값은 다음과 같습니다.
+
+$$
+	\begin{align*}
+20\log\left\vert Z_o(j\omega)\right\vert_{max}&=20\log\left\vert Z_o(j\omega_c)\right\vert\\
+&=20\log\left(K_z\frac{\omega_{z1}\omega_{z2}}{\omega_z}\right)\\
+&=20\log\left(\frac{R_c\omega_{esr}}{\omega_c}\right)
 	\end{align*}
 $$
