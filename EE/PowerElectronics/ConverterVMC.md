@@ -37,7 +37,7 @@ $$G_{vd}(s)$$는 파워 스테이지마다 다릅니다.
 
 ## 점근적 분석
 
-이전에는 폐루프 컨버터의 전달 함수를 모두 구했습니다.
+이전에는 컨버터의 전달 함수를 모두 구했습니다.
 앞으로 분석할 전달 함수의 기본 형태는 다음과 같습니다.
 
 $$
@@ -58,7 +58,7 @@ $$G(s)$$는 개루프 전달 함수이고, $$T(s)$$는 루프 이득입니다.
 
 $$
 F(s)=\frac{G(s)}{1+T(s)}=\begin{cases}
-			\displaystyle\frac{G(s)}{T_m(s)}\ \ \ \text{for }\left\vert T(s)\right\vert\gg1\\
+			\displaystyle\frac{G(s)}{T(s)}\ \ \ \text{for }\left\vert T(s)\right\vert\gg1\\
 			G(s)\ \ \ \text{for }\left\vert T(s)\right\vert \ll1
 		\end{cases}
 $$
@@ -77,7 +77,8 @@ $$
 (G, T)
 
 다음으로 $$20\log\left\vert F(j\omega)\right\vert$$를 고주파 대역부터 그려야 합니다.
-교차 주파수 이상의 대역에서는 $$20\log\left\vert T(j\omega)\right\vert$$가 $$0$$이므로 $$20\log\left\vert G(j\omega)\right\vert$$와 동일합니다.
+교차 주파수 이상의 대역에서는 $$\left\vert T(j\omega)\right\vert$$가 $$1$$에 비해 매우 작아서 분모를 $$1$$로 근사합니다.
+따라서 $$20\log\left\vert G(j\omega)\right\vert$$와 동일합니다.
 
 (F G)
 
@@ -85,7 +86,8 @@ $$
 
 (F G intersect)
 
-교차 주파수 이하의 대역에서는 $$20\log\left\vert G(j\omega)\right\vert$$에서 $$20\log\left\vert T(j\omega)\right\vert$$를 뺀 그래프를 그리면 됩니다.
+교차 주파수 이하의 대역에서는 $$\left\vert T(j\omega)\right\vert$$가 $$1$$에 비해 매우 커서 분모를 $$T(s)$$로 근사합니다.
+따라서 $$20\log\left\vert G(j\omega)\right\vert$$애서 $$20\log\left\vert T(j\omega)\right\vert$$를 뺀 그래프를 그리면 됩니다.
 
 (G-T)
 
@@ -470,4 +472,38 @@ $$
 
 ---
 
-## 설계된 루프 이득
+## 점근적 근사를 통한 전달 함수 유도
+
+루프 이득을 구했고, 파워 스테이지의 전달 함수도 알고 있으므로 이제 폐루프에 대한 전달 함수들을 구할 수 있습니다.
+점근적 근사를 통해 구해봅시다.
+
+### 음파 민감도
+
+음파 민감도는 다음과 같습니다.
+
+$$
+A_u(s)=\frac{G_{vs}(s)}{1+T_m(s)}=\begin{cases}
+			\displaystyle\frac{G_{vs}(s)}{T_m(s)}\ \ \ \text{for }\left\vert T_m(s)\right\vert\gg1\\
+			G_{vs}(s)\ \ \ \text{for }\left\vert T_m(s)\right\vert \ll1
+		\end{cases}
+$$
+
+먼저 각 전달 함수들의 보드 선도를 그립니다.
+
+(BP)
+
+그리고 교차 주파수를 중심으로 고주파 대역부터 보드 선도를 그립니다.
+
+(Au)
+
+보드 선도를 살펴봅시다.
+우선 기울기 $$+1$$의 미분으로 시작합니다.
+다음으로 극점 $$\omega_{z1}$$을 지나면서 기울기가 $$0$$이 됩니다.
+그리고 극점 $$\omega_{z2}$$를 지나면서 기울기가 $$-1$$이 됩니다.
+그 다음 극점 $$\omega_c$$를 지나면서 기울기가 $$-2$$가 됩니다.
+마지막으로 영점 $$\omega_{esr}$$을 지나면서 기울기가 $$-1$$이 됩니다.
+따라서 음파 민감도의 전달 함수는 다음과 같습니다.
+
+$$
+A_u(s)=K_as\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)\left(1+\displaystyle\frac{s}{\omega_c}\right)}
+$$
