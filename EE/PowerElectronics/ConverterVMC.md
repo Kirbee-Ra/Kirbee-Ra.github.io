@@ -97,7 +97,7 @@ $$G(s)$$와 $$T(s)$$만을 이용해서 보드 선도를 다 그렸습니다.
 우선 다음과 같이 $$F(s)$$를 시간 상수 형식으로 나타냅니다.
 
 $$
-T(s)=\frac{K\displaystyle\prod_k\left(1+\displaystyle\frac{s}{\omega_{z,k}}\right)\displaystyle\prod_k\left(1+\displaystyle\frac{s}{Q_{z,k}\omega_{0z,k}}+\displaystyle\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\displaystyle\prod_k\left(1+\displaystyle\frac{s}{\omega_{p,k}}\right)\displaystyle\prod_k\left(1+\displaystyle\frac{s}{Q_{p,k}\omega_{0p,k}}+\displaystyle\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
+T(s)=\frac{K\displaystyle\prod_k\left(1+\displaystyle\frac{s}{\omega_{z,k}}\right)\displaystyle\prod_k\left(1+\displaystyle\frac{s}{Q_{z,k}\omega_{0z,k}}+\displaystyle\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{s^m\displaystyle\prod_k\left(1+\displaystyle\frac{s}{\omega_{p,k}}\right)\displaystyle\prod_k\left(1+\displaystyle\frac{s}{Q_{p,k}\omega_{0p,k}}+\displaystyle\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
 $$
 
 이 식은 저주파 항부터 작성하는 것이 좋습니다.
