@@ -97,7 +97,7 @@ $$G(s)$$와 $$T(s)$$만을 이용해서 보드 선도를 다 그렸습니다.
 우선 다음과 같이 $$F(s)$$를 시간 상수 형식으로 나타냅니다.
 
 $$
-T(s)=\frac{K\prod_k\left(1+\displaystyle\frac{s}{\omega_{z,k}}\right)\prod_k\left(1+\displaystyle\frac{s}{Q_{z,k}\omega_{0z,k}}+\displaystyle\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\prod_k\left(1+\displaystyle\frac{s}{\omega_{p,k}}\right)\prod_k\left(1+\displaystyle\frac{s}{Q_{p,k}\omega_{0p,k}}+\displaystyle\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
+T(s)=\frac{K\displaystyle\prod_k\left(1+\displaystyle\frac{s}{\omega_{z,k}}\right)\displaystyle\prod_k\left(1+\displaystyle\frac{s}{Q_{z,k}\omega_{0z,k}}+\displaystyle\frac{s^2}{\omega_{0z,k}^2}\right)\cdots}{\displaystyle\prod_k\left(1+\displaystyle\frac{s}{\omega_{p,k}}\right)\displaystyle\prod_k\left(1+\displaystyle\frac{s}{Q_{p,k}\omega_{0p,k}}+\displaystyle\frac{s^2}{\omega_{0p,k}^2}\right)\cdots}
 $$
 
 이 식은 저주파 항부터 작성하는 것이 좋습니다.
@@ -125,7 +125,7 @@ $$
 			G_{vs}(s)\ \ \ \text{for }\left\vert T_m(s)\right\vert \ll1
 		\end{cases}\\
 		&Z_o(s)=\frac{Z_p(s)}{1+T_m(s)}=\begin{cases}
-			\frac{Z_p(s)}{T_m(s)}\ \ \ \text{for }\left\vert T_m(s)\right\vert\gg1\\
+			\displaystyle\frac{Z_p(s)}{T_m(s)}\ \ \ \text{for }\left\vert T_m(s)\right\vert\gg1\\
 			Z_p(s)\ \ \ \text{for }\left\vert T_m(s)\right\vert \ll1
 		\end{cases}
 	\end{align*}
@@ -325,7 +325,7 @@ $$
 보상기의 전달 함수는 다음과 같습니다.
 
 $$
-F_v(s)=\frac{1/R_2\left(C_2+C_3\right)}{s}\frac{\left(1+\frac{s}{1/R_3C_3}\right)\left(1+\frac{s}{1/\left(R_1+R_2\right)C_1}\right)}{\left(1+\frac{s}{1/R_1C_1}\right)\left(1+\frac{s}{1/R_3C_2C_3/\left(C_2+C_3\right)}\right)}
+F_v(s)=\frac{1/R_2\left(C_2+C_3\right)}{s}\frac{\left(1+\displaystyle\frac{s}{1/R_3C_3}\right)\left(1+\displaystyle\frac{s}{1/\left(R_1+R_2\right)C_1}\right)}{\left(1+\displaystyle\frac{s}{1/R_1C_1}\right)\left(1+\displaystyle\frac{s}{1/R_3C_2C_3/\left(C_2+C_3\right)}\right)}
 $$
 
 각 극점, 영점, 적분 이득을 다음과 같이 나타낼 수 있습니다.
