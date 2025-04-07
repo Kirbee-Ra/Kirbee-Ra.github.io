@@ -184,11 +184,13 @@ $$
 
 주파수가 $$10$$배 늘면 기울기 조건에 의해 크기가 $$20n\ \text{dB}$$만큼 늘어야하므로 다음과 같습니다.
 
+$$
 \begin{align*}
 		&20\log M_0=a\log\left(\frac{\omega}{\omega_c}\right)\\
 		&20\log M'=a\log\left(\frac{10\omega}{\omega_c}\right)=a+a\log\left(\frac{\omega}{\omega_c}\right)=a\log\left(\frac{\omega}{\omega_c}\right)+20n\\
 		&a=20n
 	\end{align*}
+$$
 
 따라서 직선의 방정식은 다음과 같습니다.
 
