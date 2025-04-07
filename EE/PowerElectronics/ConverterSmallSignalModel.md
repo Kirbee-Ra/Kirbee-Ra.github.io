@@ -297,7 +297,7 @@ $$
 q(t)=\begin{cases}
 			1\ \ \ \text{for }v_{ctrl}>v_{ramp}\\
 			0\ \ \ \text{for }v_{ctrl}<v_{ramp}
-		\end{cases}
+\end{cases}
 $$
 
 듀티 비는 다음과 같이 결정됩니다.
@@ -330,14 +330,14 @@ $$
 소신호 표현식은 다음과 같습니다.
 
 $$
-\hat{d}=\frac{hat{v}_{ctrl}}{V_m}
+\hat{d}=\frac{\hat{v}_{ctrl}}{V_m}
 $$
 
 전압 피드백 보상기는 $$v_{ctrl}$$를 출력합니다.
 PWM 블록은 듀티 정보를 출력하므로 다음의 전달 함수를 구해야 합니다.
 
 $$
-F_m=\frac{\hat{d}}{hat{v}_{ctrl}}
+F_m=\frac{\hat{d}}{\hat{v}_{ctrl}}
 $$
 
 이는 소신호 표현식을 통해 다음과 같이 구할 수 있습니다.
