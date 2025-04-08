@@ -14,7 +14,7 @@
   - [전파공학]
   - [전력전자](./EE/PowerElectronics/PowerElectronics.md)
 - [물리학](./PHY/Physics.md)
-  - [고전역학](./PHY/ClassicalMechanics/ClassicalMechanics.md)
+  - [고전역학]
   - [전자기학]
   - [양자역학]
   - [열및통계물리학]
@@ -49,9 +49,9 @@
 ---
 
 # 삽화
-- [그림 템플릿](./Figure/FigureTemplet.md)
+- [그림 템플릿]
 - [그래프 템플릿]
-- [이미지 추출]
+- [이미지 저장](./Figure/FigureSave.md)
 
 ---
 
