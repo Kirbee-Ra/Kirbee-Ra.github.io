@@ -682,7 +682,7 @@ $$
 점근적 근사를 하는 과정에서는 오차가 발생할 수 밖에 없다고 언급했습니다.
 특히 교차 주파수 부근에서 오차가 가장 컸습니다.
 교차 주파수를 중심으로 근사를 했기 때문입니다.
-실제 컨버터의 보드 선도를 살펴보면 점근적 근사를 통해 구한 보드 선도보다 교차 주파수 부근에서 위로 솟은 것을 볼 수 있습니다.
+실제 컨버터의 보드 선도를 살펴보면 점근적 근사를 통해 구한 보드 선도보다 교차 주파수 부근에서 윗방향 서지가 생긴 것을 볼 수 있습니다.
 이런 현상을 **피킹(Peaking)**이라고 합니다.
 
 피킹이 어느 정도인지 계산해봅시다.
@@ -723,3 +723,140 @@ $$
 
 이 식을 통해 위상 여유가 피킹에 영향을 미친다는 사실을 알 수 있습니다.
 위상 여유가 작을 수록 분모가 작아지기 때문에 피킹이 커집니다.
+
+피킹이 동작에 어떤 영향을 미치는지 알아봅시다.
+
+(pk)
+
+다음의 두 경우에 대한 보드 선도와 계단 함수 부하에 대한 응답을 살펴봅시다.
+피킹이 큰 경우에 라플라스 역변환을 취해보면 저감쇠 진동 형태의 응답을 볼 수 있습니다.
+진동을 최소화하여 바로 정상 상태에 도달하는 것이 바람직합니다.
+
+---
+
+## 응답 속도
+
+안정성을 평가했으니 다음으로 응답 속도를 평가해야 합니다.
+다음의 두 경우에 대해 평가합니다.
+
+1. 계단 함수 입력에 대한 응답
+2. 계단 함수 부하에 대한 응답
+
+### 계단 함수 입력에 대한 응답
+
+입력에 대한 응답은 입력과 출력의 비인 음파 민감도를 통해 평가합니다.
+점근적 근사를 통해 구한 음파 민감도는 다음과 같습니다.
+
+$$
+A_u(s)=K_as\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)\left(1+\displaystyle\frac{s}{\omega_c}\right)}
+$$
+
+여기서 극점 간의 대소 관계는 다음과 같습니다.
+
+$$
+\omega_{z1}\ll\omega_{z2}\ll\omega_c
+$$
+
+응답은 다음과 같이 구할 수 있습니다.
+
+$$
+\begin{align*}
+		v_o(t)&=\mathscr{L}^{-1}\left[\frac{V_{step}}{s}A_u(s)\right]\\
+		&=\mathscr{L}^{-1}\left[V_{step}K_a\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)\left(1+\displaystyle\frac{s}{\omega_c}\right)}\right]
+	\end{align*}
+$$
+
+분모의 차수가 분자보다 크므로 부분 분수 분해를 통해 다음과 같이 나타낼 수 있습니다.
+
+$$
+v_o(t)=\mathscr{L}^{-1}\left[\frac{K_{z1}}{1+\displaystyle\frac{s}{\omega_{z1}}}+\frac{K_{z2}}{1+\displaystyle\frac{s}{\omega_{z2}}}+\frac{K_c}{1+\displaystyle\frac{s}{\omega_c}}\right]
+$$
+
+역변환을 취하면 다음과 같습니다.
+
+$$
+v_o(t)=\left(K_{z1}'e^{-\omega_{z1}t}+K_{z2}'e^{-\omega_{z2}t}+K_c'e^{-\omega_ct}\right)u(t)
+$$
+
+$$\omega_{z1}$$이 가장 작으므로 감쇠가 가장 늦습니다.
+따라서 세 항 중에서는 $$K_{z1}'e^{-\omega_{z1}t}$$이 지배적입니다.
+여기서 응답 시간을 다음과 같이 정의합니다.
+
+$$
+t_s=3\tau=3\frac{1}{\omega_{z1}}
+$$
+
+다음 그래프를 살펴봅시다.
+
+(BP)
+
+첫번째 영점이 다른 두 경우에 대한 보드 선도와 응답입니다.
+영점 주파수를 낮게 설계한 경우, 이와 같이 응답 속도가 느린 것을 알 수 있습니다.
+
+### 계단 함수 부하에 대한 응답
+
+다음으로 부하에 대한 응답입니다.
+이는 출력 전류와 출력 전압의 비인 출력 임피던스를 통해 평가합니다.
+점근적 근사를 통해 구한 출력 임피던스는 다음과 같습니다.
+
+$$
+Z_o(s)=K_zs\frac{\left(1+\displaystyle\frac{s}{\omega_z}\right)\left(1+\displaystyle\frac{s}{\omega_{esr}}\right)}{\left(1+\displaystyle\frac{s}{\omega_{z1}}\right)\left(1+\displaystyle\frac{s}{\omega_{z2}}\right)\left(1+\displaystyle\frac{s}{\omega_c}\right)}
+$$
+
+컨버터를 설계할 때, 주로 다음과 같은 가정을 합니다.
+
+1. 루프 이득의 첫번째 영점을 개루프 출력 임피던스의 영점에 위치시킵니다: $$\omega_{z1}=\omega_z$$
+2. 루프 이득의 교차 주파수를 개루프 출력 임피던스의 esr 영점에 위치시킵니다: $$\omega_c=\omega_{esr}$$
+
+이를 통해 유도된 출력 임피던스는 다음과 같습니다.
+
+(BP)
+
+$$
+Z_o(s)=\frac{s}{\omega_m}\frac{1}{1+\displaystyle\frac{s}{\omega_{z2}}}
+$$
+
+여기서 $$\omega_m$$은 전달 함수의 미분 식의 교차 주파수입니다.
+응답은 다음과 같이 구할 수 있습니다.
+
+$$
+v_o(t)=\mathscr{L}^{-1}\left[\frac{I_{step}}{\omega_m}\frac{1}{1+\displaystyle\frac{s}{\omega_{z2}}}\right]
+$$
+
+역변환은 다음과 같습니다.
+
+$$
+v_o(t)=I_{step}\frac{\omega_{z2}}{\omega_m}e^{-\omega_{z2}t}u(t)
+$$
+
+스파이크의 크기는 다음과 같습니다.
+
+$$
+\begin{align*}
+		V_{o,spike}&=v_o(0)\\
+		&=I_{step}\frac{\omega_{z2}}{\omega_m}
+	\end{align*}
+$$
+
+이번에는 출력 임피던스의 최댓값을 구해봅시다.
+출력 임피던스에 극한 $$s\rightarrow j\infty$$를 취해봅시다.
+
+$$
+\begin{align*}
+		\left|Z_o(s)\right|_{max}&=\lim_{s\rightarrow j\infty}Z_o(s)\\
+		&=\frac{\omega_{z2}}{\omega_m}
+	\end{align*}
+$$
+
+따라서 전압 스파이크를 다음과 같이 나타낼 수 있습니다.
+
+$$
+V_{o,spike}=I_{step}\left|Z_o(s)\right|_{max}
+$$
+
+스파이크는 부하의 변화량과 출력 임피던스 크기의 최댓값의 곱으로 나타나는 것을 알 수 있습니다.
+감쇠에 관여하는 항이 $$e^{-\omega_{z2}t}$$밖에 없으므로 응답 시간은 다음과 같습니다.
+
+$$
+t_s=3\tau=3\frac{1}{\omega_{z2}}
+$$
