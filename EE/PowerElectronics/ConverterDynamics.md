@@ -296,12 +296,12 @@ $$F(s)$$가 우반면에 극점을 가지고 있고, 우반면 전체를 둘러�
 
 첫째로 **이득 여유(Gain Margin)**입니다.
 위상이 $$-180^{\circ}$$인 지점에서 궤적이 $$(-1,0)$$으로부터 떨어진 거리입니다.
-다음과 같이 쓸 수 있습니다.
+궤적이 $$(-k,0)$$를 지난다면 다음과 같이 쓸 수 있습니다.
 
 $$
 \begin{align*}
-\left(\text{GM}\right)&=20\log\left|-1\right|-20\log\left|k\right|\\
-&=20\log\left(\frac{1}{\left|k\right|}\right)
+\left(\text{GM}\right)&=20\log\left|-1\right|-20\log\left|-k\right|\\
+&=20\log\left(\frac{1}{k}\right)
 \end{align*}
 $$
 
@@ -331,4 +331,3 @@ $$
 
 1. 이득 여유는 $$6\ \text{dB}$$를 넘도록 설계하는 것이 좋습니다.
 2. 위상 여유는 $$60^{\circ}$$ 정도가 가장 좋지만, 보통 $$45^{\circ}$$만 넘도록 설계합니다. 그리고 $$30^{\circ}$$ 아래로는 떨어지지 않는 것이 좋습니다.
-
