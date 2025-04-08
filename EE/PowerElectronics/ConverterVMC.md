@@ -638,3 +638,29 @@ $$
 
 먼저 소신호 모델링을 통해 근사한 모델의 정확도를 살펴봅시다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/소신호 정확도.png" alt="소신호 정확도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 소신호 모델과 실제 컨버터의 보드 선도)
+  </figcaption>
+</figure>
+
+크기의 경우, 이중 극점에서 약간의 오차가 있고, 고주파 대역에서는 언더슛이 발생합니다.
+이는 파워 스테이지에 있는 기생 저항에 의해 더 감쇠되어서 그렇습니다.
+다음으로 위상의 경우, 저주파 대역에서는 오차가 적으나, 고주파 대역에서는 오차가 큽니다.
+이는 고주파 대역에서 PWM 블록의 전달 함수가 상수가 아니라서 그렇습니다.
+이러한 오차는 교차 주파수의 값을 높게 설정할 수록 커집니다.
+이런 경우 위상 여유를 실제보다 더 크게 측정하는 일이 생깁니다.
+그렇게 되면 제어기 설계에 영향을 주게 됩니다.
+따라서 교차 주파수를 스위칭 주파수의 $$0.1-0.3$$배로 설정하여 오차를 줄이는 것이 좋습니다.
+
+### 점근적 근사의 정확도
+
+다음으로 점근적 근사가 얼마나 정확한지 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/점근적 근사 정확도.png" alt="점근적 근사 정확도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 점근적 근사와 실제 컨버터의 보드 선도)
+  </figcaption>
+</figure>
