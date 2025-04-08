@@ -18,7 +18,7 @@
   - [전자기학]
   - [양자역학]
   - [열및통계물리학]
-  - [상대성이론](./PHY/Relativity.md)
+  - [상대성이론](./PHY/Relativity/Relativity.md)
 - [기초수학](./MTH/BasicMathematics.md)
   - [미적분학]
   - [선형대수학](./MTH/LinearAlgebra/LinearAlgebra.md)
