@@ -354,7 +354,7 @@ $$20\log\left\vert (j\omega_{z1})\right\vert$$에 $$\Delta_1$$과 $$\Delta_2$$�
 
 $$
 \begin{align*}
-	0&=20\log\left\vert (j\omega_{z1})\right\vert-\Delta_1-\Delta_2\\
+	0&=20\log\left\vert (j\omega_{z1})\right\vert+\Delta_1+\Delta_2\\
 	&=20\log\left(\frac{V_{in}K_v}{\omega_{z1}V_m}\right)+40\log\left(\frac{\omega_0}{\omega_{z2}}\right)+20\log\left(\frac{\omega_{z2}}{\omega_c}\right)\\
 	&=20\log\left(\frac{V_{in}K_v\omega_0^2\omega_{z2}}{\omega_{z1}V_m\omega_{z2}^2\omega_c}\right)\\
 	&=20\log\left(\frac{V_{in}K_v\omega_0^2}{\omega_{z1}V_m\omega_{z2}\omega_c}\right)
