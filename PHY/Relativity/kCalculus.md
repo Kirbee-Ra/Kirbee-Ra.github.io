@@ -38,3 +38,8 @@ Milne은 관찰자가 '시계'와 '빛 신호'를 이용하여 근처에서 발�
 그러면 관찰자가 시각 $$t=\displaystyle\frac{1}{2}\left(t_1+t_2\right)$$에서 발생한 사건 $$B$$와 사건 $$A$$가 동시에 일어났다고 느낄 것입니다.
 그 관찰자는 사건 $$A$$가 시각 $$t=\displaystyle\frac{1}{2}\left(t_1+t_2\right)$$에서 발생했다고 말할 수 있습니다.
 이를 **동시성의 레이더 정의(Radar Definition of Simultaneity)**라고 합니다.
+
+---
+
+### 본디의 k-인자
+
