@@ -76,28 +76,36 @@ $$
 
 $$
 \begin{cases}
-			\mathbf{V}_R=\frac{R}{R+1/j\omega C}\mathbf{V}_{in}\\
-			\mathbf{V}_C=\frac{1/j\omega C}{R+1/j\omega C}\mathbf{V}_{in}
-		\end{cases}
+	V_R(s)=\displaystyle\frac{R}{R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+	V_C(s)=\displaystyle\frac{\displaystyle\frac{1}{sC}}{R+\displaystyle\frac{1}{sC}}V_{in}(s)
+\end{cases}
 $$
 
 위 식을 통해 저주파 대역에서는 축전기에 걸리는 전압이 더 크고, 고주파 대역에서는 저항에 걸리는 전압이 더 큰 것을 알 수 있습니다.
 따라서 저주파 신호만을 출력하려면 축전기에 걸린 전압을 출력 전압으로 이용하면 됩니다.
 
+$$
+	\begin{align*}
+&V_C(s)=\displaystyle\frac{\displaystyle\frac{1}{sC}}{R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+&H(s)=\displaystyle\frac{\displaystyle\frac{1}{sC}}{R+\displaystyle\frac{1}{sC}}\\
+&H(j\omega)=\displaystyle\frac{\displaystyle\frac{1}{j\omega C}}{R+\displaystyle\frac{1}{j\omega C}}
+	\end{align*}
+$$
+
 전압 비는 다음과 같습니다.
 
 $$
 \begin{align*}
-			H(j\omega)&=\frac{1/j\omega C}{R+1/j\omega C}\\
-			&=\frac{1/\left(RC\right)^2}{\sqrt{\omega^2+\left(1/RC\right)^2}}\angle\left(-\tan^{-1}\left(\omega RC\right)\right)
-	\end{align*}
+	H(j\omega)&=\frac{\displaystyle\frac{1}{j\omega C}}{R+\displaystyle\frac{1}{j\omega C}}\\
+	&=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\angle\left(-\tan^{-1}\left(\omega RC\right)\right)
+\end{align*}
 $$
 
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 \begin{align*}
-			&\frac{1}{2}=\frac{1/\left(RC\right)^2}{\sqrt{\omega_c^2+\left(1/RC\right)^2}}\\
+			&\frac{1}{\sqrt{2}}=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\\
 			&\rightarrow\omega_c=\frac{1}{RC}
 	\end{align*}
 $$
@@ -125,28 +133,36 @@ $$
 
 $$
 \begin{cases}
-			\mathbf{V}_R=\frac{R}{R+j\omega L}\mathbf{V}_{in}\\
-			\mathbf{V}_L=\frac{j\omega L}{R+j\omega L}\mathbf{V}_{in}
-		\end{cases}
+	V_R(s)=\displaystyle\frac{R}{R+sL}V_{in}(s)\\
+	V_L(s)=\displaystyle\frac{sL}{R+sL}V_{in}(s)
+\end{cases}
 $$
 
 위 식을 통해 저주파 대역에서는 저항에 걸리는 전압이 더 크고, 고주파 대역에서는 인덕터에 걸리는 전압이 더 큰 것을 알 수 있습니다.
 따라서 저주파 신호만을 출력하려면 저항에 걸린 전압을 출력 전압으로 이용하면 됩니다.
 
+$$
+	\begin{align*}
+	&V_R(s)=\displaystyle\frac{R}{R+sL}V_{in}(s)\\
+	&H(s)=\displaystyle\frac{R}{R+sL}\\
+	&H(j\omega)=\displaystyle\frac{R}{R+j\omega L}
+\end{align*}
+$$
+
 전압 비는 다음과 같습니다.
 
 $$
-\begin{align*}
-			H(j\omega)&=\frac{j\omega L}{R+j\omega L}\\
-			&=\frac{\left(R/L\right)^2}{\sqrt{\omega^2+\left(R/L\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega L}{R}\right)\right)
-	\end{align*}
+	\begin{align*}
+	H(j\omega)&=\displaystyle\frac{R}{R+j\omega L}\\
+	&=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega L}{R}\right)\right)
+\end{align*}
 $$
 
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 \begin{align*}
-			&\frac{1}{2}=\frac{\left(R/L\right)^2}{\sqrt{\omega_c^2+\left(R/L\right)^2}}\\
+			&\frac{1}{\sqrt{2}}=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
 			&\rightarrow\omega_c=\frac{R}{L}
 	\end{align*}
 $$
@@ -187,13 +203,52 @@ $$
 
 $$
 \begin{cases}
-			\mathbf{V}_R=\frac{R}{R+1/j\omega C}\mathbf{V}_{in}\\
-			\mathbf{V}_C=\frac{1/j\omega C}{R+1/j\omega C}\mathbf{V}_{in}
-		\end{cases}
+	V_R(s)=\displaystyle\frac{R}{R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+	V_C(s)=\displaystyle\frac{\displaystyle\frac{1}{sC}}{R+\displaystyle\frac{1}{sC}}V_{in}(s)
+\end{cases}
 $$
 
 위 식을 통해 고주파 대역에서는 저항에 걸리는 전압이 더 크고, 저주파 대역에서는 축전기에 걸리는 전압이 더 큰 것을 알 수 있습니다.
 따라서 고주파 신호만을 출력하려면 저항에 걸린 전압을 출력 전압으로 이용하면 됩니다.
+
+$$
+	\begin{align*}
+&V_R(s)=\displaystyle\frac{R}{R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+&H(s)=\displaystyle\frac{R}{R+\displaystyle\frac{1}{sC}}\\
+&H(j\omega)=\displaystyle\frac{R}{R+\displaystyle\frac{1}{j\omega C}}
+\end{align*}
+$$
+
+전압 비는 다음과 같습니다.
+
+$$
+	\begin{align*}
+H(j\omega)&=\displaystyle\frac{R}{R+\displaystyle\frac{1}{j\omega C}}\\
+&=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\angle\left(90^{\circ}-\tan^{-1}\left(\omega RC\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+&\frac{1}{\sqrt{2}}=\frac{\omega_c}{\sqrt{\omega_c^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\\
+&\rightarrow\omega_c=\frac{1}{RC}
+\end{align*}
+$$
+
+차단 주파수에서의 위상은 다음과 같습니다.
+
+$$
+\begin{align*}
+\angle\left(90^{\circ}-\tan^{-1}\left(\omega_c RC\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
+&=45^{\circ}
+\end{align*}
+$$
+
+보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
 
 ### HPF RL 회로
 
@@ -205,13 +260,52 @@ $$
 
 $$
 \begin{cases}
-			\mathbf{V}_R=\frac{R}{R+j\omega L}\mathbf{V}_{in}\\
-			\mathbf{V}_L=\frac{j\omega L}{R+j\omega L}\mathbf{V}_{in}
-		\end{cases}
+	V_R(s)=\displaystyle\frac{R}{R+sL}V_{in}(s)\\
+	V_L(s)=\displaystyle\frac{sL}{R+sL}V_{in}(s)
+\end{cases}
 $$
 
 위 식을 통해 고주파 대역에서는 인덕터에 걸리는 전압이 더 크고, 저주파 대역에서는 저항에 걸리는 전압이 더 큰 것을 알 수 있습니다.
-따라서 저주파 신호만을 출력하려면 인덕터에 걸린 전압을 출력 전압으로 이용하면 됩니다.
+따라서 고주파 신호만을 출력하려면 인덕터에 걸린 전압을 출력 전압으로 이용하면 됩니다.
+
+$$
+	\begin{align*}
+&V_L(s)=\displaystyle\frac{sL}{R+sL}V_{in}(s)\\
+&H(s)=\displaystyle\frac{sL}{R+sL}\\
+&H(j\omega)=\displaystyle\frac{j\omega L}{R+j\omega L}
+\end{align*}
+$$
+
+전압 비는 다음과 같습니다.
+
+$$
+\begin{align*}
+H(j\omega)&=\displaystyle\frac{j\omega L}{R+j\omega L}\\
+&=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\angle\left(90^{\circ}-\tan^{-1}\left( \frac{\omega L}{R}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+&\frac{1}{\sqrt{2}}=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
+&\rightarrow\omega_c=\frac{R}{L}
+\end{align*}
+$$
+
+차단 주파수에서의 위상은 다음과 같습니다.
+
+$$
+\begin{align*}
+\angle\left(90^{\circ}-\tan^{-1}\left( \frac{\omega_cL}{R}\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
+&=45^{\circ}
+\end{align*}
+$$
+
+보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
 
 ---
 
