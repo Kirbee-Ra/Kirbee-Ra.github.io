@@ -89,3 +89,135 @@ $$
 
 행렬로 나타내면 다음과 같습니다.
 
+$$
+\begin{cases*}
+			\begin{bmatrix}
+				ct\\
+				x
+			\end{bmatrix}=\displaystyle\frac{c}{2}\begin{bmatrix}
+				1&k\\
+				-1&k
+			\end{bmatrix}\begin{bmatrix}
+				T\\
+				T'
+			\end{bmatrix}\\
+			\begin{bmatrix}
+				ct'\\
+				x'
+			\end{bmatrix}=\displaystyle\frac{c}{2}\begin{bmatrix}
+				k&1\\
+				-k&1
+			\end{bmatrix}\begin{bmatrix}
+				T\\
+				T'
+			\end{bmatrix}
+		\end{cases*}
+$$
+
+관찰자 $$O'$$에 대한 식을 다음과 같이 나타내봅시다.
+
+$$
+\begin{align*}
+		\begin{bmatrix}
+			T\\
+			T'
+		\end{bmatrix}&=\frac{2}{c}\begin{bmatrix}
+			k&1\\
+			-k&1
+		\end{bmatrix}^{-1}\begin{bmatrix}
+			ct'\\
+			x'
+		\end{bmatrix}\\
+		&=\frac{1}{kc}\begin{bmatrix}
+			1&-1\\
+			k&k
+		\end{bmatrix}\begin{bmatrix}
+			ct'\\
+			x'
+			\end{bmatrix}
+	\end{align*}
+$$
+
+이를 관찰자 $$O$$에 대한 식에 대입하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+		\begin{bmatrix}
+			ct\\
+			x
+		\end{bmatrix}&=\displaystyle\frac{c}{2}\begin{bmatrix}
+			1&k\\
+			-1&k
+		\end{bmatrix}\frac{1}{kc}\begin{bmatrix}
+		1&-1\\
+		k&k
+		\end{bmatrix}\begin{bmatrix}
+		ct'\\
+		x'
+		\end{bmatrix}\\
+		&=\frac{1}{2k}\begin{bmatrix}
+			k^2+1&k^2-1\\
+			k^2-1&k^2+1
+		\end{bmatrix}\begin{bmatrix}
+			ct'\\
+			x'
+		\end{bmatrix}\\
+		&=\frac{1}{2}\begin{bmatrix}
+			k+k^{-1}&k-k^{-1}\\
+			k-k^{-1}&k+k^{-1}
+		\end{bmatrix}\begin{bmatrix}
+			ct'\\
+			x'
+		\end{bmatrix}
+	\end{align*}
+$$
+
+$$k+k^{-1}$$과 $$k-k^{-1}$$은 각각 다음과 같습니다.
+
+$$
+\begin{align*}
+		&k+k^{-1}=\sqrt{\frac{1+\beta}{1-\beta}}+\sqrt{\frac{1-\beta}{1+\beta}}=\frac{2}{\sqrt{1-\beta^2}}\\
+		&k-k^{-1}=\sqrt{\frac{1+\beta}{1-\beta}}-\sqrt{\frac{1-\beta}{1+\beta}}=\frac{2\beta}{\sqrt{1-\beta^2}}
+	\end{align*}
+$$
+
+이를 대입하면 다음과 같습니다.
+
+$$
+\begin{align*}
+		\begin{bmatrix}
+			ct\\
+			x
+		\end{bmatrix}&=\frac{1}{2}\begin{bmatrix}
+			\displaystyle\frac{2}{\sqrt{1-\beta^2}}&\displaystyle\frac{2\beta}{\sqrt{1-\beta^2}}\\
+			\displaystyle\frac{2\beta}{\sqrt{1-\beta^2}}&\displaystyle\frac{2}{\sqrt{1-\beta^2}}
+		\end{bmatrix}\begin{bmatrix}
+			ct'\\
+			x'
+		\end{bmatrix}\\
+		&=\frac{1}{\sqrt{1-\beta^2}}\begin{bmatrix}
+			1&\beta\\
+			\beta&1
+		\end{bmatrix}\begin{bmatrix}
+		ct'\\
+		x'
+		\end{bmatrix}
+	\end{align*}
+$$
+
+여기서 $$\displaystyle\frac{1}{\sqrt{1-\beta^2}}$$은 로런츠 인자 $$\gamma$$이므로 로런츠 변환은 다음과 같습니다.
+
+$$
+\begin{bmatrix}
+			ct\\
+			x
+		\end{bmatrix}=\gamma\begin{bmatrix}
+			1&\beta\\
+			\beta&1
+		\end{bmatrix}\begin{bmatrix}
+		ct'\\
+		x'
+		\end{bmatrix}
+$$
+
+이는 시간 1차원과 공간 1차원에 대한 식이므로 2차원 로런츠 변환입니다.
