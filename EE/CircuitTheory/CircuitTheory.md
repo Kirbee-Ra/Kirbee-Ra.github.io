@@ -34,6 +34,6 @@
 ---
 
 ## 필터
-- [필터 회로]
+- [필터 회로](./Filter.md)
 - [수동 필터](./PassiveFilter.md)
-- [능동 필터]
+- [능동 필터](./ActiveFilter.md)
