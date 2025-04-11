@@ -90,7 +90,7 @@ $$
 행렬로 나타내면 다음과 같습니다.
 
 $$
-\begin{cases*}
+\begin{cases}
 			\begin{bmatrix}
 				ct\\
 				x
@@ -111,7 +111,7 @@ $$
 				T\\
 				T'
 			\end{bmatrix}
-		\end{cases*}
+		\end{cases}
 $$
 
 관찰자 $$O'$$에 대한 식을 다음과 같이 나타내봅시다.
@@ -221,3 +221,114 @@ $$
 $$
 
 이는 시간 1차원과 공간 1차원에 대한 식이므로 2차원 로런츠 변환입니다.
+
+### 로런츠 역변환
+
+역변환은 간단합니다.
+다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{align*}
+		\begin{bmatrix}
+			ct'\\
+			x'
+		\end{bmatrix}&=\frac{1}{\gamma\left(1-\beta^2\right)}\begin{bmatrix}
+			1&-\beta\\
+			-\beta&1
+		\end{bmatrix}\begin{bmatrix}
+		ct\\
+		x
+		\end{bmatrix}\\
+		&=\gamma\begin{bmatrix}
+			1&-\beta\\
+			-\beta&1
+		\end{bmatrix}\begin{bmatrix}
+			ct\\
+			x
+		\end{bmatrix}
+	\end{align*}
+$$
+
+관찰자 $$O$$가 $$O'$$에 대해 $$-x'$$방향으로 동일한 속력 $$u$$로 운동하는 것입니다.
+
+### 고전 역학으로의 근사
+
+시간에 대한 식의 양 변을 $$c$$로 나누면 다음과 같습니다.
+
+$$
+\begin{bmatrix}
+			t\\
+			x
+		\end{bmatrix}=\gamma\begin{bmatrix}
+			1&\displaystyle\frac{\beta}{c}\\
+			\beta&1
+		\end{bmatrix}\begin{bmatrix}
+		t'\\
+		x'
+		\end{bmatrix}
+$$
+
+극한 $$c\rightarrow\infty$$를 취하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+		&\lim_{c\rightarrow\infty}\gamma=1\\
+		&\lim_{c\rightarrow\infty}\gamma\beta=0\\
+		&\lim_{c\rightarrow\infty}\begin{bmatrix}
+			t\\
+			x
+		\end{bmatrix}=\begin{bmatrix}
+			1&0\\
+			u&1
+		\end{bmatrix}\begin{bmatrix}
+			t'\\
+			x'
+		\end{bmatrix}
+	\end{align*}
+$$
+
+이는 고전 역학에서의 갈릴레이 변환과 일치합니다.
+
+---
+
+## 속도 변환
+
+어떤 입자가 관찰자 $$O$$에 대해 $$-x$$방향으로 일정한 속력 $$v$$로 운동한다고 해봅시다.
+고전 역학에서는 관찰자 $$O'$$가 측정한 입자의 속도는 $$u+v$$입니다.
+하지만 특수 상대성 이론에서는 다릅니다.
+입자가 $$x(0)=a$$에서 출발할 때, 이 입자의 궤적은 다음과 같습니다.
+
+$$
+x=-vt+a
+$$
+
+이를 로런츠 변환 식에 대입하면 다음과 같습니다.
+
+$$
+\begin{bmatrix}
+		ct'\\
+		x'
+	\end{bmatrix}=\gamma\begin{bmatrix}
+	1&-\beta\\
+	-\beta&1
+	\end{bmatrix}\begin{bmatrix}
+	ct\\
+	-vt+a
+	\end{bmatrix}
+$$
+
+이 식의 미분은 다음과 같습니다.
+
+$$
+\begin{bmatrix}
+		cdt'\\
+		dx'
+	\end{bmatrix}=\gamma\begin{bmatrix}
+	1&-\beta\\
+	-\beta&1
+	\end{bmatrix}\begin{bmatrix}
+	cdt\\
+	-vdt
+	\end{bmatrix}
+$$
+
