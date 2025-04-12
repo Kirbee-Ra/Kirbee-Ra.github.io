@@ -518,7 +518,7 @@ $$
 
 $$
 	\begin{align*}
-		H(s)=\frac{s}{s+\omega_c}
+		H(s)=\frac{\beta s}{s^2+\beta s+\omega_0^2}
 	\end{align*}
 $$
 
@@ -526,8 +526,19 @@ $$
 
 $$
 	\begin{align*}
-	H(j\omega)&=\frac{j\omega}{j\omega+\omega_c}\\
-	&=\frac{\omega}{\sqrt{\omega^2+\omega_c^2}}\angle\left(\tan^{-1}\left(\frac{\omega_c}{\omega}\right)\right)
+	H(j\omega)&=\frac{\beta}{j\omega+\beta+\displaystyle\frac{\omega_0^2}{j\omega}}\\
+	&=\frac{\beta}{\sqrt{\beta^2+\left(\displaystyle\frac{\omega^2-\omega_0^2}{\omega}\right)^2}}\angle\left(\tan^{-1}\left(\frac{\omega_0^2-\omega^2}{\beta\omega}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같습니다.
+
+$$
+\begin{align*}
+	&\frac{1}{\sqrt{2}}=\frac{\beta}{\sqrt{\beta^2+\left(\displaystyle\frac{\omega_c^2-\omega_0^2}{\omega_c}\right)^2}}\\
+	&\beta^2+\left(\frac{\omega_c^2-\omega_0^2}{\omega_c}\right)^2=2\beta^2\\
+	&\frac{\omega_c^2-\omega_0^2}{\omega_c}=\pm\beta\\
+	&\omega_c=\mp\frac{\beta}{2}+\sqrt{\left(\frac{\beta}{2}\right)^2+\omega_0^2}
 \end{align*}
 $$
 
@@ -535,8 +546,8 @@ $$
 
 $$
 	\begin{align*}
-\angle\left(\tan^{-1}\left(\frac{\omega_c}{\omega_c}\right)\right)&=\angle\left(\tan^{-1}1\right)\\
-&=45^{\circ}
+\angle\left(\tan^{-1}\left(\frac{\omega_0^2-\omega^2}{\beta\omega}\right)\right)&=\angle\left(\tan^{-1}\left(\pm1\right)\right)\\
+&=\pm45^{\circ}
 \end{align*}
 $$
 
