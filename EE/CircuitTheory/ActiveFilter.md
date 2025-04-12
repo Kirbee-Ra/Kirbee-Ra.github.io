@@ -206,22 +206,3 @@ H(s)&=H_{LPF}(s)H_{HPF}(s)H_{inv}(s)\\
 &=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\left(\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_HC_H}\right)+\displaystyle\frac{1}{R_LR_HC_LC_H}}
 \end{align*}
 $$
-
-일반적인 대역 필터의 전달 함수를 떠올려 봅시다.
-
-$$
-H_{BPF}(s)=\frac{\beta s}{s^2+\beta s+\omega_0^2}
-$$
-
-두 식을 비교해보면, 분모의 1차항이 다른 것을 알 수 있습니다.
-형태를 맞추기 위해 다음의 근사가 필요합니다.
-
-$$
-\frac{1}{R_LC_L}\gg\frac{1}{R_HC_H}
-$$
-
-합의 경우, 큰 쪽이 지배적이므로 다음과 같습니다.
-
-$$
-H(s)=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_LR_HC_LC_H}}
-$$
