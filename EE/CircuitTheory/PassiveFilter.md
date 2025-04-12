@@ -446,8 +446,8 @@ $$
 
 $$
 	\begin{align*}
-	&V_X(s)=\frac{R}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}V_{in}(s)\\
-	&H(s)=\frac{R}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}=\frac{\displaystyle\frac{1}{R}}{sC+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{sL}}\\
+	&V_X(s)=\frac{sL\vert\vert\displaystyle\frac{1}{sC}}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}V_{in}(s)\\
+	&H(s)=\frac{sL\vert\vert\displaystyle\frac{1}{sC}}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}=\frac{\displaystyle\frac{1}{R}}{sC+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{sL}}\\
 	&H(j\omega)=\frac{\displaystyle\frac{1}{R}}{j\omega C+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{j\omega L}}
 \end{align*}
 $$
@@ -573,9 +573,9 @@ $$
 
 $$
 	\begin{align*}
-&V_R(s)=\frac{R}{sL+R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
-&H(s)=\frac{R}{sL+R+\displaystyle\frac{1}{sC}}\\
-&H(j\omega)=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}
+	&V_X(s)=\frac{sL+\displaystyle\frac{1}{sC}}{sL+R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+	&H(s)=\frac{sL+\displaystyle\frac{1}{sC}}{sL+R+\displaystyle\frac{1}{sC}}\\
+	&H(j\omega)=\frac{j\omega L+\displaystyle\frac{1}{j\omega C}}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}
 \end{align*}
 $$
 
@@ -583,28 +583,28 @@ $$
 
 $$
 \begin{align*}
-	H(j\omega)&=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}\\
-	&=\frac{\omega\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega^2\right)^2+\left(\omega\displaystyle\frac{R}{L}\right)^2}}\angle\left(\tan^{-1}\left(\frac{1-\omega^2LC}{\omega RC}\right)\right)
+	H(j\omega)&=\frac{j\omega L+\displaystyle\frac{1}{j\omega C}}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}\\
+	&=\frac{\left\vert1-\omega^2LC\right\vert}{\sqrt{\left(1-\omega^2LC\right)^2+\left(\omega RC\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega RC}{1-\omega^2LC}\right)\right)
 \end{align*}
 $$
 
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
-	\begin{align*}
-	&\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{R}{L}\right)^2}}\\
-	&2=\left(\frac{1}{LC}-\omega_c^2\right)^2\left(\frac{L}{\omega_c R}\right)^2+1\\
-	&\frac{1}{LC}-\omega_c^2=\pm\omega_c\frac{R}{L}\\
-	&\omega_c=\mp\frac{R}{2L}+\sqrt{\left(\frac{R}{2L}\right)^2+\frac{1}{LC}}
+\begin{align*}
+&\frac{1}{\sqrt{2}}=\frac{\left\vert1-\omega_c^2LC\right\vert}{\sqrt{\left(1-\omega_c^2LC\right)^2+\left(\omega_c RC\right)^2}}\\
+&\left(1-\omega_c^2LC\right)^2+\left(\omega_c RC\right)^2=2\left(1-\omega_c^2LC\right)^2\\
+&1-\omega_c^2LC=\pm\omega_c RC\\
+&\omega_c=\mp\frac{R}{2L}+\sqrt{\left(\frac{R}{2L}\right)^2+\frac{1}{LC}}
 \end{align*}
 $$
 
 차단 주파수에서의 위상은 다음과 같습니다.
 
 $$
-\begin{align*}
-	\angle\left(\tan^{-1}\left(\frac{1-\omega_c^2LC}{\omega_cRC}\right)\right)&=\angle\left(\tan^{-1}\left(\pm1\right)\right)\\
-	&=\pm45^{\circ}
+	\begin{align*}
+\angle\left(-\tan^{-1}\left(\frac{\omega RC}{1-\omega^2LC}\right)\right)&=\angle\left(-\tan^{-1}\left(\pm1\right)\right)\\
+&=\mp45^{\circ}
 \end{align*}
 $$
 
@@ -647,7 +647,75 @@ $$
 직렬로 연결된 임피던스는 크기가 큰 쪽이 지배적입니다.
 중간 대역에서는 병렬로 연결된 두 소자의 등가 임피던스가 지배적입니다.
 저주파 대역과 고주파 대역에서는 저항이 지배적입니다.
-따라서 대역 파단 필터를 구성하려면, 저항에 걸리는 전압을 출력해야 합니다.
+따라서 대역 차단 필터를 구성하려면, 저항에 걸리는 전압을 출력해야 합니다.
+
+$$
+	\begin{align*}
+	&V_X(s)=\frac{R}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}V_{in}(s)\\
+	&H(s)=\frac{R}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}=\frac{sC+\displaystyle\frac{1}{sL}}{sC+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{sL}}\\
+	&H(j\omega)=\frac{j\omega C+\displaystyle\frac{1}{j\omega L}}{j\omega C+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{j\omega L}}
+\end{align*}
+$$
+
+전압 비는 다음과 같습니다.
+
+$$
+	\begin{align*}
+	H(j\omega)&=\frac{j\omega C+\displaystyle\frac{1}{j\omega L}}{j\omega C+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{j\omega L}}\\
+	&=\frac{\left\vert1-\omega^2LC\right\vert}{\sqrt{\left(1-\omega^2LC\right)^2+\left(\omega\displaystyle\frac{L}{R}\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega\displaystyle\frac{L}{R}}{1-\omega^2LC}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+	&\frac{1}{\sqrt{2}}=\frac{\left\vert1-\omega_c^2LC\right\vert}{\sqrt{\left(1-\omega_c^2LC\right)^2+\left(\omega_c\displaystyle\frac{L}{R}\right)^2}}\\
+	&\left(1-\omega_c^2LC\right)^2+\left(\omega_c\displaystyle\frac{L}{R}\right)^2=2\left(1-\omega_c^2LC\right)^2\\
+	&1-\omega_c^2LC=\pm\omega_c\frac{L}{R}\\
+	&\omega_c=\mp\frac{1}{2RC}+\sqrt{\left(\frac{1}{2RC}\right)^2+\frac{1}{LC}}
+\end{align*}
+$$
+
+차단 주파수에서의 위상은 다음과 같습니다.
+
+$$
+\begin{align*}
+\angle\left(-\tan^{-1}\left(\frac{\omega\displaystyle\frac{L}{R}}{1-\omega^2LC}\right)\right)&=\angle\left(\tan^{-1}\left(\mp1\right)\right)\\
+	&=\mp45^{\circ}
+\end{align*}
+$$
+
+공진 주파수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+\omega_0&=\sqrt{\omega_{c1}\omega_{c2}}\\
+&=\frac{1}{\sqrt{LC}}
+\end{align*}
+$$
+
+대역폭은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\beta&=\omega_{c2}-\omega_{c1}\\
+&=\frac{1}{RC}
+\end{align*}
+$$
+
+$$Q$$ 인자는 다음과 같습니다.
+
+$$
+	\begin{align*}
+Q&=\frac{\omega_0}{\beta}\\
+&=R\sqrt{\frac{C}{L}}
+\end{align*}
+$$
+
+보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
 
 ---
 
