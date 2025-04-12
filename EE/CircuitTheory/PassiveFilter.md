@@ -365,8 +365,46 @@ $$
 따라서 대역 필터를 구성하려면, 저항에 걸리는 전압을 출력해야 합니다.
 
 $$
+	\begin{align*}
+&V_R(s)=\frac{R}{sL+R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+&H(s)=\frac{R}{sL+R+\displaystyle\frac{1}{sC}}\\
+&H(j\omega)=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}
+\end{align*}
+$$
+
+전압 비는 다음과 같습니다.
 
 $$
+	\begin{align*}
+H(j\omega)&=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}\\
+&=\frac{\omega\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega^2\right)^2+\left(\omega\displaystyle\frac{R}{L}\right)^2}}\angle\left(90^{\circ}-\tan^{-1}\left(\frac{\omega\displaystyle\frac{R}{L}}{\displaystyle\frac{1}{LC}-\omega^2}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+	&\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{R}{L}\right)^2}}\\
+	&2=\left(\frac{1}{LC}-\omega_c^2\right)^2\left(\frac{L}{\omega_c R}\right)^2+1\\
+	&\frac{1}{LC}-\omega_c^2=\pm\omega_c\frac{R}{L}\\
+	&\omega_c=\mp\frac{R}{2L}+\sqrt{\left(\frac{R}{2L}\right)^2+\frac{1}{LC}}
+\end{align*}
+$$
+
+차단 주파수에서의 위상은 다음과 같습니다.
+
+$$
+\begin{align*}
+\angle\left(90^{\circ}-\tan^{-1}\left( \frac{\omega_cL}{R}\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
+&=45^{\circ}
+\end{align*}
+$$
+
+보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
+
 
 ### BPF 병렬 RLC 회로
 
