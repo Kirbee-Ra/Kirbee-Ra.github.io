@@ -232,8 +232,8 @@ $$
 
 $$
 	\begin{align*}
-H(j\omega)&=\displaystyle\frac{R}{R+\displaystyle\frac{1}{j\omega C}}\\
-&=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\angle\left(90^{\circ}-\tan^{-1}\left(\omega RC\right)\right)
+	H(j\omega)&=\displaystyle\frac{R}{R+\displaystyle\frac{1}{j\omega C}}\\
+	&=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\angle\left(\tan^{-1}\left(\frac{1}{\omega RC}\right)\right)
 \end{align*}
 $$
 
@@ -250,8 +250,8 @@ $$
 
 $$
 \begin{align*}
-\angle\left(90^{\circ}-\tan^{-1}\left(\omega_c RC\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
-&=45^{\circ}
+	\angle\left(\tan^{-1}\left(\frac{1}{\omega_c RC}\right)\right)&=\angle\left(\tan^{-1}1\right)\\
+	&=45^{\circ}
 \end{align*}
 $$
 
@@ -281,8 +281,8 @@ $$
 
 $$
 \begin{align*}
-H(j\omega)&=\displaystyle\frac{j\omega L}{R+j\omega L}\\
-&=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\angle\left(90^{\circ}-\tan^{-1}\left( \frac{\omega L}{R}\right)\right)
+	H(j\omega)&=\displaystyle\frac{j\omega L}{R+j\omega L}\\
+	&=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\angle\left(\tan^{-1}\left( \frac{R}{\omega L}\right)\right)
 \end{align*}
 $$
 
@@ -299,8 +299,8 @@ $$
 
 $$
 \begin{align*}
-\angle\left(90^{\circ}-\tan^{-1}\left( \frac{\omega_cL}{R}\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
-&=45^{\circ}
+\angle\left(\tan^{-1}\left( \frac{R}{\omega_c L}\right)\right)&=\angle\left(\tan^{-1}1\right)\\
+	&=45^{\circ}
 \end{align*}
 $$
 
@@ -331,7 +331,7 @@ $$
 $$
 	\begin{align*}
 	H(j\omega)&=\frac{j\omega}{j\omega+\omega_c}\\
-	&=\frac{\omega}{\sqrt{\omega^2+\omega_c^2}}\angle\left(90^{\circ}-\tan^{-1}\left(\frac{\omega}{\omega_c}\right)\right)
+	&=\frac{\omega}{\sqrt{\omega^2+\omega_c^2}}\angle\left(\tan^{-1}\left(\frac{\omega_c}{\omega}\right)\right)
 \end{align*}
 $$
 
@@ -339,8 +339,8 @@ $$
 
 $$
 	\begin{align*}
-	\angle\left(90^{\circ}-\tan^{-1}\left(\frac{\omega_c}{\omega_c}\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
-	&=45^{\circ}
+\angle\left(\tan^{-1}\left(\frac{\omega_c}{\omega_c}\right)\right)&=\angle\left(\tan^{-1}1\right)\\
+&=45^{\circ}
 \end{align*}
 $$
 
@@ -375,9 +375,9 @@ $$
 전압 비는 다음과 같습니다.
 
 $$
-	\begin{align*}
-H(j\omega)&=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}\\
-&=\frac{\omega\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega^2\right)^2+\left(\omega\displaystyle\frac{R}{L}\right)^2}}\angle\left(90^{\circ}-\tan^{-1}\left(\frac{\omega\displaystyle\frac{R}{L}}{\displaystyle\frac{1}{LC}-\omega^2}\right)\right)
+\begin{align*}
+	H(j\omega)&=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}\\
+	&=\frac{\omega\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega^2\right)^2+\left(\omega\displaystyle\frac{R}{L}\right)^2}}\angle\left(\tan^{-1}\left(\frac{1-\omega^2LC}{\omega RC}\right)\right)
 \end{align*}
 $$
 
@@ -396,8 +396,35 @@ $$
 
 $$
 \begin{align*}
-\angle\left(90^{\circ}-\tan^{-1}\left( \frac{\omega_cL}{R}\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
-&=45^{\circ}
+	\angle\left(\tan^{-1}\left(\frac{1-\omega_c^2LC}{\omega_cRC}\right)\right)&=\angle\left(\tan^{-1}\left(\pm1\right)\right)\\
+	&=\pm45^{\circ}
+\end{align*}
+$$
+
+공진 주파수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+\omega_0&=\sqrt{\omega_{c1}\omega_{c2}}\\
+&=\frac{1}{\sqrt{LC}}
+\end{align*}
+$$
+
+대역폭은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\beta&=\omega_{c2}-\omega_{c1}\\
+&=\frac{R}{L}
+\end{align*}
+$$
+
+$$Q$$ 인자는 다음과 같습니다.
+
+$$
+	\begin{align*}
+Q&=\frac{\omega_0}{\beta}\\
+&=\frac{1}{R}\sqrt{\frac{L}{C}}
 \end{align*}
 $$
 
@@ -417,6 +444,106 @@ $$
 반면에 중간 대역에서는 임피던스가 매우 커집니다.
 따라서 대역 필터를 구성하려면, 병렬로 연결된 두 소자에 걸리는 전압을 출력해야 합니다.
 
+$$
+	\begin{align*}
+	&V_X(s)=\frac{R}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}V_{in}(s)\\
+	&H(s)=\frac{R}{R+\left(sL\vert\vert\displaystyle\frac{1}{sC}\right)}=\frac{\displaystyle\frac{1}{R}}{sC+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{sL}}\\
+	&H(j\omega)=\frac{\displaystyle\frac{1}{R}}{j\omega C+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{j\omega L}}
+\end{align*}
+$$
+
+전압 비는 다음과 같습니다.
+
+$$
+\begin{align*}
+	H(j\omega)&=\frac{\displaystyle\frac{1}{R}}{j\omega C+\displaystyle\frac{1}{R}+\displaystyle\frac{1}{j\omega L}}\\
+	&=\frac{\omega\displaystyle\frac{1}{RC}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega^2\right)^2+\left(\omega\displaystyle\frac{1}{RC}\right)^2}}\angle\left(\tan^{-1}\left(\frac{1-\omega^2LC}{\omega\displaystyle\frac{L}{R}}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+	&\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{1}{RC}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{1}{RC}\right)^2}}\\
+	&2=\left(\frac{1}{LC}-\omega_c^2\right)^2\left(\frac{RC}{\omega_c}\right)^2+1\\
+	&\frac{1}{LC}-\omega_c^2=\pm\omega_c\frac{1}{RC}\\
+	&\omega_c=\mp\frac{1}{2RC}+\sqrt{\left(\frac{1}{2RC}\right)^2+\frac{1}{LC}}
+\end{align*}
+$$
+
+차단 주파수에서의 위상은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\angle\left(\tan^{-1}\left(\frac{1-\omega_c^2LC}{\omega_c\displaystyle\frac{L}{R}}\right)\right)&=\angle\left(\tan^{-1}\left(\pm1\right)\right)\\
+	&=\pm45^{\circ}
+\end{align*}
+$$
+
+공진 주파수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+\omega_0&=\sqrt{\omega_{c1}\omega_{c2}}\\
+&=\frac{1}{\sqrt{LC}}
+\end{align*}
+$$
+
+대역폭은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\beta&=\omega_{c2}-\omega_{c1}\\
+&=\frac{1}{RC}
+\end{align*}
+$$
+
+$$Q$$ 인자는 다음과 같습니다.
+
+$$
+	\begin{align*}
+Q&=\frac{\omega_0}{\beta}\\
+&=R\sqrt{\frac{C}{L}}
+\end{align*}
+$$
+
+보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
+
+### 일반적인 대역 필터
+
+앞서 살펴봤듯이 일반적인 2차 대역 필터의 전달 함수는 다음과 같은 형태입니다.
+
+$$
+	\begin{align*}
+		H(s)=\frac{s}{s+\omega_c}
+	\end{align*}
+$$
+
+크기와 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+	H(j\omega)&=\frac{j\omega}{j\omega+\omega_c}\\
+	&=\frac{\omega}{\sqrt{\omega^2+\omega_c^2}}\angle\left(\tan^{-1}\left(\frac{\omega_c}{\omega}\right)\right)
+\end{align*}
+$$
+
+차단 주파수에서 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\angle\left(\tan^{-1}\left(\frac{\omega_c}{\omega_c}\right)\right)&=\angle\left(\tan^{-1}1\right)\\
+&=45^{\circ}
+\end{align*}
+$$
+
+보드 선도는 다음과 같이 나타납니다.
+
+(BP)
+
 ---
 
 ## 2차 대역 차단 필터
@@ -433,6 +560,74 @@ $$
 출력을 축전기와 인덕터를 직렬 연결한 부분에 설정하면, 중간 대역에서 임피던스가 매우 작아져서 해당 대역의 주파수를 지닌 신호는 크기가 비교적 작아집니다.
 따라서 대역 차단 필터를 구성하려면, 축전기와 인덕터를 직렬 연결한 부분에 걸리는 전압을 출력해야 합니다.
 
+$$
+	\begin{align*}
+&V_R(s)=\frac{R}{sL+R+\displaystyle\frac{1}{sC}}V_{in}(s)\\
+&H(s)=\frac{R}{sL+R+\displaystyle\frac{1}{sC}}\\
+&H(j\omega)=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}
+\end{align*}
+$$
+
+전압 비는 다음과 같습니다.
+
+$$
+\begin{align*}
+	H(j\omega)&=\frac{R}{j\omega L+R+\displaystyle\frac{1}{j\omega C}}\\
+	&=\frac{\omega\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega^2\right)^2+\left(\omega\displaystyle\frac{R}{L}\right)^2}}\angle\left(\tan^{-1}\left(\frac{1-\omega^2LC}{\omega RC}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+	&\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{R}{L}\right)^2}}\\
+	&2=\left(\frac{1}{LC}-\omega_c^2\right)^2\left(\frac{L}{\omega_c R}\right)^2+1\\
+	&\frac{1}{LC}-\omega_c^2=\pm\omega_c\frac{R}{L}\\
+	&\omega_c=\mp\frac{R}{2L}+\sqrt{\left(\frac{R}{2L}\right)^2+\frac{1}{LC}}
+\end{align*}
+$$
+
+차단 주파수에서의 위상은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\angle\left(\tan^{-1}\left(\frac{1-\omega_c^2LC}{\omega_cRC}\right)\right)&=\angle\left(\tan^{-1}\left(\pm1\right)\right)\\
+	&=\pm45^{\circ}
+\end{align*}
+$$
+
+공진 주파수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+\omega_0&=\sqrt{\omega_{c1}\omega_{c2}}\\
+&=\frac{1}{\sqrt{LC}}
+\end{align*}
+$$
+
+대역폭은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\beta&=\omega_{c2}-\omega_{c1}\\
+&=\frac{R}{L}
+\end{align*}
+$$
+
+$$Q$$ 인자는 다음과 같습니다.
+
+$$
+	\begin{align*}
+Q&=\frac{\omega_0}{\beta}\\
+&=\frac{1}{R}\sqrt{\frac{L}{C}}
+\end{align*}
+$$
+
+보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
+
 ### BSF 병렬 RLC 회로
 
 다음은 RLC 병렬 필터 회로입니다.
@@ -445,4 +640,4 @@ $$
 
 ---
 
-## 대역폭과 Q 인자
+## 대역폭과 $$Q$$ 인자
