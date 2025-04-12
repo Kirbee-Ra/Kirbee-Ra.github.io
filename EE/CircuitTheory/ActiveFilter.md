@@ -51,6 +51,32 @@ $$
 
 축전기의 임피던스는 분모에 $$s$$가 있으므로 위 식을 $$s$$로 나눠봅시다.
 
+$$
+	\begin{align*}
+H(s)=A\frac{\displaystyle\frac{\omega_c}{s}}{1+\displaystyle\frac{\omega_c}{s}}
+\end{align*}
+$$
+
+이는 다음과 같이 $$Z_1$$에 저항을 두고, $$Z_2$$에 저항과 축전기를 병렬 연결한 임피던스를 두면 됩니다.
+
+$$
+	\begin{align*}
+H(s)&=-\frac{R_2\vert\vert\displaystyle\frac{1}{sC}}{R_1}\\
+&=-\frac{R_2}{R_1}\frac{\displaystyle\frac{1}{R_2C}}{s+\displaystyle\frac{1}{R_2C}}
+\end{align*}
+$$
+
+증폭 비와 차단 주파수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+&A=-\frac{R_2}{R_1}\\
+&\omega_c=\frac{1}{R_2C}
+\end{align*}
+$$
+
+수동 필터와는 다르게 저항 값을 조절하여 증폭 비를 $$1$$보다 높게 설정할 수 있습니다.
+
 ---
 
 ## 1차 고역 필터
@@ -60,6 +86,34 @@ $$
 $$
 H(s)=\frac{As}{s+\omega_c}
 $$
+
+축전기의 임피던스는 분모에 $$s$$가 있으므로 위 식을 $$s$$로 나눠봅시다.
+
+$$
+	\begin{align*}
+H(s)=A\frac{1}{1+\displaystyle\frac{\omega_c}{s}}
+\end{align*}
+$$
+
+이는 다음과 같이 $$Z_1$$에 저항과 축전기를 직렬 연결한 임피던스를 두고, $$Z_2$$에 저항을 두면 됩니다.
+
+$$
+	\begin{align*}
+H(s)&=-\frac{R_2}{R_1+\displaystyle\frac{1}{sC}}\\
+&=-\frac{R_2}{R_1}\frac{s}{s+\displaystyle\frac{1}{R_1C}}
+\end{align*}
+$$
+
+증폭 비와 차단 주파수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+&A=-\frac{R_2}{R_1}\\
+&\omega_c=\frac{1}{R_1C}
+\end{align*}
+$$
+
+수동 필터와는 다르게 저항 값을 조절하여 증폭 비를 $$1$$보다 높게 설정할 수 있습니다.
 
 ---
 
