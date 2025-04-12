@@ -130,6 +130,45 @@ $$
 이러면 설계한 통과 대역에 해당하는 주파수를 가진 신호들만 통과하게 됩니다.
 마지막으로 반전 증폭기를 캐스케이딩하여 증폭을 시키면 됩니다.
 
+전달 함수들은 다음과 같습니다.
+
+$$
+	\begin{align*}
+&H_{LPF}(s)=-\frac{\displaystyle\frac{1}{R_LC_L}}{s+\displaystyle\frac{1}{R_LC_L}}\\
+&H_{HPF}(s)=-\frac{s}{s+\displaystyle\frac{1}{R_HC_H}}\\
+&H_{inv}(s)=-\frac{R_2}{R_1}
+\end{align*}
+$$
+
+주파수 영역에서의 캐스케이딩은 전달 함수 간의 곱으로 표현할 수 있습니다.
+
+$$
+	\begin{align*}
+H(s)&=H_{LPF}(s)H_{HPF}(s)H_{inv}(s)\\
+&=\left(-\frac{\displaystyle\frac{1}{R_LC_L}}{s+\displaystyle\frac{1}{R_LC_L}}\right)\left(-\frac{s}{s+\displaystyle\frac{1}{R_HC_H}}\right)\left(-\frac{R_2}{R_1}\right)\\
+&=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\left(\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_HC_H}\right)+\displaystyle\frac{1}{R_LR_HC_LC_H}}
+\end{align*}
+$$
+
+일반적인 대역 필터의 전달 함수를 떠올려 봅시다.
+
+$$
+H_{BPF}(s)=\frac{\beta s}{s^2+\beta s+\omega_0^2}
+$$
+
+두 식을 비교해보면, 분모의 1차항이 다른 것을 알 수 있습니다.
+형태를 맞추기 위해 다음의 근사가 필요합니다.
+
+$$
+\frac{1}{R_LC_L}\gg\frac{1}{R_HC_H}
+$$
+
+합의 경우, 큰 쪽이 지배적이므로 다음과 같습니다.
+
+$$
+H(s)=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_LR_HC_LC_H}}
+$$
+
 ---
 
 ## 2차 대역 차단 필터
@@ -147,3 +186,42 @@ $$
 이 신호는 저역 필터를 통과하지 못합니다.
 차단 대역의 주파수를 지닌 신호는 두 필터를 모두 통과하지 못합니다.
 마지막으로 반전 증폭기를 캐스케이딩하여 증폭을 시키면 됩니다.
+
+전달 함수들은 다음과 같습니다.
+
+$$
+	\begin{align*}
+&H_{LPF}(s)=-\frac{\displaystyle\frac{1}{R_LC_L}}{s+\displaystyle\frac{1}{R_LC_L}}\\
+&H_{HPF}(s)=-\frac{s}{s+\displaystyle\frac{1}{R_HC_H}}\\
+&H_{inv}(s)=-\frac{R_2}{R_1}
+\end{align*}
+$$
+
+주파수 영역에서의 병렬 연결과 캐스케이딩은 다음과 같이 표현할 수 있습니다.
+
+$$
+	\begin{align*}
+H(s)&=H_{LPF}(s)H_{HPF}(s)H_{inv}(s)\\
+&=\left(-\frac{\displaystyle\frac{1}{R_LC_L}}{s+\displaystyle\frac{1}{R_LC_L}}\right)\left(-\frac{s}{s+\displaystyle\frac{1}{R_HC_H}}\right)\left(-\frac{R_2}{R_1}\right)\\
+&=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\left(\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_HC_H}\right)+\displaystyle\frac{1}{R_LR_HC_LC_H}}
+\end{align*}
+$$
+
+일반적인 대역 필터의 전달 함수를 떠올려 봅시다.
+
+$$
+H_{BPF}(s)=\frac{\beta s}{s^2+\beta s+\omega_0^2}
+$$
+
+두 식을 비교해보면, 분모의 1차항이 다른 것을 알 수 있습니다.
+형태를 맞추기 위해 다음의 근사가 필요합니다.
+
+$$
+\frac{1}{R_LC_L}\gg\frac{1}{R_HC_H}
+$$
+
+합의 경우, 큰 쪽이 지배적이므로 다음과 같습니다.
+
+$$
+H(s)=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_LR_HC_LC_H}}
+$$
