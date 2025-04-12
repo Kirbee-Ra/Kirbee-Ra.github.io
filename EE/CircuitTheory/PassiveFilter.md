@@ -64,7 +64,7 @@ $$
 
 ## 1차 저역 필터
 
-**저역 필터(Low Pass Filter, LPF)**는 **저주파 통과 필터**라고도 하며, 저주파 신호만 출력되게 하는 필터입니다.
+**저역 필터(Low Pass Filter, LPF)**는 **저주파 통과 필터**라고도 하며, 저주파 신호만 출력하는 필터입니다.
 
 ### LPF RC 회로
 
@@ -208,7 +208,7 @@ $$
 
 ## 1차 고역 필터
 
-**고역 필터(High Pass Filter, HPF)**는 **고주파 통과 필터**라고도 하며, 고주파 신호만 출력되게 하는 필터입니다.
+**고역 필터(High Pass Filter, HPF)**는 **고주파 통과 필터**라고도 하며, 고주파 신호만 출력하는 필터입니다.
 
 ### HPF RC 회로
 
@@ -352,6 +352,7 @@ $$
 
 ## 2차 대역 필터
 
+**대역 필터(Band Pass Filter, BPF)**는 특정 주파수 대역만 출력하는 필터입니다.
 2차 대역 필터는 저항, 축전기, 인덕터로 구성됩니다.
 
 ### BPF 직렬 RLC 회로
@@ -559,6 +560,7 @@ $$
 
 ## 2차 대역 차단 필터
 
+**대역 차단 필터(Band Stop Filter, BSF)**는 특정 주파수 대역만 차단하는 필터입니다.
 2차 대역 차단 필터는 저항, 축전기, 인덕터로 구성됩니다.
 
 ### BSF 직렬 RLC 회로
@@ -714,6 +716,49 @@ Q&=\frac{\omega_0}{\beta}\\
 $$
 
 보드 선도를 통해 다음과 같이 나타낼 수 있습니다.
+
+(BP)
+
+### 일반적인 대역 차단 필터
+
+앞서 살펴봤듯이 일반적인 2차 대역 차단 필터의 전달 함수는 다음과 같은 형태입니다.
+
+$$
+	\begin{align*}
+		H(s)=\frac{s^2+\omega_0^2}{s^2+\beta s+\omega_0^2}
+	\end{align*}
+$$
+
+크기와 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+	H(j\omega)&=\frac{\omega_0^2-\omega^2}{\omega_0^2-\omega^2+j\beta\omega}\\
+	&=\frac{\left\vert\omega_0^2-\omega^2\right\vert}{\sqrt{\left(\omega_0^2-\omega^2\right)^2+\left(\beta\omega\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\beta\omega}{\omega_0^2-\omega}\right)\right)
+\end{align*}
+$$
+
+차단 주파수는 다음과 같습니다.
+
+$$
+\begin{align*}
+	&\frac{1}{\sqrt{2}}=\frac{\left\vert\omega_0^2-\omega_c^2\right\vert}{\sqrt{\left(\omega_0^2-\omega_c^2\right)^2+\left(\beta\omega_c\right)^2}}\\
+	&\left(\omega_0^2-\omega_c^2\right)^2+\left(\beta\omega_c\right)^2=2\left(\omega_0^2-\omega_c^2\right)^2\\
+	&\omega_0^2-\omega_c^2=\pm\beta\omega_c\\
+	&\omega_c=\mp\frac{\beta}{2}+\sqrt{\left(\frac{\beta}{2}\right)^2+\omega_0^2}
+\end{align*}
+$$
+
+차단 주파수에서 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+	\angle\left(-\tan^{-1}\left(\frac{\beta\omega}{\omega_0^2-\omega}\right)\right)&=\angle\left(\tan^{-1}\left(\mp1\right)\right)\\
+	&=\mp45^{\circ}
+\end{align*}
+$$
+
+보드 선도는 다음과 같이 나타납니다.
 
 (BP)
 
