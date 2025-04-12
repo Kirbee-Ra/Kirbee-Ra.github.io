@@ -166,6 +166,44 @@ $$
 
 ### 일반적인 1차 저역 필터
 
+앞서 살펴봤듯이 일반적인 1차 저역 필터의 전달 함수는 다음과 같은 형태입니다.
+
+$$
+	\begin{align*}
+		H(s)=\frac{A\omega_c}{s+\omega_c}
+	\end{align*}
+$$
+
+수동 필터의 경우는 증폭 비가 $$1$$이므로 다음과 같습니다.
+
+$$
+	\begin{align*}
+		H(s)=\frac{\omega_c}{s+\omega_c}
+	\end{align*}
+$$
+
+크기와 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+		H(j\omega)&=\frac{\omega_c}{j\omega+\omega_c}\\
+		&=\frac{\omega_c}{\sqrt{\omega^2+\omega_c^2}}\angle\left(-\tan^{-1}\left(\frac{\omega}{\omega_c}\right)\right)
+	\end{align*}
+$$
+
+차단 주파수에서 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+	\angle\left(-\tan^{-1}\left(\frac{\omega_c}{\omega_c}\right)\right)&=\angle\left(-\tan^{-1}1\right)\\
+	&=-45^{\circ}
+\end{align*}
+$$
+
+보드 선도는 다음과 같이 나타납니다.
+
+(BP)
+
 ---
 
 ## 1차 고역 필터
@@ -271,6 +309,44 @@ $$
 (BP)
 
 ### 일반적인 1차 고역 필터
+
+앞서 살펴봤듯이 일반적인 1차 저역 필터의 전달 함수는 다음과 같은 형태입니다.
+
+$$
+	\begin{align*}
+		H(s)=\frac{As}{s+\omega_c}
+	\end{align*}
+$$
+
+수동 필터의 경우는 증폭 비가 $$1$$이므로 다음과 같습니다.
+
+$$
+	\begin{align*}
+		H(s)=\frac{s}{s+\omega_c}
+	\end{align*}
+$$
+
+크기와 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+	H(j\omega)&=\frac{j\omega}{j\omega+\omega_c}\\
+	&=\frac{\omega}{\sqrt{\omega^2+\omega_c^2}}\angle\left(90^{\circ}-\tan^{-1}\left(\frac{\omega}{\omega_c}\right)\right)
+\end{align*}
+$$
+
+차단 주파수에서 위상은 다음과 같습니다.
+
+$$
+	\begin{align*}
+	\angle\left(90^{\circ}-\tan^{-1}\left(\frac{\omega_c}{\omega_c}\right)\right)&=\angle\left(90^{\circ}-\tan^{-1}1\right)\\
+	&=45^{\circ}
+\end{align*}
+$$
+
+보드 선도는 다음과 같이 나타납니다.
+
+(BP)
 
 ---
 
