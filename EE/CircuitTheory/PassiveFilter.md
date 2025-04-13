@@ -6,12 +6,11 @@
 ## 목차
 
 - [수동 필터]
-- [수동 소자의 주파수 응답]
-- [1차 저역 필터]
-- [1차 고역 필터]
-- [RLC 회로]
-- [2차 대역 필터]
-- [2차 대역 차단 필터]
+- [수동 소자의 주파수 응답](#수동-소자의-주파수-응답)
+- [1차 저역 필터](#1차-저역-필터)
+- [1차 고역 필터](#1차-고역-필터)
+- [2차 대역 필터](#2차-대역-필터)
+- [2차 대역 차단 필터](#2차-대역-차단 필터)
 
 ---
 
@@ -93,11 +92,22 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\left\vert H(j0)\right\vert\\
+	&=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\displaystyle\frac{1}{\left(RC\right)^2}}}\\
+	&=1
+\end{align*}
+$$
+
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 \begin{align*}
-			&\frac{1}{\sqrt{2}}=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\\
+			&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\\
 			&\rightarrow\omega_c=\frac{1}{RC}
 	\end{align*}
 $$
@@ -142,11 +152,21 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\left\vert H(j0)\right\vert\\
+	&=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\left(\displaystyle\frac{R}{L}\right)^2}}\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 \begin{align*}
-			&\frac{1}{\sqrt{2}}=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
+			&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
 			&\rightarrow\omega_c=\frac{R}{L}
 	\end{align*}
 $$
@@ -237,11 +257,21 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\lim_{\omega\rightarrow \infty}\left\vert H(j\omega)\right\vert\\
+	&=\lim_{\omega\rightarrow \infty}\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 	\begin{align*}
-&\frac{1}{\sqrt{2}}=\frac{\omega_c}{\sqrt{\omega_c^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\\
+&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\omega_c}{\sqrt{\omega_c^2+\left(\displaystyle\frac{1}{RC}\right)^2}}\\
 &\rightarrow\omega_c=\frac{1}{RC}
 \end{align*}
 $$
@@ -286,11 +316,21 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\lim_{\omega\rightarrow \infty}\left\vert H(j\omega)\right\vert\\
+	&=\lim_{\omega\rightarrow \infty}\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 	\begin{align*}
-&\frac{1}{\sqrt{2}}=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
+&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\omega}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
 &\rightarrow\omega_c=\frac{R}{L}
 \end{align*}
 $$
@@ -382,11 +422,21 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\left\vert H(j\omega_0)\right\vert\\
+	&=\frac{\omega_0\displaystyle\frac{R}{L}}{\sqrt{\left(\omega_0\displaystyle\frac{R}{L}\right)^2}}\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 	\begin{align*}
-	&\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{R}{L}\right)^2}}\\
+	&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{R}{L}\right)^2}}\\
 	&2=\left(\frac{1}{LC}-\omega_c^2\right)^2\left(\frac{L}{\omega_c R}\right)^2+1\\
 	&\frac{1}{LC}-\omega_c^2=\pm\omega_c\frac{R}{L}\\
 	&\omega_c=\mp\frac{R}{2L}+\sqrt{\left(\frac{R}{2L}\right)^2+\frac{1}{LC}}
@@ -462,11 +512,21 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\left\vert H(j\omega_0)\right\vert\\
+	&=\frac{\omega_0\displaystyle\frac{1}{RC}}{\sqrt{\left(\omega_0\displaystyle\frac{1}{RC}\right)^2}}\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 	\begin{align*}
-	&\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{1}{RC}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{1}{RC}\right)^2}}\\
+	&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\omega_c\displaystyle\frac{1}{RC}}{\sqrt{\left(\displaystyle\frac{1}{LC}-\omega_c^2\right)^2+\left(\omega_c\displaystyle\frac{1}{RC}\right)^2}}\\
 	&2=\left(\frac{1}{LC}-\omega_c^2\right)^2\left(\frac{RC}{\omega_c}\right)^2+1\\
 	&\frac{1}{LC}-\omega_c^2=\pm\omega_c\frac{1}{RC}\\
 	&\omega_c=\mp\frac{1}{2RC}+\sqrt{\left(\frac{1}{2RC}\right)^2+\frac{1}{LC}}
@@ -590,11 +650,20 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\left\vert H(j0)\right\vert=\lim_{\omega\rightarrow \infty}\left\vert H(j\omega)\right\vert\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 \begin{align*}
-&\frac{1}{\sqrt{2}}=\frac{\left\vert1-\omega_c^2LC\right\vert}{\sqrt{\left(1-\omega_c^2LC\right)^2+\left(\omega_c RC\right)^2}}\\
+&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\left\vert1-\omega_c^2LC\right\vert}{\sqrt{\left(1-\omega_c^2LC\right)^2+\left(\omega_c RC\right)^2}}\\
 &\left(1-\omega_c^2LC\right)^2+\left(\omega_c RC\right)^2=2\left(1-\omega_c^2LC\right)^2\\
 &1-\omega_c^2LC=\pm\omega_c RC\\
 &\omega_c=\mp\frac{R}{2L}+\sqrt{\left(\frac{R}{2L}\right)^2+\frac{1}{LC}}
@@ -668,11 +737,20 @@ $$
 \end{align*}
 $$
 
+전압 비의 최댓값은 다음과 같습니다.
+
+$$
+\begin{align*}
+	\left\vert H\right\vert_{max}&=\left\vert H(j0)\right\vert=\lim_{\omega\rightarrow \infty}\left\vert H(j\omega)\right\vert\\
+	&=1
+\end{align*}
+$$
+
 차단 주파수는 다음과 같이 구할 수 있습니다.
 
 $$
 	\begin{align*}
-	&\frac{1}{\sqrt{2}}=\frac{\left\vert1-\omega_c^2LC\right\vert}{\sqrt{\left(1-\omega_c^2LC\right)^2+\left(\omega_c\displaystyle\frac{L}{R}\right)^2}}\\
+	&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\left\vert1-\omega_c^2LC\right\vert}{\sqrt{\left(1-\omega_c^2LC\right)^2+\left(\omega_c\displaystyle\frac{L}{R}\right)^2}}\\
 	&\left(1-\omega_c^2LC\right)^2+\left(\omega_c\displaystyle\frac{L}{R}\right)^2=2\left(1-\omega_c^2LC\right)^2\\
 	&1-\omega_c^2LC=\pm\omega_c\frac{L}{R}\\
 	&\omega_c=\mp\frac{1}{2RC}+\sqrt{\left(\frac{1}{2RC}\right)^2+\frac{1}{LC}}
