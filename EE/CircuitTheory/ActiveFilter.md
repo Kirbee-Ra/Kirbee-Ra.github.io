@@ -202,7 +202,7 @@ $$
 $$
 	\begin{align*}
 H(s)&=H_{LPF}(s)H_{HPF}(s)H_{inv}(s)\\
-&=\left(-\frac{\displaystyle\frac{1}{R_LC_L}}{s+\displaystyle\frac{1}{R_LC_L}}\right)\left(-\frac{s}{s+\displaystyle\frac{1}{R_HC_H}}\right)\left(-\frac{R_2}{R_1}\right)\\
+&=\left(-\frac{\displaystyle\frac{1}{R_LC_L}}{s+\displaystyle\frac{1}{R_LC_L}}-\frac{s}{s+\displaystyle\frac{1}{R_HC_H}}\right)\left(-\frac{R_2}{R_1}\right)\\
 &=-\frac{R_2}{R_1}\frac{s\displaystyle\frac{1}{R_LC_L}}{s^2+s\left(\displaystyle\frac{1}{R_LC_L}+\displaystyle\frac{1}{R_HC_H}\right)+\displaystyle\frac{1}{R_LR_HC_LC_H}}
 \end{align*}
 $$
