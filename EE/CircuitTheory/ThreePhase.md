@@ -185,9 +185,33 @@ $$
 \end{cases}
 $$
 
+평형 3상 시스템에 대해 생각해봅시다. 각 상전압을 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{cases}
+			\mathbf{V}_{an}=V_{ph}\angle\phi\\
+			\mathbf{V}_{bn}=V_{ph}\angle\left(\phi-120^{\circ}\right)\\
+			\mathbf{V}_{cn}=V_{ph}\angle\left(\phi+120^{\circ}\right)
+		\end{cases}
+$$
+
+각 선간 전압은 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{V}_{ab}=\mathbf{V}_{an}-\mathbf{V}_{bn}=\sqrt{3}V_{ph}\angle\left(\phi+30^{\circ}\right)\\
+	\mathbf{V}_{bc}=\mathbf{V}_{bn}-\mathbf{V}_{cn}=\sqrt{3}V_{ph}\angle\left(\phi-90^{\circ}\right)\\
+	\mathbf{V}_{ca}=\mathbf{V}_{cn}-\mathbf{V}_{an}=\sqrt{3}V_{ph}\angle\left(\phi+150^{\circ}\right)
+\end{cases}
+$$
+
+상전압에 비해 진폭이 $$\sqrt{3}$$배가 되었고, 위상은 $$+30^{\circ}$$만큼 이동했습니다.
+
 ---
 
 ## 3상 전원의 Δ 결선
+
+
 
 ---
 
