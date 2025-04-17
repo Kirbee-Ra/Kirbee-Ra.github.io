@@ -445,9 +445,9 @@ $$
 
 $$
 \begin{cases}
-	\mathbf{I}_a=\mathbf{I}_{L,ab}-\mathbf{I}_{L,ca}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-30^{\circ}-\theta\right)\\
-	\mathbf{I}_b=\mathbf{I}_{L,bc}-\mathbf{I}_{L,ab}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-150^{\circ}-\theta\right)\\
-	\mathbf{I}_c=\mathbf{I}_{L,ca}-\mathbf{I}_{L,bc}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi+90^{\circ}-\theta\right)
+	\mathbf{I}_a=\mathbf{I}_{L,ab}-\mathbf{I}_{L,ca}=\displaystyle\frac{\sqrt{3}V_m}{Z_m}\angle\left(\phi-30^{\circ}-\theta\right)\\
+	\mathbf{I}_b=\mathbf{I}_{L,bc}-\mathbf{I}_{L,ab}=\displaystyle\frac{\sqrt{3}_m}{Z_m}\angle\left(\phi-150^{\circ}-\theta\right)\\
+	\mathbf{I}_c=\mathbf{I}_{L,ca}-\mathbf{I}_{L,bc}=\displaystyle\frac{\sqrt{3}V_m}{Z_m}\angle\left(\phi+90^{\circ}-\theta\right)
 \end{cases}
 $$
 
@@ -518,8 +518,76 @@ $$
 	\begin{align*}
 &Z_A=Z_B=Z_C=Z_Y\\
 &Z_1=Z_2=Z_3=Z_{\Delta}\\
-&\rightarrow Z_{\Delta}=3Z_Y
+&\rightarrow Z_{\Delta}=3Z_Y or Z_Y=\displaystyle\frac{Z_{\Delta}}{3}
 \end{align*}
 $$
 
---
+### Y 결선 전원 - Δ 결선 부하
+
+이제 다음과 같이 전원이 Y 결선이고, 부하가 Δ 결선인 상황에 대해 알아봅시다.
+
+(Y delta)
+
+평형 3상 시스템을 가정하고 임피던스가 $$Z$$인 부하를 Y 결선으로 변환하면 다음과 같습니다.
+
+(Y delta bal)
+
+상전압이 다음과 같다고 해봅시다.
+
+$$
+\begin{cases}
+			\mathbf{V}_{an}=V_m\angle\phi\\
+			\mathbf{V}_{bn}=V_m\angle\left(\phi-120^{\circ}\right)\\
+			\mathbf{V}_{cn}=V_m\angle\left(\phi+120^{\circ}\right)
+		\end{cases}
+$$
+
+각 부하에 흐르는 전류는 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_{L,a}=\displaystyle\frac{\mathbf{V}_{an}}{Z/3}=\displaystyle\frac{3V_m}{Z_m}\angle\left(\phi-\theta\right)\\
+	\mathbf{I}_{L,b}=\displaystyle\frac{\mathbf{V}_{bn}}{Z/3}=\displaystyle\frac{3V_m}{Z_m}\angle\left(\phi-120^{\circ}-\theta\right)\\
+	\mathbf{I}_{L,c}=\displaystyle\frac{\mathbf{V}_{cn}}{Z/3}=\displaystyle\frac{3V_m}{Z_m}\angle\left(\phi+120^{\circ}-\theta\right)
+\end{cases}
+$$
+
+이는 선전류와 동일합니다.
+
+### Δ 결선 전원 - Y 결선 부하
+
+마지막으로 전원이 Δ 결선이고, 부하가 Y 결선인 경우를 살펴봅시다.
+
+(delta Y)
+
+평형 3상 시스템을 가정하고 임피던스가 $$Z$$인 부하를 Δ 결선으로 변환하면 다음과 같습니다.
+
+(delta Y bal)
+
+$$
+\begin{cases}
+			\mathbf{V}_{ab}=V_m\angle\phi\\
+			\mathbf{V}_{bc}=V_m\angle\left(\phi-120^{\circ}\right)\\
+			\mathbf{V}_{ca}=V_m\angle\left(\phi+120^{\circ}\right)
+		\end{cases}
+$$
+
+각 부하에 흐르는 전류는 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_{L,ab}=\displaystyle\frac{\mathbf{V}_{ab}}{3Z}=\displaystyle\frac{V_m}{3Z_m}\angle\left(\phi-\theta\right)\\
+	\mathbf{I}_{L,bc}=\displaystyle\frac{\mathbf{V}_{bc}}{3Z}=\displaystyle\frac{V_m}{3Z_m}\angle\left(\phi-120^{\circ}-\theta\right)\\
+	\mathbf{I}_{L,ca}=\displaystyle\frac{\mathbf{V}_{ca}}{3Z}=\displaystyle\frac{V_m}{3Z_m}\angle\left(\phi+120^{\circ}-\theta\right)
+\end{cases}
+$$
+
+선전류는 다음과 같이 각 마디에 KCL을 적용하여 구할 수 있습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_a=\mathbf{I}_{L,ab}-\mathbf{I}_{L,ca}=\displaystyle\frac{V_m}{\sqrt{3}Z_m}\angle\left(\phi-30^{\circ}-\theta\right)\\
+	\mathbf{I}_b=\mathbf{I}_{L,bc}-\mathbf{I}_{L,ab}=\displaystyle\frac{V_m}{\sqrt{3}Z_m}\angle\left(\phi-150^{\circ}-\theta\right)\\
+	\mathbf{I}_c=\mathbf{I}_{L,ca}-\mathbf{I}_{L,bc}=\displaystyle\frac{V_m}{\sqrt{3}Z_m}\angle\left(\phi+90^{\circ}-\theta\right)
+\end{cases}
+$$
