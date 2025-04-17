@@ -500,3 +500,139 @@ $$3$$차원에서의 원뿔의 방정식을 $$4$$차원 시공간으로 확장�
 광추는 원점으로부터 시간에 따라 광속 $$c$$로 퍼집니다.
 즉, 구형의 파면을 형성하게 됩니다.
 이렇게 특수 상대성 이론에서 기술하는 시공간을 **민코프스키 공간(Minkowski Space)**이라고 합니다.
+
+### 4차원 로런츠 변환
+
+두 사건 $$E_1$$과 $$E_2$$를 생각해봅시다.
+관찰자 $$O$$는 두 사건의 좌표를 다음과 같이 기술합니다.
+
+$$
+	\begin{align*}
+&E_1:\left(t_1,x_1,y_1,z_1\right)\\
+&E_2:\left(t_2,x_2,y_2,z_2\right)
+\end{align*}
+$$
+
+관찰자 $$O'$$은 두 사건의 좌표를 다음과 같이 기술합니다.
+
+$$
+	\begin{align*}
+&E_1:\left(t_1',x_1',y_1',z_1'\right)\\
+&E_2:\left(t_2',x_2',y_2',z_2'\right)
+\end{align*}
+$$
+
+두 사건이 광자의 세계선 위에 위치한다면, 다음의 방정식과 동치입니다.
+
+$$
+c^2\left(t_2-t_1\right)^2-\left(x_2-x_1\right)^2-\left(y_2-y_1\right)^2-\left(z_2-z_1\right)^2=0
+$$
+
+두 사건이 광자의 세계선 위에 위치한다는 것은 관성 좌표계와는 상관 없이 이와 같은 식으로 나타낼 수 있습니다.
+따라서 다음의 식도 성립합니다.
+
+$$
+c^2\left(t_2'-t_1'\right)^2-\left(x_2'-x_1'\right)^2-\left(y_2'-y_1'\right)^2-\left(z_2'-z_1'\right)^2=0
+$$
+
+위 식을 간단히 쓰기 위해 다음의 두 벡터를 이용해봅시다.
+
+$$
+	\begin{align*}
+&\mathbf{X}=\begin{bmatrix}
+	ct_2\\
+	x_2\\
+	y_2\\
+	z_2
+\end{bmatrix}-\begin{bmatrix}
+ct_1\\
+x_1\\
+y_1\\
+z_1
+\end{bmatrix}\\
+&\mathbf{X}'=\begin{bmatrix}
+	ct_2'\\
+	x_2'\\
+	y_2'\\
+	z_2'
+\end{bmatrix}-\begin{bmatrix}
+	ct_1'\\
+	x_1'\\
+	y_1'\\
+	z_1'
+\end{bmatrix}
+\end{align*}
+$$
+
+그리고 다음과 같이 대각 행렬 $$\mathbf{g}$$를 정의해봅시다.
+
+$$
+\mathbf{g}=\begin{bmatrix}
+	1&0&0&0\\
+	0&-1&0&0\\
+	0&0&-1&0\\
+	0&0&0&-1
+\end{bmatrix}
+$$
+
+따라서 두 사건에 대한 식은 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{cases}
+	\mathbf{X}^T\mathbf{g}\mathbf{X}=0\\
+	\mathbf{X}'^T\mathbf{g}\mathbf{X}'=0
+\end{cases}
+$$
+
+$$\mathbf{X}$$와 $$\mathbf{X}'$$은 로런츠 변환 관계에 있습니다.
+
+$$
+\mathbf{X}=\mathbf{L}\mathbf{X}'
+$$
+
+$$\mathbf{X}^T$$는 다음과 같습니다.
+
+$$
+\mathbf{X}^T=\mathbf{X}'^T\mathbf{L}^T
+$$
+
+따라서 다음과 같이 쓸 수 있습니다.
+
+$$
+\mathbf{X}'^T\mathbf{L}^T\mathbf{g}\mathbf{L}\mathbf{X}'=0
+$$
+
+다음 식과 비교해봅시다.
+
+$$
+\mathbf{X}'^T\mathbf{g}\mathbf{X}'=0
+$$
+
+두 식은 동치입니다.
+이런 경우는 다음을 만족하는 $$0$$이 아닌 실수 $$\alpha$$가 존재합니다.
+
+$$
+\mathbf{L}^T\mathbf{g}\mathbf{L}=\alpha\mathbf{g}
+$$
+
+로런츠 변환은 가역 행렬이어야 하기 때문에 $$\alpha$$는 $$0$$이면 안됩니다.
+역변환은 다음과 같습니다.
+
+$$
+\mathbf{L}^{-1}=\alpha^{-1}\mathbf{g}^{-1}\mathbf{L}^T\mathbf{g}
+$$
+
+여기서 $$\mathbf{g}^{-1}=\mathbf{g}$$이므로 다음과 같습니다.
+
+$$
+\mathbf{L}^{-1}=\alpha^{-1}\mathbf{g}\mathbf{L}^T\mathbf{g}
+$$
+
+역변환의 $$00$$번째 성분이 $$\gamma/\alpha$$임이 드러났습니다.
+이는 이전에 언급한 $$\gamma'$$이었고, $$\gamma$$와 동일했습니다.
+따라서 $$\alpha=1$$입니다.
+그러므로 다음과 같습니다.
+
+$$
+\mathbf{L}^T\mathbf{g}\mathbf{L}=\mathbf{g}
+$$
