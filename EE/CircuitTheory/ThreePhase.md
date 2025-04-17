@@ -406,4 +406,120 @@ $$
 이런 경우는 중성선이 없어도 됩니다.
 따라서 다음과 같이 전선을 3개만 쓰는 **3상 3선식 시스템(Three-Phase Three-Wires System, 3P3W System)**으로 구성할 수 있습니다.
 
----
+### Δ 결선 전원 - Δ 결선 부하
+
+다음으로 전원과 부하 모두 Δ 결선된 회로를 살펴봅시다.
+
+(delta delta)
+
+이 경우는 부하 양단에 걸린 전압이 선간 전압과 동일합니다.
+또한 각 전원의 상전압과 동일합니다.
+그러므로 부하 전류는 다음과 같이 상전압을 부하 임피던스로 나누면 구할 수 있습니다.
+
+$$
+\mathbf{I}_L=\frac{\mathbf{V}_{ph}}{Z}
+$$
+
+상전압이 다음과 같다고 해봅시다.
+
+$$
+\begin{cases}
+	\mathbf{V}_{ab}=V_m\angle\phi\\
+	\mathbf{V}_{bc}=V_m\angle\left(\phi-120^{\circ}\right)\\
+	\mathbf{V}_{ca}=V_m\angle\left(\phi+120^{\circ}\right)
+\end{cases}
+$$
+
+각 부하에 흐르는 전류는 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_{L,ab}=\displaystyle\frac{\mathbf{V}_{ab}}{Z}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-\theta\right)\\
+	\mathbf{I}_{L,bc}=\displaystyle\frac{\mathbf{V}_{bc}}{Z}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-120^{\circ}-\theta\right)\\
+	\mathbf{I}_{L,ca}=\displaystyle\frac{\mathbf{V}_{ca}}{Z}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi+120^{\circ}-\theta\right)
+\end{cases}
+$$
+
+부하 전류들을 이용해 선전류를 구할 수 있습니다.
+각 마디에 KCL을 적용하면 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_a=\mathbf{I}_{L,ab}-\mathbf{I}_{L,ca}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-30^{\circ}-\theta\right)\\
+	\mathbf{I}_b=\mathbf{I}_{L,bc}-\mathbf{I}_{L,ab}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-150^{\circ}-\theta\right)\\
+	\mathbf{I}_c=\mathbf{I}_{L,ca}-\mathbf{I}_{L,bc}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi+90^{\circ}-\theta\right)
+\end{cases}
+$$
+
+### 부하의 Y-Δ 변환
+
+이전에 언급한 경우들은 모두 전원과 부하가 동일한 방법으로 결선된 것들이었습니다.
+결선법이 다른 경우는 전원의 결선법에 맞추어 부하의 결선법을 변환하는 것이 좋습니다.
+다음 그림을 살펴봅시다.
+
+(Y Δ load)
+
+두 결선법 사이의 관계식을 알아내기 위해 우선 $$A$$ 단자와 $$B$$ 단자 사이의 등가 임피던스를 구해봅시다.
+Y 결선의 경우를 먼저 살펴봅시다.
+$$C$$ 단자는 개방 상태이므로 임피던스 $$Z_C$$는 무시할 수 있습니다.
+따라서 등가 임피던스는 다음과 같습니다.
+
+$$
+Z_{eq}=Z_A+Z_B
+$$
+
+다음으로 Δ 결선된 경우를 살펴봅시다.
+이 경우는 $$Z_1$$과 $$Z_2$$가 직렬로 연결되어 있고, 이 직렬 연결된 임피던스가 $$Z_3$$와 병렬로 연결되어 있습니다.
+따라서 등가 임피던스는 다음과 같습니다.
+
+$$
+Z_{eq}=Z_3\vert\vert\left(Z_1+Z_2\right)
+$$
+
+두 양은 같으므로 다음과 같습니다.
+
+$$
+Z_A+Z_B=Z_3\vert\vert\left(Z_1+Z_2\right)
+$$
+
+다른 단자들에 대해서도 이 방법을 적용하면 아래와 같은 관계식 3개를 유도할 수 있습니다.
+
+$$
+		\begin{cases}
+Z_A+Z_B=Z_3\vert\vert\left(Z_1+Z_2\right)\\
+Z_B+Z_C=Z_1\vert\vert\left(Z_2+Z_3\right)\\
+Z_C+Z_A=Z_2\vert\vert\left(Z_3+Z_1\right)
+\end{cases}
+$$
+
+먼저 Y$$\rightarrow$$Δ 변환식은 다음과 같습니다.
+
+$$
+		\begin{cases}
+Z_1=\displaystyle\frac{Z_AZ_B+Z_BZ_C+Z_CZ_A}{Z_A}\\
+Z_2=\displaystyle\frac{Z_AZ_B+Z_BZ_C+Z_CZ_A}{Z_B}\\
+Z_3=\displaystyle\frac{Z_AZ_B+Z_BZ_C+Z_CZ_A}{Z_C}
+\end{cases}
+$$
+
+Δ$$\rightarrow$$Y 변환식은 다음과 같습니다.
+
+$$
+		\begin{cases}
+Z_A=\displaystyle\frac{Z_2Z_3}{Z_1+Z_2+Z_3}\\
+Z_B=\displaystyle\frac{Z_3Z_1}{Z_1+Z_2+Z_3}\\
+Z_C=\displaystyle\frac{Z_1Z_2}{Z_1+Z_2+Z_3}
+\end{cases}
+$$
+
+이 식들은 평형 3상 시스템에서는 다음과 같이 더 간단해집니다.
+
+$$
+	\begin{align*}
+&Z_A=Z_B=Z_C=Z_Y\\
+&Z_1=Z_2=Z_3=Z_{\Delta}\\
+&\rightarrow Z_{\Delta}=3Z_Y
+\end{align*}
+$$
+
+--
