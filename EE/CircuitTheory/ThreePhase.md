@@ -92,7 +92,7 @@ $$
 ### 상전류와 선전류
 
 **상전류(Phase Current)**는 각 전원에 흐르는 전류를 의미합니다. 각 상에 대한 전류이므로 상전류라고 합니다.
-**선전류(Line Current)**는 전선에 흐르는 의미합니다.
+**선전류(Line Current)**는 전선에 흐르는 전류를 의미합니다.
 두 양은 전원의 결선 방법에 따라 관계가 달라집니다.
 
 ---
@@ -591,3 +591,35 @@ $$
 	\mathbf{I}_c=\mathbf{I}_{L,ca}-\mathbf{I}_{L,bc}=\displaystyle\frac{V_m}{\sqrt{3}Z_m}\angle\left(\phi+90^{\circ}-\theta\right)
 \end{cases}
 $$
+
+---
+
+## 최대 전력 전달
+
+---
+
+## 역률 개선
+
+실제 생산되는 전력에는 사용 가능한 유효 전력과 사용할 수 없는 무효 전력이 섞여있습니다.
+높은 역률은 같은 피상 전력 대비 유효 전력의 비율이 높다는 것을 의미합니다.
+전기 요금은 유효 전력을 통해 계산이 됩니다.
+따라서 역률이 높아야 같은 전기 요금 대비 전력 생산 단가를 낮출 수 있습니다.
+더 적은 피상 전력으로도 동일한 유효 전력을 만들 수 있다는 의미이기 때문입니다.
+실제로 쓰이는 부하에는 역률의 하한이 있습니다.
+하한보다 낮은 역률을 가진 부하는 **역률 개선(Power Factor Correction)**이 필요합니다.
+
+임피던스가 $$Z=R+jX$$인 부하의 역률은 다음과 같이 구할 수 있습니다.
+
+$$
+	\begin{align*}
+&S=\frac{1}{2}\mathbf{V}_L\mathbf{I}_L^*=\frac{1}{2}\left\vert\mathbf{I}_L\right\vert^2Z\\
+&P=\text{Re}\left[S\right]=\frac{1}{2}\left\vert\mathbf{I}_L\right\vert^2\text{Re}\left[Z\right]=\frac{1}{2}\left\vert\mathbf{I}_L\right\vert^2R\\
+&\rightarrow\left(\text{PF}\right)=\frac{P}{\left\vert S\right\vert}=\frac{R}{\left\vert Z\right\vert}=\frac{R}{\sqrt{R^2+X^2}}=\frac{1}{\sqrt{1+\left(\displaystyle\frac{X}{R}\right)^2}}
+\end{align*}
+$$
+
+위 식을 보면 리액턴스 값을 저항 값에 비해 작게 만들수록 역률이 증가하는 것을 알 수 있습니다.
+
+---
+
+## 전력 측정
