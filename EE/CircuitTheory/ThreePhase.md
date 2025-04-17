@@ -74,13 +74,14 @@ $$
 
 분명 $$3$$배의 단면적을 갖는 전선이 필요하지만, 이 전선에 흐르는 전류는 세 전류의 합으로 나타낼 수 있고, 그 값은 항상 $$0$$입니다.
 즉, 이 전선에는 전류가 흐르지 않는 상태로, 개방 회로와 동등한 효과를 냅니다.
-그러므로 이 전선을 없어도 됩니다.
+그러므로 이 전선은 없어도 됩니다.
 
 (3 wires)
 
 앞서 언급한 가정 하에 $$3$$개의 전선으로만 구성된 시스템이 구축되었습니다.
 이는 특수한 경우로, 세 전원의 진폭이 같고, 위상만 $$120^{\circ}$$만큼씩 차이가 나며, 부하는 모두 동일합니다.
 이를 **평형 3상 시스템(Balanced Three Phase System)**이라고 합니다.
+이 내용은 [뒤](#부하의-y-결선과-Δ-결선)에서 자세히 다루겠습니다.
 
 ### 상전압과 선간 전압
 
@@ -343,5 +344,66 @@ $$
 ---
 
 ## 부하의 Y 결선과 Δ 결선
+
+3상 시스템에는 부하가 총 3개가 연결됩니다.
+부하 또한 전원과 마찬가지로 Y 결선과 Δ 결선이 있습니다.
+두 경우 모두 부하 양단에 걸린 전압을 알면 부하 전류를 구할 수 있습니다.
+
+### Y 결선 전원 - Y 결선 부하
+
+전원과 부하가 모두 Y 결선된 상황을 살펴봅시다.
+
+(YY)
+
+이 경우는 부하 양단에 걸린 전압이 상전압과 동일합니다.
+따라서 다음과 같이 상전압을 부하 임피던스로 나누면 부하 전류를 구할 수 있습니다.
+
+$$
+\mathbf{I}_L=\frac{\mathbf{V}_{ph}}{Z}
+$$
+
+이제 평형 3상 시스템에 대해 생각해봅시다.
+
+상전압은 다음과 같습니다.
+
+$$
+		\begin{cases}
+			\mathbf{V}_{an}=V_m\angle\phi\\
+			\mathbf{V}_{bn}=V_m\angle\left(\phi-120^{\circ}\right)\\
+			\mathbf{V}_{cn}=V_m\angle\left(\phi+120^{\circ}\right)
+		\end{cases}
+$$
+
+부하를 다음과 같다고 해봅시다.
+
+$$
+Z=Z_m\angle\theta
+$$
+
+각 부하에 흐르는 전류는 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_{L,a}=\displaystyle\frac{\mathbf{V}_{an}}{Z}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-\theta\right)\\
+	\mathbf{I}_{L,b}=\displaystyle\frac{\mathbf{V}_{bn}}{Z}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi-120^{\circ}-\theta\right)\\
+	\mathbf{I}_{L,c}=\displaystyle\frac{\mathbf{V}_{cn}}{Z}=\displaystyle\frac{V_m}{Z_m}\angle\left(\phi+120^{\circ}-\theta\right)
+\end{cases}
+$$
+
+전류들의 위상이 $$120^{\circ}$$씩 차이가 납니다.
+
+중성선에서 KCL을 적용해보면 다음과 같습니다.
+
+$$
+	\begin{align*}
+&\mathbf{I}_{nN}-\mathbf{I}_{L,a}-\mathbf{I}_{L,b}-\mathbf{I}_{L,c}=0\\
+&\rightarrow\mathbf{I}_{nN}=\mathbf{I}_{L,a}+\mathbf{I}_{L,b}+\mathbf{I}_{L,c}
+\end{align*}
+$$
+
+우변은 진폭이 같고 위상이 $$120^{\circ}$$씩 차이가 나기 때문에 $$\mathbf{0}$$이 됩니다.
+따라서 중성선에는 전류가 흐르지 않습니다.
+이런 경우는 중성선이 없어도 됩니다.
+따라서 다음과 같이 전선을 3개만 쓰는 **3상 3선식 시스템(Three-Phase Three-Wires System, 3P3W System)**으로 구성할 수 있습니다.
 
 ---
