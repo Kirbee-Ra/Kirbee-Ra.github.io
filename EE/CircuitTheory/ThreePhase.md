@@ -194,7 +194,7 @@ $$
 	\begin{align*}
 v_a(t)&=-\dot{\Lambda}_a\\
 &=\omega\Lambda_0\sin\left(\omega t+\phi\right)\\
-&=V_{ph}\sin\left(\omega t+\phi\right)
+&=V_m\sin\left(\omega t+\phi\right)
 \end{align*}
 $$
 
@@ -230,9 +230,9 @@ $$
 
 $$
 \begin{cases}
-	v_{an}(t)=-\dot{\Lambda}_a=\omega\Lambda_0\cos\left(\omega t+\phi\right)=V_{ph}\cos\left(\omega t+\phi\right)\\
-	v_{bn}(t)=-\dot{\Lambda}_b=\omega\Lambda_0\cos\left(\omega t+\phi-120^{\circ}\right)=V_{ph}\cos\left(\omega t+\phi-120^{\circ}\right)\\
-	v_{cn}(t)=-\dot{\Lambda}_c=\omega\Lambda_0\cos\left(\omega t+\phi+120^{\circ}\right)=V_{ph}\cos\left(\omega t+\phi+120^{\circ}\right)
+	v_{an}(t)=-\dot{\Lambda}_a=\omega\Lambda_0\cos\left(\omega t+\phi\right)=V_m\cos\left(\omega t+\phi\right)\\
+	v_{bn}(t)=-\dot{\Lambda}_b=\omega\Lambda_0\cos\left(\omega t+\phi-120^{\circ}\right)=V_m\cos\left(\omega t+\phi-120^{\circ}\right)\\
+	v_{cn}(t)=-\dot{\Lambda}_c=\omega\Lambda_0\cos\left(\omega t+\phi+120^{\circ}\right)=V_m\cos\left(\omega t+\phi+120^{\circ}\right)
 \end{cases}
 $$
 
@@ -242,11 +242,18 @@ $$
 
 ## 3상 전원의 Y 결선
 
-
-다음 그림과 같이 각 전원들이 Y 결선 되었다고 해봅시다.
+다음과 같이 권선에서 고정자를 향해 전류가 들어가는 부분만 전선에 연결하고, 전류가 나가는 부분을 서로 단락시켜 봅시다.
 
 (Y)
 
+이를 회로도로 나타내면 다음과 같습니다.
+
+(Y sch)
+
+이와 같이 세 전원의 전위가 낮은 부분끼리 단락시키고, 전위가 높은 부분을 전선에 연결하는 결선법을 **Y 결선(Y/Wye Connection)**이라고 합니다.
+또는 **T 결선(T/Tee Connection)**이라고 합니다.
+결선의 형태와 비슷한 문자로 표현한 것입니다.
+Y 결선은 그림과 같이 세 전선과 하나의 중성선으로 구성됩니다.
 이때 선간 전압은 KVL에 의해 다음과 같이 구할 수 있습니다.
 
 $$
@@ -257,13 +264,14 @@ $$
 \end{cases}
 $$
 
-평형 3상 시스템에 대해 생각해봅시다. 각 상전압을 다음과 같이 나타낼 수 있습니다.
+평형 3상 시스템에 대해 생각해봅시다.
+각 상전압을 다음과 같이 나타낼 수 있습니다.
 
 $$
 \begin{cases}
-			\mathbf{V}_{an}=V_{ph}\angle\phi\\
-			\mathbf{V}_{bn}=V_{ph}\angle\left(\phi-120^{\circ}\right)\\
-			\mathbf{V}_{cn}=V_{ph}\angle\left(\phi+120^{\circ}\right)
+			\mathbf{V}_{an}=V_m\angle\phi\\
+			\mathbf{V}_{bn}=V_m\angle\left(\phi-120^{\circ}\right)\\
+			\mathbf{V}_{cn}=V_m\angle\left(\phi+120^{\circ}\right)
 		\end{cases}
 $$
 
@@ -271,9 +279,9 @@ $$
 
 $$
 \begin{cases}
-	\mathbf{V}_{ab}=\mathbf{V}_{an}-\mathbf{V}_{bn}=\sqrt{3}V_{ph}\angle\left(\phi+30^{\circ}\right)\\
-	\mathbf{V}_{bc}=\mathbf{V}_{bn}-\mathbf{V}_{cn}=\sqrt{3}V_{ph}\angle\left(\phi-90^{\circ}\right)\\
-	\mathbf{V}_{ca}=\mathbf{V}_{cn}-\mathbf{V}_{an}=\sqrt{3}V_{ph}\angle\left(\phi+150^{\circ}\right)
+	\mathbf{V}_{ab}=\mathbf{V}_{an}-\mathbf{V}_{bn}=\sqrt{3}V_m\angle\left(\phi+30^{\circ}\right)\\
+	\mathbf{V}_{bc}=\mathbf{V}_{bn}-\mathbf{V}_{cn}=\sqrt{3}V_m\angle\left(\phi-90^{\circ}\right)\\
+	\mathbf{V}_{ca}=\mathbf{V}_{cn}-\mathbf{V}_{an}=\sqrt{3}V_m\angle\left(\phi+150^{\circ}\right)
 \end{cases}
 $$
 
@@ -287,12 +295,50 @@ $$
 
 ## 3상 전원의 Δ 결선
 
-다음 그림과 같이 각 전원들이 Δ 결선 되었다고 해봅시다.
+다음과 같이 한 상에서 전위가 낮은 부분이 다른 상의 전위가 높은 부분에 단락된 경우를 살펴봅시다.
 
 (delta)
 
+이를 회로도로 나타내면 다음과 같습니다.
 
+이와 같은 결선법을 **Δ 결선(Δ/Delta Connection)**이라고 합니다.
+또는 **π 결선(π/Pi Connection)**이라고도 합니다.
+회로를 보시면 아시겠지만, 이런 경우는 상전압과 선간 전압이 동일합니다.
+각 전원의 양단이 두 전선에 각각 연결되어 있기 때문입니다.
 
+하지만 상전류와 선전류는 다릅니다.
+각 마디에 KCL을 적용하면 다음과 같습니다.
+
+$$
+\begin{cases}
+	-\mathbf{I}_{ab}+\mathbf{I}_a+\mathbf{I}_{ca}=0&\rightarrow\mathbf{I}_a=\mathbf{I}_{ab}-\mathbf{I}_{ca}\\
+	-\mathbf{I}_{bc}+\mathbf{I}_b+\mathbf{I}_{ab}=0&\rightarrow\mathbf{I}_b=\mathbf{I}_{bc}-\mathbf{I}_{ab}\\
+	-\mathbf{I}_{ca}+\mathbf{I}_c+\mathbf{I}_{bc}=0&\rightarrow\mathbf{I}_c=\mathbf{I}_{ca}-\mathbf{I}_{bc}
+\end{cases}
+$$
+
+평형 3상 시스템에 대해 생각해봅시다.
+각 상전류를 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_{ab}=I_m\angle\phi\\
+	\mathbf{I}_{bc}=I_m\angle\left(\phi-120^{\circ}\right)\\
+	\mathbf{I}_{ca}=I_m\angle\left(\phi+120^{\circ}\right)
+\end{cases}
+$$
+
+각 선전류는 다음과 같습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_a=\mathbf{I}_{ab}-\mathbf{I}_{ca}=\sqrt{3}I_m\angle\left(\phi+30^{\circ}\right)\\
+	\mathbf{I}_b=\mathbf{I}_{bc}-\mathbf{I}_{ab}=\sqrt{3}I_m\angle\left(\phi-90^{\circ}\right)\\
+	\mathbf{I}_c=\mathbf{I}_{ca}-\mathbf{I}_{bc}=\sqrt{3}I_m\angle\left(\phi+150^{\circ}\right)
+\end{cases}
+$$
+
+상전류에 비해 진폭이 $$\sqrt{3}$$배가 되었고, 위상은 $$+30^{\circ}$$만큼 이동했습니다.
 
 ---
 
