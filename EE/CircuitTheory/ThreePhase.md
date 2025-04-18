@@ -141,7 +141,7 @@ $$
 세 전력을 더하면 다음과 같습니다.
 
 $$
-p_{total}(t)=\frac{3V_mI_m}{2}\cos\phi
+p_{total}(t)=\frac{3}{2}V_mI_m\cos\phi
 $$
 
 $$120^{\circ}$$씩 차이 나는 항들은 더하면 모두 $$0$$이므로 이와 같이 나타납니다.
@@ -650,13 +650,14 @@ $$
 $$
 \begin{align*}
 	&\begin{cases}
-		\mathbf{V}_{an}=V_m\angle\phi_v\\
-		\mathbf{V}_{bn}=V_m\angle\left(\phi_v-120^{\circ}\right)\\
-		\mathbf{V}_{cn}=V_m\angle\left(\phi_v+120^{\circ}\right)
+		\mathbf{V}_{ph,a}=V_m\angle\phi_v\\
+		\mathbf{V}_{ph,b}=V_m\angle\left(\phi_v-120^{\circ}\right)\\
+		\mathbf{V}_{ph,c}=V_m\angle\left(\phi_v+120^{\circ}\right)
 	\end{cases}\\
 	&\begin{cases}
-		\mathbf{I}_a=I_m\angle\phi_i\\
-		\mathbf{I}_b=I_m\angle\left(\phi_i-120^{\circ}\right)
+		\mathbf{I}_{ph,a}=I_m\angle\phi_i\\
+		\mathbf{I}_{ph,b}=I_m\angle\left(\phi_i-120^{\circ}\right)\\
+  \mathbf{I}_{ph,c}=I_m\angle\left(\phi_i+120^{\circ}\right)
 	\end{cases}\\
 	&\begin{cases}
 		\mathbf{V}_{ac}=V_l\angle\phi_{vl}\\
@@ -692,7 +693,7 @@ $$
 
 $$
 \begin{cases}
-	\mathbf{V}_{ac}=\mathbf{V}_{an}-\mathbf{V}_{cn}&\rightarrow V_l\angle\phi_{vl}=\sqrt{3}V_m\angle\left(\phi_v-30^{\circ}\right)\\	\mathbf{V}_{bc}=\mathbf{V}_{bn}-\mathbf{V}_{cn}&\rightarrow V_l\angle\left(\phi_{vl}-60^{\circ}\right)=\sqrt{3}V_m\angle\left(\phi_v-90^{\circ}\right)
+	\mathbf{V}_{ac}=\mathbf{V}_{ph,a}-\mathbf{V}_{ph,c}&\rightarrow V_l\angle\phi_{vl}=\sqrt{3}V_m\angle\left(\phi_v-30^{\circ}\right)\\	\mathbf{V}_{bc}=\mathbf{V}_{ph,b}-\mathbf{V}_{ph,c}&\rightarrow V_l\angle\left(\phi_{vl}-60^{\circ}\right)=\sqrt{3}V_m\angle\left(\phi_v-90^{\circ}\right)
 \end{cases}
 $$
 
@@ -730,3 +731,48 @@ P_1+P_2=\frac{3}{2}V_mI_m\cos\phi
 $$
 
 [앞](#평형-3상-시스템)서 언급한 3상 시스템의 전력과 동일합니다.
+
+다음으로 Δ 결선된 전원의 경우를 살펴봅시다.
+상전압과 선간 전압이 같으므로 다음과 같습니다.
+
+$$
+\begin{cases}
+		V_l=V_m\\
+		\phi_{vl}=\phi_v
+	\end{cases}
+$$
+
+상전류와 선전류는 다음의 관계에 있습니다.
+
+$$
+\begin{cases}
+	\mathbf{I}_a=\mathbf{I}_{ph,a}-\mathbf{I}_{ph,c}&\rightarrow I_l\angle\phi_{il}=\sqrt{3}I_m\angle\left(\phi_i-30^{\circ}\right)\\
+	\mathbf{I}_b=\mathbf{I}_{ph,b}-\mathbf{I}_{ph,a}&\rightarrow I_l\angle\left(\phi_{il}-120^{\circ}\right)=\sqrt{3}I_m\angle\left(\phi_i-150^{\circ}\right)
+\end{cases}
+$$
+
+선전류의 진폭과 위상은 다음과 같습니다.
+
+$$
+\begin{cases}
+	&I_l=\sqrt{3}I_m\\
+	&\phi_{il}=\phi_i-30^{\circ}
+\end{cases}
+$$
+
+이전에 구한 전력 합에 대입하면 다음과 같습니다.
+
+$$
+\begin{align*}
+P_1+P_2&=\frac{\sqrt{3}}{2}V_lI_l\cos\left(\phi_{vl}-\phi_{il}+30^{\circ}\right)\\
+&=\frac{3}{2}V_mI_m\cos\left(\phi_v-\phi_i\right)
+\end{align*}
+$$
+
+상전압과 상전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
+
+$$
+P_1+P_2=\frac{3}{2}V_mI_m\cos\phi
+$$
+
+이 또한 [앞](#평형-3상-시스템)서 언급한 3상 시스템의 전력과 동일합니다.
