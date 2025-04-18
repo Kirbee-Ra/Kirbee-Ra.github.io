@@ -673,8 +673,10 @@ $$
 
 다음과 같이 $$a$$상과 $$c$$상 사이의 선간 전압 측정 및 $$a$$상의 선전류를 측정할 수 있게 전력계를 하나 설치하고, 또 $$b$$상과 $$c$$상 사이의 선간 전압 측정 및 $$b$$상의 선전류를 측정할 수 있게 전력계를 하나 설치해봅시다.
 
-<figure style="text-align: center;">
-  <img src="./CTFigure/2전력계.png" alt="2전력계" width="120%"/>
+<figure style="margin: 0; padding: 0;">
+  <img src="./CTFigure/2전력계.png"
+       alt="2전력계"
+       style="display: block; margin: 0 auto; width: 120%; max-width: none;" />
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 2 전력계법)
   </figcaption>
