@@ -405,5 +405,5 @@ $$
 ## 같이 보기
 
 - [컨버터 모델링](./ConverterModeling.md)
-- [컨버터의 평균화 모델](./AverageModel.md)
+- [컨버터의 평균화 모델](./AveragedModel.md)
 - [컨버터의 전달 함수](./ConverterTransferFunction.md)
