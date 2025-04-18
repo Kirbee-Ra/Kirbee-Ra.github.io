@@ -50,9 +50,13 @@ Milne은 관찰자가 '시계'와 '빛 신호'를 이용하여 근처에서 발�
 
 ### 본디의 k-인자
 
+
+
 ---
 
 ## 시간 지연
+
+
 
 ---
 
@@ -290,13 +294,13 @@ $$
 
 ## 속도 변환
 
-어떤 입자가 관찰자 $$O$$에 대해 $$-x$$방향으로 일정한 속력 $$v$$로 운동한다고 해봅시다.
-고전 역학에서는 관찰자 $$O'$$가 측정한 입자의 속도는 $$u+v$$입니다.
+어떤 입자가 관찰자 $$O$$에 대해 $$+x$$방향으로 일정한 속력 $$v$$로 운동한다고 해봅시다.
+고전 역학에서는 관찰자 $$O'$$가 측정한 입자의 속도는 $$u-v$$입니다.
 하지만 특수 상대성 이론에서는 다릅니다.
 입자가 $$x(0)=a$$에서 출발할 때, 이 입자의 궤적은 다음과 같습니다.
 
 $$
-x=-vt+a
+x=vt+a
 $$
 
 이를 로런츠 변환 식에 대입하면 다음과 같습니다.
@@ -310,7 +314,7 @@ $$
 	-\beta&1
 	\end{bmatrix}\begin{bmatrix}
 	ct\\
-	-vt+a
+	vt+a
 	\end{bmatrix}
 $$
 
@@ -325,9 +329,128 @@ $$
 	-\beta&1
 	\end{bmatrix}\begin{bmatrix}
 	cdt\\
-	-vdt
+	vdt
 	\end{bmatrix}
 $$
+
+식을 전개하면 다음과 같습니다.
+
+$$
+\begin{cases}
+	cdt'=\gamma\left(c-\beta v\right)dt\\
+	dx'=\gamma\left(-\beta c+v\right)dt
+\end{cases}
+$$
+
+따라서 관찰자 $$O'$$에 대한 입자의 속도는 다음과 같습니다.
+
+$$
+\begin{align*}
+w&=\frac{dx'}{dt'}\\
+&=\frac{u-v}{1-\displaystyle\frac{uv}{c^2}}
+\end{align*}
+$$
+
+이 값 또한 $$c$$보다 커지지 않습니다.
+극한 $$c\rightarrow\infty$$를 취하면 고전 역학에서의 상대 속도 식이 됩니다.
+
+$$
+\begin{align*}
+\lim_{c\rightarrow\infty}w&=\lim_{c\rightarrow\infty}\frac{u-v}{1-\displaystyle\frac{uv}{c^2}}\\
+&=u-v
+\end{align*}
+$$
+
+---
+
+## 길이 수축
+
+이제 다음과 같이 어느 막대가 $$x'$$축 상의 $$x'=0$$과 $$x'=L$$를 양 끝으로 관찰자 $$O'$$에 대해 정지 상태라고 해봅시다.
+관찰자 $$O'$$가 막대의 길이를 측정하기 위해 $$x'=0$$에서 막대의 반대편 끝으로 빛 신호를 보냈다고 해봅시다.
+빛 신호가 막대의 끝에 도달한 사건을 사건 $$A$$라고 하고, 동시에 $$x'=0$$에서 사건 $$E$$가 발생한다고 해봅시다.
+길이는 양 끝의 위치를 동시에 측정해야 하므로 관찰자 $$O'$$의 입장에서는 사건 $$A$$와 사건 $$E$$ 사이의 거리가 바로 막대의 길이입니다.
+두 세계선은 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{cases}
+	\begin{bmatrix}
+		ct'\\
+		L
+	\end{bmatrix}\\
+	\begin{bmatrix}
+		ct'\\
+		0
+	\end{bmatrix}
+\end{cases}
+$$
+
+관찰자 $$O$$의 입장에서는 사건 $$A$$와 사건 $$E$$가 동시에 발생하지 않습니다.
+관찰자 $$O$$의 입장에서 막대의 길이가 어떻게 되는지 생각해봅시다.
+사건 $$E$$와 동시에 발생하는 사건 $$B$$가 있다고 해봅시다.
+이 또한 이전과 같이 $$x=0$$에서 막대의 반대편 끝으로 빛 신호를 보냈을 때, 빛 신호가 도달한 사건이라고 해봅시다.
+사건 $$B$$의 좌표를 알아낸다면, 관찰자 $$O$$가 측정한 길이를 구할 수 있습니다.
+두 세계선에 로런츠 변환을 취하면 다음과 같습니다.
+
+$$
+\begin{cases}
+	\begin{bmatrix}
+		ct\\
+		x
+	\end{bmatrix}=\begin{bmatrix}
+		1&\beta\\
+		\beta&1
+	\end{bmatrix}\begin{bmatrix}
+		ct'\\
+		L
+	\end{bmatrix}=\begin{bmatrix}
+		ct'+\beta L\\
+		ut'+L
+	\end{bmatrix}\\
+	\begin{bmatrix}
+	ct\\
+	x
+	\end{bmatrix}=\begin{bmatrix}
+	1&\beta\\
+	\beta&1
+	\end{bmatrix}\begin{bmatrix}
+	ct'\\
+	0
+	\end{bmatrix}=\begin{bmatrix}
+	ct'\\
+	ut'
+	\end{bmatrix}
+\end{cases}
+$$
+
+사건 $$E$$의 좌표가 $$t=x=0$$이라고 해봅시다.
+그렇다면 사건 $$B$$의 시각 또한 $$t=0$$이어야 합니다.
+따라서 다음과 같습니다.
+
+$$
+\begin{align*}
+&ct'+\beta L=0\\
+&\rightarrow t'=-\frac{\beta L}{c}
+\end{align*}
+$$
+
+이때 사건 $$B$$의 $$x$$좌표는 다음과 같습니다.
+
+$$
+\begin{align*}
+x_B&=\gamma\left(-\beta^2L+L\right)\\
+&=\frac{L}{\gamma}
+\end{align*}
+$$
+
+기존의 길이에 비해 $$\displaystyle\frac{1}{\gamma}$$가 되어 줄어들었습니다.
+이 현상을 **길이 수축(Length Contraction)**이라고 합니다.
+
+---
+
+## 로런츠 변환의 합성
+
+로런츠 변환을 두 번 하는 경우에 대해 생각해봅시다.
+
 
 ---
 
