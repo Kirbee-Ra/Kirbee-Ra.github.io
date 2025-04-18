@@ -755,8 +755,8 @@ $$
 
 $$
 \begin{cases}
-	&I_l=\sqrt{3}I_m\\
-	&\phi_{il}=\phi_i-30^{\circ}
+	I_l=\sqrt{3}I_m\\
+	\phi_{il}=\phi_i-30^{\circ}
 \end{cases}
 $$
 
