@@ -661,10 +661,10 @@ $$
 중성선에 전류가 흐르는 경우는 전력계 3개가 필요합니다.
 하지만 중성선이 없는 경우는 전력계 2개만으로도 전력을 측정할 수 있습니다.
 
-<figure style="text-align: center;">
+<figure style="margin: 0; padding: 0;">
   <img src="./CTFigure/일반3상.png"
        alt="일반3상"
-       style="width: 120%; max-width: none;" />
+       style="display: block; margin: 0 auto; width: 120%; max-width: none;" />
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 중성선이 없는 일반적인 3상 시스템)
   </figcaption>
