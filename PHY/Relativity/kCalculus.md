@@ -974,3 +974,142 @@ $$
 $$
 \mathbf{L}^T\mathbf{g}\mathbf{L}=\mathbf{g}
 $$
+
+### 표준 로런츠 변환
+
+앞서 언급한 관계식을 통해 로런츠 변환 행렬의 모든 성분을 알아내봅시다.
+
+$$
+\mathbf{L}^T\mathbf{g}\mathbf{L}=\mathbf{g}
+$$
+
+2차원 로런츠 변환을 통해 $$L_{00},L_{01},L_{10},L_{11}$$은 이미 구했습니다.
+
+$$
+\mathbf{L}=\begin{bmatrix}
+	\gamma&\gamma\beta&L_{02}&L_{03}\\
+	\gamma\beta&\gamma&L_{12}&L_{13}\\
+	L_{20}&L_{21}&L_{22}&L_{23}\\
+	L_{30}&L_{31}&L_{32}&L_{33}
+\end{bmatrix}
+$$
+
+따라서 다음과 같이 쓸 수 있습니다.
+
+$$
+	\begin{bmatrix}
+		\gamma&\gamma\beta&L_{20}&L_{30}\\
+		\gamma\beta&\gamma&L_{21}&L_{31}\\
+		L_{02}&L_{12}&L_{22}&L_{32}\\
+		L_{03}&L_{13}&L_{23}&L_{33}
+	\end{bmatrix}
+	\begin{bmatrix}
+		1&0&0&0\\
+		0&-1&0&0\\
+		0&0&-1&0\\
+		0&0&0&-1
+	\end{bmatrix}
+\begin{bmatrix}
+	\gamma&\gamma\beta&L_{02}&L_{03}\\
+	\gamma\beta&\gamma&L_{12}&L_{13}\\
+	L_{20}&L_{21}&L_{22}&L_{23}\\
+	L_{30}&L_{31}&L_{32}&L_{33}
+\end{bmatrix}=	\begin{bmatrix}
+1&0&0&0\\
+0&-1&0&0\\
+0&0&-1&0\\
+0&0&0&-1
+\end{bmatrix}
+$$
+
+$$00$$번째 성분과 $$11$$번째 성분만 비교하면 다음과 같습니다.
+
+$$
+	\begin{cases}
+	00:\gamma^2-\gamma^2\beta^2-L_{20}^2-L_{30}^2=1\\
+	11:\gamma^2\beta^2-\gamma^2-L_{21}^2-L_{31}^2=-1
+\end{cases}
+$$
+
+여기서 $$\gamma^2-\gamma^2\beta^2=1$$이므로 다음과 같습니다.
+
+$$
+	\begin{cases}
+	00:L_{20}^2+L_{30}^2=0\\
+	11:L_{21}^2+L_{31}^2=0
+\end{cases}
+$$
+
+따라서 위 네 성분은 모두 $$0$$입니다.
+다음으로 $$02,03,12,13$$번째 성분을 비교하면 다음과 같습니다.
+
+$$
+	\begin{cases}
+	02:\gamma L_{02}-\gamma\beta L_{12}=0\\
+	03:\gamma L_{03}-\gamma\beta L_{13}=0\\
+	12:\gamma\beta L_{02}-\gamma L_{12}=0\\
+	13:\gamma\beta L_{03}-\gamma L_{13}=0
+\end{cases}
+$$
+
+$$\gamma\neq0$$이고, $$\beta\neq1$$이므로 위 네 성분 또한 모두 $$0$$입니다.
+마지막으로 $$22,23,32,33$$번째 성분을 살펴봅시다.
+
+$$
+	\begin{cases}
+	22:-L_{22}^2-L_{32}^2=-1\\
+	23:-L_{22}L_{23}-L_{32}L_{33}=0\\
+	32:-L_{22}L_{23}-L_{32}L_{33}=0\\
+	33:-L_{23}^2-L_{33}^2=-1
+\end{cases}
+$$
+
+이 성분들을 알아내기 전에 다음 행렬에 대해 살펴봅시다.
+
+$$
+\mathbf{L}_{sub}=\begin{bmatrix}
+	L_{22}&L_{23}\\
+	L_{32}&L_{33}
+\end{bmatrix}
+$$
+
+이 행렬과 전치 행렬의 곱은 다음과 같습니다.
+
+$$
+\begin{align*}
+\mathbf{L}_{sub}^T\mathbf{L}_{sub}&=\begin{bmatrix}
+	L_{22}&L_{32}\\
+	L_{23}&L_{33}
+\end{bmatrix}\begin{bmatrix}
+	L_{22}&L_{23}\\
+	L_{32}&L_{33}
+\end{bmatrix}\\
+&=\begin{bmatrix}
+	L_{22}^2+L_{32}^2&L_{23}L_{23}+L_{32}L_{33}\\
+	L_{22}L_{23}+L_{32}L_{33}&L_{23}^2+L_{33}^2
+\end{bmatrix}
+\end{align*}
+$$
+
+이전에 구한 성분 관계식을 이용하면 다음과 같습니다.
+
+$$
+\begin{align*}
+\mathbf{L}_{sub}^T\mathbf{L}_{sub}&=\begin{bmatrix}
+	1&0\\
+	0&1
+\end{bmatrix}
+$$
+
+즉, $$\mathbf{L}_{sub}^T=\mathbf{L}_{sub}^{-1}$$이고, $$\mathbf{L}_{sub}$$는 직교 행렬입니다.
+
+따라서 로런츠 변환 행렬은 다음과 같습니다.
+
+$$
+\mathbf{L}=\begin{bmatrix}
+	\gamma&\gamma\beta&0&0\\
+	\gamma\beta&\gamma&0&0\\
+	0&0&L_{22}&L_{23}\\
+	0&0&L_{32}&L_{33}
+\end{bmatrix}
+$$
