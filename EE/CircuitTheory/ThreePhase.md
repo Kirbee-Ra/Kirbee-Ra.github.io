@@ -596,6 +596,15 @@ $$
 
 ## 최대 전력 전달
 
+부하에 전력이 최대로 전달될 조건에 대해 생각해봅시다.
+단상 회로의 경우는 다음의 조건 하에 부하로 전달되는 전력이 최대가 되었습니다.
+
+$$
+	Z_L=Z_{Th}^*
+$$
+
+
+
 ---
 
 ## 역률 개선
@@ -645,19 +654,19 @@ $$
 
 (2 watt)
 
-상전압, 상전류, 선간 전압, 선전류가 다음과 같다고 해봅시다.
+부하 전압, 부하 전류, 선간 전압, 선전류가 다음과 같다고 해봅시다.
 
 $$
 \begin{align*}
 	&\begin{cases}
-		\mathbf{V}_{ph,a}=V_m\angle\phi_v\\
-		\mathbf{V}_{ph,b}=V_m\angle\left(\phi_v-120^{\circ}\right)\\
-		\mathbf{V}_{ph,c}=V_m\angle\left(\phi_v+120^{\circ}\right)
+		\mathbf{V}_{L,a}=V_m\angle\phi_v\\
+		\mathbf{V}_{L,b}=V_m\angle\left(\phi_v-120^{\circ}\right)\\
+		\mathbf{V}_{L,c}=V_m\angle\left(\phi_v+120^{\circ}\right)
 	\end{cases}\\
 	&\begin{cases}
-		\mathbf{I}_{ph,a}=I_m\angle\phi_i\\
-		\mathbf{I}_{ph,b}=I_m\angle\left(\phi_i-120^{\circ}\right)\\
-  \mathbf{I}_{ph,c}=I_m\angle\left(\phi_i+120^{\circ}\right)
+		\mathbf{I}_{L,a}=I_m\angle\phi_i\\
+		\mathbf{I}_{L,b}=I_m\angle\left(\phi_i-120^{\circ}\right)\\
+  \mathbf{I}_{L,c}=I_m\angle\left(\phi_i+120^{\circ}\right)
 	\end{cases}\\
 	&\begin{cases}
 		\mathbf{V}_{ac}=V_l\angle\phi_{vl}\\
@@ -688,12 +697,12 @@ $$
 \end{align*}
 $$
 
-먼저 Y 결선된 전원에 대해 생각해봅시다.
-이 경우에 상전압과 선간 전압은 다음의 관계에 있습니다.
+먼저 Y 결선된 부하에 대해 생각해봅시다.
+이 경우에 부하 전압과 선간 전압은 다음의 관계에 있습니다.
 
 $$
 \begin{cases}
-	\mathbf{V}_{ac}=\mathbf{V}_{ph,a}-\mathbf{V}_{ph,c}&\rightarrow V_l\angle\phi_{vl}=\sqrt{3}V_m\angle\left(\phi_v-30^{\circ}\right)\\	\mathbf{V}_{bc}=\mathbf{V}_{ph,b}-\mathbf{V}_{ph,c}&\rightarrow V_l\angle\left(\phi_{vl}-60^{\circ}\right)=\sqrt{3}V_m\angle\left(\phi_v-90^{\circ}\right)
+	\mathbf{V}_{ac}=\mathbf{V}_{L,a}-\mathbf{V}_{L,c}&\rightarrow V_l\angle\phi_{vl}=\sqrt{3}V_m\angle\left(\phi_v-30^{\circ}\right)\\	\mathbf{V}_{bc}=\mathbf{V}_{L,b}-\mathbf{V}_{L,c}&\rightarrow V_l\angle\left(\phi_{vl}-60^{\circ}\right)=\sqrt{3}V_m\angle\left(\phi_v-90^{\circ}\right)
 \end{cases}
 $$
 
@@ -706,7 +715,7 @@ $$
 	\end{cases}
 $$
 
-상전류와 선전류는 같으므로 다음과 같습니다.
+부하 전류와 선전류는 같으므로 다음과 같습니다.
 
 $$
 \begin{cases}
@@ -724,7 +733,7 @@ P_1+P_2&=\frac{\sqrt{3}}{2}V_lI_l\cos\left(\phi_{vl}-\phi_{il}+30^{\circ}\right)
 \end{align*}
 $$
 
-상전압과 상전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
+부하 전압과 부하 전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
 
 $$
 P_1+P_2=\frac{3}{2}V_mI_m\cos\phi
@@ -732,8 +741,8 @@ $$
 
 [앞](#평형-3상-시스템)서 언급한 3상 시스템의 전력과 동일합니다.
 
-다음으로 Δ 결선된 전원의 경우를 살펴봅시다.
-상전압과 선간 전압이 같으므로 다음과 같습니다.
+다음으로 Δ 결선된 부하의 경우를 살펴봅시다.
+부하 전압과 선간 전압이 같으므로 다음과 같습니다.
 
 $$
 \begin{cases}
@@ -742,12 +751,12 @@ $$
 	\end{cases}
 $$
 
-상전류와 선전류는 다음의 관계에 있습니다.
+부하 전류와 선전류는 다음의 관계에 있습니다.
 
 $$
 \begin{cases}
-	\mathbf{I}_a=\mathbf{I}_{ph,a}-\mathbf{I}_{ph,c}&\rightarrow I_l\angle\phi_{il}=\sqrt{3}I_m\angle\left(\phi_i-30^{\circ}\right)\\
-	\mathbf{I}_b=\mathbf{I}_{ph,b}-\mathbf{I}_{ph,a}&\rightarrow I_l\angle\left(\phi_{il}-120^{\circ}\right)=\sqrt{3}I_m\angle\left(\phi_i-150^{\circ}\right)
+	\mathbf{I}_a=\mathbf{I}_{L,a}-\mathbf{I}_{L,c}&\rightarrow I_l\angle\phi_{il}=\sqrt{3}I_m\angle\left(\phi_i-30^{\circ}\right)\\
+	\mathbf{I}_b=\mathbf{I}_{L,b}-\mathbf{I}_{L,a}&\rightarrow I_l\angle\left(\phi_{il}-120^{\circ}\right)=\sqrt{3}I_m\angle\left(\phi_i-150^{\circ}\right)
 \end{cases}
 $$
 
@@ -769,7 +778,7 @@ P_1+P_2&=\frac{\sqrt{3}}{2}V_lI_l\cos\left(\phi_{vl}-\phi_{il}+30^{\circ}\right)
 \end{align*}
 $$
 
-상전압과 상전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
+부하 전압과 부하 전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
 
 $$
 P_1+P_2=\frac{3}{2}V_mI_m\cos\phi
@@ -798,7 +807,7 @@ P_1-P_2&=\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}\right)-\frac{V_lI_l}{2}\c
 \end{align*}
 $$
 
-앞서 살펴봤듯이 전원의 결선 방법과 관계없이 다음이 성립합니다.
+앞서 살펴봤듯이 부하의 결선 방법과 관계없이 다음이 성립합니다.
 
 $$
 \begin{cases}
@@ -813,7 +822,7 @@ $$
 P_1-P_2=\frac{\sqrt{3}}{2}V_mI_m\sin\left(\phi_v-\phi_i\right)
 $$
 
-상전압과 상전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
+부하 전압과 부하 전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
 
 $$
 P_1-P_2=\frac{\sqrt{3}}{2}V_mI_m\sin\phi
@@ -834,4 +843,4 @@ $$
 \phi=\tan^{-1}\left(\sqrt{3}\frac{P_1-P_2}{P_1+P_2}\right)
 $$
 
-이 값에 코사인을 취하면 역률을 구할 수 있습니다.
+이 값에 코사인을 취하면 부하의 역률을 구할 수 있습니다.
