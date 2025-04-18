@@ -640,3 +640,93 @@ $$
 3상 시스템은 측정해야 하는 전압이 3개이고, 전류 또한 3개이기 때문에 전력계 또한 3개가 필요한 것으로 보입니다.
 중성선에 전류가 흐르는 경우는 전력계 3개가 필요합니다.
 하지만 중성선이 없는 경우는 전력계 2개만으로도 전력을 측정할 수 있습니다.
+
+다음과 같이 $$a$$상과 $$c$$상 사이의 선간 전압 측정 및 $$a$$상의 선전류를 측정할 수 있게 전력계를 하나 설치하고, 또 $$b$$상과 $$c$$상 사이의 선간 전압 측정 및 $$b$$상의 선전류를 측정할 수 있게 전력계를 하나 설치해봅시다.
+
+(2 watt)
+
+상전압, 상전류, 선간 전압, 선전류가 다음과 같다고 해봅시다.
+
+$$
+\begin{align*}
+	&\begin{cases}
+		\mathbf{V}_{an}=V_m\angle\phi_v\\
+		\mathbf{V}_{bn}=V_m\angle\left(\phi_v-120^{\circ}\right)\\
+		\mathbf{V}_{cn}=V_m\angle\left(\phi_v+120^{\circ}\right)
+	\end{cases}\\
+	&\begin{cases}
+		\mathbf{I}_a=I_m\angle\phi_i\\
+		\mathbf{I}_b=I_m\angle\left(\phi_i-120^{\circ}\right)
+	\end{cases}\\
+	&\begin{cases}
+		\mathbf{V}_{ac}=V_l\angle\phi_{vl}\\
+		\mathbf{V}_{bc}=V_l\angle\left(\phi_{vl}-60^{\circ}\right)
+	\end{cases}\\
+	&\begin{cases}
+		\mathbf{I}_a=I_l\angle\phi_{il}\\
+		\mathbf{I}_b=I_l\angle\left(\phi_{il}-120^{\circ}\right)
+	\end{cases}
+\end{align*}
+$$
+
+이때 각 전력계가 측정하는 유효 전력은 다음과 같습니다.
+
+$$
+	\begin{cases}
+		P_1=\text{Re}\left[S_1\right]=\text{Re}\left[\displaystyle\frac{1}{2}\mathbf{V}_{ac}\mathbf{I}_a^*\right]=\displaystyle\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}\right)\\
+		P_2=\text{Re}\left[S_2\right]=\text{Re}\left[\displaystyle\frac{1}{2}\mathbf{V}_{bc}\mathbf{I}_b^*\right]=\displaystyle\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}+60^{\circ}\right)
+	\end{cases}
+$$
+
+두 전력의 합은 다음과 같습니다.
+
+$$
+\begin{align*}
+	P_1+P_2&=\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}\right)+\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}+60^{\circ}\right)\\
+	&=\frac{\sqrt{3}}{2}V_lI_l\cos\left(\phi_{vl}-\phi_{il}+30^{\circ}\right)
+\end{align*}
+$$
+
+먼저 Y 결선된 전원에 대해 생각해봅시다.
+이 경우에 상전압과 선간 전압은 다음의 관계에 있습니다.
+
+$$
+\begin{cases}
+	\mathbf{V}_{ac}=\mathbf{V}_{an}-\mathbf{V}_{cn}&\rightarrow V_l\angle\phi_{vl}=\sqrt{3}V_m\angle\left(\phi_v-30^{\circ}\right)\\	\mathbf{V}_{bc}=\mathbf{V}_{bn}-\mathbf{V}_{cn}&\rightarrow V_l\angle\left(\phi_{vl}-60^{\circ}\right)=\sqrt{3}V_m\angle\left(\phi_v-90^{\circ}\right)
+\end{cases}
+$$
+
+선간 전압의 진폭과 위상은 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{cases}
+		V_l=\sqrt{3}V_m\\
+		\phi_{vl}=\phi_v-30^{\circ}
+	\end{cases}
+$$
+
+상전류와 선전류는 같으므로 다음과 같습니다.
+
+$$
+\begin{cases}
+		I_l=I_m\\
+		\phi_{il}=\phi_i
+	\end{cases}
+$$
+
+이전에 구한 전력 합에 대입하면 다음과 같습니다.
+
+$$
+\begin{align*}
+P_1+P_2&=\frac{\sqrt{3}}{2}V_lI_l\cos\left(\phi_{vl}-\phi_{il}+30^{\circ}\right)\\
+&=\frac{3}{2}V_mI_m\cos\left(\phi_v-\phi_i\right)
+\end{align*}
+$$
+
+상전압과 상전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
+
+$$
+P_1+P_2=\frac{3}{2}V_mI_m\cos\phi
+$$
+
+[앞](#평형-3상-시스템)서 언급한 3상 시스템의 전력과 동일합니다.
