@@ -661,9 +661,21 @@ $$
 중성선에 전류가 흐르는 경우는 전력계 3개가 필요합니다.
 하지만 중성선이 없는 경우는 전력계 2개만으로도 전력을 측정할 수 있습니다.
 
+<figure style="text-align: center;">
+  <img src="./CTFigure/일반3상.png" alt="일반3상" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 중성선이 없는 일반적인 3상 시스템)
+  </figcaption>
+</figure>
+
 다음과 같이 $$a$$상과 $$c$$상 사이의 선간 전압 측정 및 $$a$$상의 선전류를 측정할 수 있게 전력계를 하나 설치하고, 또 $$b$$상과 $$c$$상 사이의 선간 전압 측정 및 $$b$$상의 선전류를 측정할 수 있게 전력계를 하나 설치해봅시다.
 
-(2 watt)
+<figure style="text-align: center;">
+  <img src="./CTFigure/2전력계.png" alt="2전력계" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 2 전력계법)
+  </figcaption>
+</figure>
 
 부하 전압, 부하 전류, 선간 전압, 선전류가 다음과 같다고 해봅시다.
 
