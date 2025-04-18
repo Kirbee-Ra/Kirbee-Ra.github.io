@@ -450,6 +450,221 @@ $$
 ## 로런츠 변환의 합성
 
 로런츠 변환을 두 번 하는 경우에 대해 생각해봅시다.
+다음의 두 로런츠 변환을 생각해봅시다.
+
+$$
+\begin{cases}
+	\mathbf{L}_u=\gamma_u\begin{bmatrix}
+		1&\beta_u\\
+		\beta_u&1
+	\end{bmatrix}\\
+	\mathbf{L}_v=\gamma_v\begin{bmatrix}
+		1&\beta_v\\
+		\beta_v&1
+	\end{bmatrix}
+\end{cases}
+$$
+
+변환 $$\mathbf{L}_u$$을 한 뒤에 변환 $$\mathbf{L}_v$$를 한다면 합성 변환 $$\mathbf{L}_w$$는 다음과 같습니다.
+
+$$
+\begin{align*}
+\mathbf{L}_w&=\mathbf{L}_u\mathbf{L}_v\\
+&=\gamma_v\begin{bmatrix}
+	1&\beta_v\\
+	\beta_v&1
+\end{bmatrix}\gamma_u\begin{bmatrix}
+1&\beta_u\\
+\beta_u&1
+\end{bmatrix}\\
+&=\gamma_u\gamma_v\begin{bmatrix}
+	1+\beta_u\beta_v&\beta_u+\beta_v\\
+	\beta_u+\beta_v&1+\beta_u\beta_v\\
+\end{bmatrix}\\
+	&=\gamma_u\gamma_v\left(1+\beta_u\beta_v\right)\begin{bmatrix}
+		1&\displaystyle\frac{\beta_u+\beta_v}{1+\beta_u\beta_v}\\
+		\displaystyle\frac{\beta_u+\beta_v}{1+\beta_u\beta_v}&1
+	\end{bmatrix}\\
+	&=\gamma_u\gamma_v\left(1+\beta_u\beta_v\right)\begin{bmatrix}
+		1&\displaystyle\frac{1}{c}\displaystyle\frac{u+v}{1+\displaystyle\frac{uv}{c^2}}\\
+		\displaystyle\frac{1}{c}\displaystyle\frac{u+v}{1+\displaystyle\frac{uv}{c^2}}&1
+	\end{bmatrix}
+\end{align*}
+$$
+
+$$\gamma_u\gamma_v\left(1+\beta_u\beta_v\right)$$는 다음과 같이 계산됩니다.
+
+$$
+\begin{align*}
+\gamma_u\gamma_v\left(1+\beta_u\beta_v\right)&=\frac{1}{\sqrt{1-\beta_u^2}}\frac{1}{\sqrt{1-\beta_v^2}}\left(1+\beta_u\beta_v\right)\\
+&=\frac{1+\beta_u\beta_v}{\sqrt{1+\beta_u^2\beta_v^2-\beta_u^2-\beta_v^2}}\\
+&=\frac{1}{\sqrt{\displaystyle\frac{1+\beta_u^2\beta_v^2-\beta_u^2-\beta_v^2}{1+\beta_u^2\beta_v^2+2\beta_u\beta_v}}}\\
+&=\frac{1}{\sqrt{\displaystyle\frac{1+\beta_u^2\beta_v^2+2\beta_u\beta_v-\beta_u^2-2\beta_u\beta_v-\beta_v^2}{1+\beta_u^2\beta_v^2+2\beta_u\beta_v}}}\\
+&=\frac{1}{\sqrt{1-\displaystyle\frac{\beta_u^2+2\beta_u\beta_v+\beta_v^2}{1+\beta_u^2\beta_v^2+2\beta_u\beta_v}}}\\
+&=\frac{1}{\sqrt{1-\displaystyle\frac{\left(\beta_u+\beta_v\right)^2}{\left(1+\beta_u\beta_v\right)^2}}}\\
+&=\frac{1}{\sqrt{1-\left(\displaystyle\frac{1}{c}\displaystyle\frac{u+v}{1+\displaystyle\frac{uv}{c^2}}\right)^2}}
+\end{align*}
+$$
+
+합성 변환을 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{align*}
+\mathbf{L}_w=\frac{1}{\sqrt{1-\left(\displaystyle\frac{1}{c}\displaystyle\frac{u+v}{1+\displaystyle\frac{uv}{c^2}}\right)^2}}\begin{bmatrix}
+	1&\displaystyle\frac{1}{c}\displaystyle\frac{u+v}{1+\displaystyle\frac{uv}{c^2}}\\
+	\displaystyle\frac{1}{c}\displaystyle\frac{u+v}{1+\displaystyle\frac{uv}{c^2}}&1
+\end{bmatrix}
+\end{align*}
+$$
+
+식을 살펴보면 속도 변환 식이 있는 것을 알 수 있습니다.
+
+$$
+w=\frac{u+v}{1+\frac{uv}{c^2}}
+$$
+
+따라서 합성 변환은 다음과 같습니다.
+
+$$
+\begin{align*}
+\mathbf{L}_w=\gamma_w\begin{bmatrix}
+	1&\beta_w\\
+	\beta_w&1
+\end{bmatrix}\ \ \ \text{where }\gamma_w=\frac{1}{\sqrt{1-\beta_w^2}}
+\end{align*}
+$$
+
+---
+
+## 신속도
+
+$$\beta$$와 $$k$$의 관계식을 다시 살펴봅시다.
+
+$$
+\begin{align*}
+\beta=\frac{k-k^{-1}}{k+k^{-1}}
+\end{align*}
+$$
+
+이는 자연로그를 이용하여 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{align*}
+&k=e^{\ln k}\\
+&\beta=\frac{e^{\ln k}-e^{-\ln k}}{e^{\ln k}+e^{-\ln k}}=\tanh\left(\ln k\right)
+\end{align*}
+$$
+
+여기서 $$\ln k$$를 다음과 같다고 해봅시다.
+
+$$
+\phi=\ln k
+$$
+
+로런츠 변환을 다시 살펴봅시다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x
+\end{bmatrix}=\gamma\begin{bmatrix}
+1&\beta\\
+\beta&1
+\end{bmatrix}\begin{bmatrix}
+ct'\\
+x'
+\end{bmatrix}
+$$
+
+$$\beta$$만을 이용하여 표현하면 다음과 같습니다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x
+\end{bmatrix}=\begin{bmatrix}
+\displaystyle\frac{1}{\sqrt{1-\beta^2}}&\displaystyle\frac{\beta}{\sqrt{1-\beta^2}}\\
+\displaystyle\frac{\beta}{\sqrt{1-\beta^2}}&\displaystyle\frac{1}{\sqrt{1-\beta^2}}
+\end{bmatrix}\begin{bmatrix}
+ct'\\
+x'
+\end{bmatrix}
+$$
+
+이전에 정의한 양 $$\phi$$를 이용하면 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{align*}
+&\beta=\tanh\phi\\
+&\begin{bmatrix}
+	ct\\
+	x
+\end{bmatrix}=\begin{bmatrix}
+\displaystyle\frac{1}{\sqrt{1-\tanh\phi^2}}&\displaystyle\frac{\tanh\phi}{\sqrt{1-\tanh\phi^2}}\\
+\displaystyle\frac{\tanh\phi}{\sqrt{1-\tanh\phi^2}}&\displaystyle\frac{1}{\sqrt{1-\tanh\phi^2}}
+\end{bmatrix}\begin{bmatrix}
+ct'\\
+x'
+\end{bmatrix}
+\end{align*}
+$$
+
+식을 정리하면 다음과 같습니다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x
+\end{bmatrix}=\begin{bmatrix}
+\cosh\phi&\sinh\phi\\
+\sinh\phi&\cosh\phi
+\end{bmatrix}\begin{bmatrix}
+ct'\\
+x'
+\end{bmatrix}
+$$
+
+유클리드 공간의 회전 변환과 비슷한 형태입니다.
+단지 삼각 함수가 아닌 쌍곡선 함수로 표현됩니다.
+이런 변환을 **쌍곡 회전 변환(Hyperbolic Rotational Transformation)**이라고 합니다.
+그리고 이전에 정의한 $$\phi$$는 변환의 **신속도(Rapidity)**라고 하며, 이 회전 변환에서 회전 각을 의미합니다.
+
+### 속도 변환
+
+신속도를 이용하면 속도 변환 식이 더 간단해집니다.
+속도 변환 식을 다시 살펴봅시다.
+
+$$
+w=\frac{u+v}{1+\frac{uv}{c^2}}
+$$
+
+$$\beta$$를 이용하여 표현하면 다음과 같습니다.
+
+$$
+\beta_w=\frac{\beta_u+\beta_v}{1+\beta_u\beta_v}
+$$
+
+신속도를 이용하여 표현해봅시다.
+
+$$
+\begin{align*}
+\tanh\phi_w&=\frac{\tanh\phi_u+\tanh\phi_v}{1+\tanh\phi_u\tanh\phi_v}\\
+&=\tanh\left(\phi_u+\phi_v\right)
+\end{align*}
+$$
+
+따라서 다음과 같습니다.
+
+$$
+\phi_w=\phi_u+\phi_v
+$$
+
+신속도를 이용하면 속도 변환 식이 간단하게 합으로 나타납니다.
+
+---
+
+## 로런츠 군과 푸앵카레 군
+
 
 
 ---
