@@ -777,3 +777,61 @@ $$
 
 이 또한 [앞](#평형-3상-시스템)서 언급한 3상 시스템의 전력과 동일합니다.
 이렇게 전력계를 2개만 사용하여 측정하는 방법을 **2 전력계법(Two Wattmeter Method)**이라고 합니다.
+
+### 역률 계산
+
+이번에는 두 전력계에서 측정한 전력의 차를 구해봅시다.
+
+$$
+	\begin{cases}
+		P_1=\displaystyle\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}\right)\\
+		P_2=\displaystyle\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}+60^{\circ}\right)
+	\end{cases}
+$$
+
+차는 다음과 같습니다.
+
+$$
+\begin{align*}
+P_1-P_2&=\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}\right)-\frac{V_lI_l}{2}\cos\left(\phi_{vl}-\phi_{il}+60^{\circ}\right)\\
+&=\frac{1}{2}V_lI_l\sin\left(\phi_{vl}-\phi_{il}+30^{\circ}\right)
+\end{align*}
+$$
+
+앞서 살펴봤듯이 전원의 결선 방법과 관계없이 다음이 성립합니다.
+
+$$
+\begin{cases}
+	V_lI_l=\sqrt{3}V_mI_m\\
+	\phi_{vl}-\phi_{il}=\phi_v-\phi_i-30^{\circ}
+\end{cases}
+$$
+
+대입하면 다음과 같습니다.
+
+$$
+P_1-P_2=\frac{\sqrt{3}}{2}V_mI_m\sin\left(\phi_v-\phi_i\right)
+$$
+
+상전압과 상전류의 위상차를 $$\phi=\phi_v-\phi_i$$라고 하면 다음과 같습니다.
+
+$$
+P_1-P_2=\frac{\sqrt{3}}{2}V_mI_m\sin\phi
+$$
+
+전력 합에 대한 전력 차의 비는 다음과 같습니다.
+
+$$
+\begin{align*}
+\frac{P_1-P_2}{P_1+P_2}&=\frac{\displaystyle\frac{\sqrt{3}}{2}V_mI_m\sin\phi}{\displaystyle\frac{3}{2}V_mI_m\cos\phi}\\
+&=\frac{1}{\sqrt{3}}\tan\phi
+\end{align*}
+$$
+
+따라서 위상차는 다음과 같습니다.
+
+$$
+\phi=\tan^{-1}\left(\sqrt{3}\frac{P_1-P_2}{P_1+P_2}\right)
+$$
+
+이 값에 코사인을 취하면 역률을 구할 수 있습니다.
