@@ -1103,13 +1103,44 @@ $$
 
 즉, $$\mathbf{L}_{sub}^T=\mathbf{L}_{sub}^{-1}$$이고, $$\mathbf{L}_{sub}$$는 직교 행렬입니다.
 
+다시 다음의 관계식을 살펴봅시다.
+
+$$
+\mathbf{L}^T\mathbf{g}\mathbf{L}=\mathbf{g}
+$$
+
+$$\mathbf{L}$$의 행렬식을 구하면 다음과 같습니다.
+
+$$
+\begin{align*}
+&\det(\mathbf{L})^2\det\left(\mathbf{g}\right)=\det\left(\mathbf{g}\right)\\
+&\det\left(\mathbf{L}\right)=\pm1
+\end{align*}
+$$
+
+여기서 고유 로런츠 변환은 공간의 반전이 없어야 하므로 다음의 조건이 필요합니다.
+
+$$
+&\det\left(\mathbf{L}\right)=1
+$$
+
+이러면 $$\mathbf{L}_{sub}$$는 $$y,z$$축의 회전 변환을 나타냅니다.
+표준 로런츠 변환은 두 축이 회전을 하지 않은 상태를 의미하므로 다음과 같습니다.
+
+$$
+\mathbf{L}_{sub}=\begin{bmatrix}
+	1&0\\
+	0&1
+\end{bmatrix}
+$$
+
 따라서 로런츠 변환 행렬은 다음과 같습니다.
 
 $$
 \mathbf{L}=\begin{bmatrix}
 	\gamma&\gamma\beta&0&0\\
 	\gamma\beta&\gamma&0&0\\
-	0&0&L_{22}&L_{23}\\
-	0&0&L_{32}&L_{33}
+	0&0&1&0\\
+	0&0&0&1
 \end{bmatrix}
 $$
