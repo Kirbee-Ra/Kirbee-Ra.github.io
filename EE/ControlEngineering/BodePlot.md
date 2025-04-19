@@ -118,14 +118,14 @@ $$
 다음의 전달 함수를 살펴봅시다.
 
 $$
-T(s)=\frac{K\Pi_k\left(s+z_k\right)\Pi_k\left(s^2+a_ks+b_k\right)\cdots}{\Pi_k\left(s+p_k\right)\Pi_k\left(s^2+c_ks+d_k\right)\cdots}
+T(s)=\frac{K\displaystyle\prod_k\left(s+z_k\right)\displaystyle\prod_k\left(s^2+a_ks+b_k\right)\cdots}{\displaystyle\prod_k\left(s+p_k\right)\displaystyle\prod_k\left(s^2+c_ks+d_k\right)\cdots}
 $$
 
 일반적인 전달 함수는 이와 같이 1차, 2차 및 그 이상 차수에 대한 식으로 인수분해되어 나타낼 수 있습니다.
 보드 선도는 주파수에 대한 응답을 분석하는 것이 목적이므로 다음과 같이 $$s=j\omega$$를 대입하여 그립니다.
 
 $$
-T(j\omega)=\frac{K\Pi_k\left(j\omega+z_k\right)\Pi_k\left(-\omega^2+ja_k\omega+b_k\right)\cdots}{\Pi_k\left(j\omega+p_k\right)\Pi_k\left(-\omega^2+jc_k\omega+d_k\right)\cdots}
+T(j\omega)=\frac{K\displaystyle\prod_k\left(j\omega+z_k\right)\displaystyle\prod_k\left(-\omega^2+ja_k\omega+b_k\right)\cdots}{\displaystyle\prod_k\left(j\omega+p_k\right)\displaystyle\prod_k\left(-\omega^2+jc_k\omega+d_k\right)\cdots}
 $$
 
 하지만 이렇게 곱으로 나타낸 식은 그리기 어렵습니다.
