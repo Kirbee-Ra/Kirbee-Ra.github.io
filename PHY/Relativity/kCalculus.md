@@ -665,7 +665,90 @@ $$
 
 ## 로런츠 군과 푸앵카레 군
 
+이러한 2차원 로런츠 변환들은 **로런츠 군(Lorentz Group)**을 형성합니다.
 
+### 군
+
+먼저 **군(Group)**에 대해 간단히 짚고 넘어갑시다.
+군은 대상들의 집합과 그 위에 정의된 연산이 다음의 네 가지 공리를 만족하는 구조입니다.
+
+- 닫힘성: 대상들의 연산 결과가 군에 속해 있어야 합니다.
+
+$$
+\forall a,b\in G,a\cdot b\in G
+$$
+
+- 결합 법칙: 세 대상들의 연산의 순서를 바꿔도 결과가 같아야 합니다.
+
+$$
+\forall a,b,c\in G,\left(a\cdot b\right)\cdot c=a\cdot\left(b\cdot c\right)
+$$
+
+- 항등원: 어떤 대상과 연산을 하면 결과가 연산 전과 같습니다.
+
+$$
+\exists e\in G,\forall a\in G,a\cdot e=e\cdot a=a
+$$
+
+- 역원: 어떤 대상과 연산을 하면 항등원이 나옵니다.
+
+$$
+\forall a\in G,\exists a^{-1},a\cdot a^{-1}=a^{-1}\cdot a=a
+$$
+
+이러한 군을 다음과 같이 표기합니다.
+
+$$
+\left(G,\cdot\right)
+$$
+
+$$G$$는 대상들의 집합입니다.
+$$\cdot$$은 이항 연산입니다.
+
+$$
+\cdot:G\times G\rightarrow G
+$$
+
+### 로런츠 군
+
+로런츠 군은 다음과 같이 나뉩니다.
+
+- 고유 정시적(Proper Orthochronous): 공간 반전과 시간 역전이 없습니다.
+- 고유적(Proper): 공간 반전이 없습니다.
+- 정시적(Orthochronous): 시간 역전이 없습니다.
+- 그 외: 공간 반전과 시간 역전을 포함합니다.
+
+공간 반전은 다음과 같이 표현합니다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x
+\end{bmatrix}\mapsto\begin{bmatrix}
+ct'\\
+x'
+\end{bmatrix}=\begin{bmatrix}
+ct\\
+-x
+\end{bmatrix}
+$$
+
+시간 역전은 다음과 같이 표현합니다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x
+\end{bmatrix}\mapsto\begin{bmatrix}
+ct'\\
+x'
+\end{bmatrix}=\begin{bmatrix}
+-ct\\
+x
+\end{bmatrix}
+$$
+
+이 두 성질을 갖지 않는 로런츠 군을 **고유 정시적 로런츠 군(Proper Orthochronous Lorentz Group)**이라고 합니다.
 
 ---
 
@@ -1143,4 +1226,95 @@ $$
 	0&0&1&0\\
 	0&0&0&1
 \end{bmatrix}
+$$
+
+### 고유 정시적 로런츠 변환
+
+지금까지는 부스트가 $$+x$$방향이고, 모든 축의 방향이 같은 로런츠 변환에 대해 알아봤습니다.
+이제 일반적인 상황을 생각해봅시다.
+축의 방향이 모두 다르면서, 부스트의 방향도 정해지지 않았습니다.
+물론 공간 반전과 시간 역전은 포함하지 않습니다.
+일반적인 로런츠 변환은 다음과 같은 형태로 나타납니다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x\\
+	y\\
+	z
+\end{bmatrix}=\mathbf{L}\begin{bmatrix}
+ct'\\
+x'\\
+y'\\
+z'
+\end{bmatrix}\ \ \ \text{where }\mathbf{L}=\begin{bmatrix}
+1&0\\
+0&\mathbf{H}
+\end{bmatrix}\mathbf{L}_u\begin{bmatrix}
+1&0\\
+0&\mathbf{K}^T
+\end{bmatrix}
+$$
+
+여기서 $$\mathbf{H},\mathbf{K}$$는 고유 직교 행렬이고, $$\mathbf{L}_u$$는 표준 로런츠 변환입니다.
+앞서 언급했듯이 부스트의 방향이 정해지지 않았습니다.
+하지만 우리는 그동안 $$+x$$방향 부스트에 대해 고려했습니다.
+따라서 먼저 부스트의 방향을 $$+x$$방향으로 변환해주기 위해 회전 변환을 합니다.
+다음으로 표준 로런츠 변환을 통해 $$+x$$방향으로 부스트를 해줍니다.
+마지막으로 회전된 축들을 원래의 방향으로 되돌리기 위해 다시 한 번 회전 변환을 합니다.
+일반적인 로런츠 변환은 이런 과정을 통해 유도되었고, 이를 $$고유 정시적 로런츠 변환(Proper Orthochronous Lorentz Transformation)**이라고 합니다.
+이런 변환들은 다음의 성질을 가집니다.
+
+- $$\mathbf{L}$$은 유사 직교적입니다: $$\mathbf{L}^{-1}=\mathbf{g}\mathbf{L}^T\mathbf{g}$$
+- $$\mathbf{H}$$의 $$00$$번째 성분은 양수입니다: 시간 역전이 없음을 의미합니다.
+- $$\det(\mathbf{L})=1: 공간 반전이 없음을 의미합니다.
+
+일반적인 로런츠 변환은 첫번째 성질만을 만족합니다.
+두번째 성질을 만족하는 변환은 정시적 로런츠 변환입니다.
+세번째 성질을 만족하는 변환은 고유 로런츠 변환입니다.
+
+마지막으로 공간 상의 병진 이동까지 포함시키면 다음과 같이 표현할 수 있습니다.
+
+$$
+\begin{bmatrix}
+	ct\\
+	x\\
+	y\\
+	z
+\end{bmatrix}=\mathbf{L}\begin{bmatrix}
+ct'\\
+x'\\
+y'\\
+z'
+\end{bmatrix}+\mathbf{C}
+$$
+
+이런 로런츠 변환을 **비동차 로런츠 변환(Inhomogeneous Lorentz Transformation)** 또는 **푸앵카레 변환(Poincaré Transformation)**이라고 합니다.
+각 성분을 다음과 같이 써봅시다.
+
+$$
+\begin{bmatrix}
+	x^0\\
+	x^1\\
+	x^2\\
+	x^3
+\end{bmatrix}=\begin{bmatrix}
+ct\\
+x\\
+y\\
+z
+\end{bmatrix}
+$$
+
+위 첨자는 제곱이 아니라 인덱스를 의미합니다.
+따라서 각 성분을 다음과 같이 쓸 수 있습니다.
+
+$$
+	x^a=\sum_{b=0}^3{L^a}_bx'^b+C^a\ \ \ (a=0,1,2,3)
+$$
+
+혹은 아인슈타인 표기법에 따라 합의 기호를 생략할 수 있습니다.
+
+$$
+x^a={L^a}_bx'^b+C^a
 $$
