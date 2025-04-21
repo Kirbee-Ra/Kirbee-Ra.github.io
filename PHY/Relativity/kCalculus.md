@@ -104,6 +104,7 @@ $$
 따라서 다음과 같습니다.
 
 $$
+\begin{align*}
 x_B&=c\left(t_B-t\right)\\
 &=\frac{1}{2}c\left(k^2-1\right)t
 	\end{align*}
@@ -357,7 +358,7 @@ $$
 			x
 		\end{bmatrix}=\gamma\begin{bmatrix}
 			1&\displaystyle\frac{\beta}{c}\\
-			\beta&1
+			u&1
 		\end{bmatrix}\begin{bmatrix}
 		t'\\
 		x'
