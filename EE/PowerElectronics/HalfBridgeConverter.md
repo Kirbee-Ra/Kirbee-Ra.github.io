@@ -48,6 +48,19 @@ $$
 
 다음으로 
 
+$$
+\begin{align*}
+i_P(t)&=\frac{i_L(t)}{n}q(t)+\left(-\frac{i_L(t)}{n}\right)\left(1-q(t)\right)\\
+&=\frac{i_L(t)}{n}\left(2q(t)-1\right)
+\end{align*}
+\begin{align*}
+	\overline{i}_P(t)=\frac{\overline{i}_L(t)}{n}\left(2d(t)-1\right)
+\end{align*}
+\begin{align*}
+	v_{rec}(t)=\frac{v_s(t)-v_{C_c}(t)}{n}q(t)+
+\end{align*}
+$$
+
 ### 소신호 모델
 
 ### 개루프 입력-출력 전달 함수
