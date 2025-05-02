@@ -147,8 +147,8 @@ $$
 
 (dist)
 
-$$k$$번째 전류 피드백 신호 오차는 $$\Delta v_{I,k}$$이고, 두 신호가 $$v_{con}-v_{ramp}$$와 같아지는 시각은 $$T_s\Delta d$$만큼 차이납니다.
-$$S_n$$은 인덕터 전류가 상승하는 구간에서의 전류 피드백 신호의 기울기, $$S_e$$는 $$v_{ramp}$$의 기울기, 그리고 $$S_f$$는 인덕터 전류가 하강하는 구간에서의 전류 피드백 신호의 기울기입니다.
+$$k$$번째 전류 피드백 신호 오차는 $$\Delta v_{I,k}$$이고, 두 신호가 $$v_{ctrl}-v_{ramp}$$와 같아지는 시각은 $$T_s\Delta d$$만큼 차이납니다.
+$$S_n$$은 인덕터 전류가 상승하는 구간에서의 전류 피드백 신호의 기울기, $$S_e$$는 보상 신호의 기울기, 그리고 $$S_f$$는 인덕터 전류가 하강하는 구간에서의 전류 피드백 신호의 기울기입니다.
 이 기울기들은 모두 절댓값을 나타냅니다.
 이 변수들을 이용하면 $$k$$번째 전류 피드백 신호 오차는 다음과 같습니다.
 
@@ -180,3 +180,118 @@ $$
 $$
 S_e>\frac{S_f-S_n}{2}
 $$
+
+만약 보상 신호가 없는 경우는 다음 조건 하에서 컨버터가 안정적으로 동작합니다.
+
+$$
+\begin{align*}
+	&S_e=0\\
+	&\rightarrow S_n>S_f
+\end{align*}
+$$
+
+인덕터 전류 상승 구간에서의 기울기가 하강 구간에서의 기울기가 크다는 것은 듀티 비가 $$0.5$$보다 낮은 상태를 의미합니다.
+이는 보상 신호 도입 전에 살펴본 바와 같습니다.
+
+### 스위치 전류 감지
+
+피크 전류 모드 제어에서는 인덕터 전류 대신 스위치 전류를 활용할 수도 있습니다.
+벅 컨버터의 경우, 스위치가 켜진 상태에서는 스위치 전류와 인덕터 전류가 같고, 스위치가 꺼진 상태에서는 스위치 전류가 $$0$$이고, 인덕터 전류는 감소합니다.
+필요한 정보는 인덕터 전류가 피크 값이 되는 시점이므로 스위치 전류를 이용할 수도 있습니다.
+
+(iq csn)
+(waveform)
+
+그림과 같이 스위치가 꺼지고 켜지는 타이밍이 인덕터 전류를 감지한 경우와 같음을 알 수 있습니다.
+스위치 전류를 활용한 경우는 다음과 같은 이점들이 있습니다.
+
+- 전류 감지 회로의 간소화
+- 스위치 전류의 DC 값과 AC 값 감지
+- 스위치 전류의 과전류 보호
+
+이러한 이점들로 인해 스위치 전류를 이용한 피크 전류 모드 제어는 컨버터에 널리 이용되고 있습니다.
+
+### 전류 감지 회로
+
+이제 전류 감지 회로가 어떻게 구성되어 있는지 살펴봅시다.
+우선 스위치가 켜진 경우, 스위치 전류를 턴 비가 $$1:n$$인 변류기를 이용하여 감지 회로로 흐르게 합니다.
+이 전류는 제너 다이오드 $$D_z$$를 따라 감지 저항 $$R_s$$에서 전압 정보로 변환되고, 저항 $$R_f$$와 축전기 $$C_f$$로 구성된 저역 필터를 통과하여 전류 피드백 신호 $$v_I$$로 변환됩니다.
+보상 신호의 경우는 클럭 신호가 입력이 되면 저항 $$R_R$$을 지나 축전기 $$C_R$$을 충전시키고, 축전기 양단의 전압을 이용하여 구성됩니다.
+스위치가 꺼진 경우에는 $$D_z$$에 의해 변류기가 리셋됩니다.
+
+먼저 전류 피드백 신호의 식을 구해봅시다.
+이 회로는 다음과 같이 모델링할 수 있습니다.
+
+(cs RC)
+
+이때 $$C_f$$에 걸리는 전압은 다음과 같습니다.
+
+$$
+v_I(s)=\frac{1}{sC_f}\frac{R_s}{R_s+R_f+\displaystyle\frac{1}{sC_f}}\frac{i_Q(s)}{n}
+$$
+
+따라서 전류 감지 회로의 전류-전압 변환 이득은 다음과 같습니다.
+
+$$
+\begin{align*}
+	R_i(s)&=\frac{v_I(s)}{i_Q(s)}\\
+	&=\frac{1}{sC_f}\frac{R_s}{R_s+R_f+\displaystyle\frac{1}{sC_f}}\frac{1}{n}\\
+	&=\frac{R_s}{n}\frac{1}{1+sC_f\left(R_s+R_f\right)}
+\end{align*}
+$$
+
+제어 대역에서는 다음과 같이 근사할 수 있습니다.
+
+$$
+R_i=\frac{R_s}{n}
+$$
+
+다음으로 보상 신호의 식을 구해봅시다.
+이 회로는 다음과 같이 모델링할 수 있습니다.
+
+(ramp rc)
+
+클럭 신호가 계단 함수 형태로 입력되므로 보상 신호는 다음과 같습니다.
+
+$$
+v_{ramp}(s)=\frac{\displaystyle\frac{1}{sC_R}}{R_R+\displaystyle\frac{1}{sC_R}}\frac{V_{CLK}}{s}
+$$
+
+라플라스 역변환을 통해 다음과 같이 나타낼 수 있습니다.
+
+$$
+v_{ramp}(t)=V_{CLK}\left(1-e^{-\frac{t}{R_RC_R}}\right)
+$$
+
+이는 다음의 가정 하에 근사가 가능합니다.
+
+$$
+\begin{align*}
+	&T_s\ll R_RC_R\\
+	&\rightarrow v_{ramp}(t)=\left(1-\left(1-\frac{V_{CLK}}{R_RC_R}t\right)\right)=\frac{V_{CLK}}{R_RC_R}t
+\end{align*}
+$$
+
+보상 신호의 기울기가 다음과 같음을 알 수 있습니다.
+
+$$
+S_e=\frac{V_{CLK}}{R_RC_R}
+$$
+
+보상 신호의 진폭은 다음과 같습니다.
+
+$$
+\begin{align*}
+	V_m&=v_{ramp}(T_s)\\
+	&=\frac{V_{CLK}}{R_RC_R}T_s
+\end{align*}
+$$
+
+### 피크 전류 모드 제어의 장점
+
+- 동적 성능 개선: 부스트 컨버터와 벅-부스트 컨버터는 우반면 영점으로 인해 전압 모드 제어만으로는 제어가 어려웠습니다. 이는 전류 모드 제어를 통해 안정성과 성능을 확보할 수 있습니다.
+- 컨버터의 동 특성의 민감도 감소: 전류 모드 제어로 동작하는 컨버터는 전압 모드 제어로 동작하는 컨버터에 비해 전원 임피던스와 동작 모드 전환(CCM, DCM)에 의한 영향을 덜 받습니다. (참고: B. Choi, D. Kim, D. Lee, S. Choi, and J. Sun, "Analysis of input filter interactions in switching power converters," IEEE Trans. Power Electron., vol. 22, no. 2, pp. 452-460, Mar. 2007., D. Kim, B. Choi, D. Lee, and J. Sun, "Dynamics of current-mode controlled dc-to-dc converters with input filter stage," in Proc. IEEE Power Electron. Specialists' Conf., 2005, pp 2648-2656. D. Sable, R. Ridley, and B. Cho, "Comparison of performance of single-loop and current-injection control for PWM converters that operate in both continuous and discontinuous modes of operation," IEEE Trans. Power Electron., vol. 7, no. 1, pp. 136-142, Jan. 1992.)
+- 보상기 설계의 간소화: 3P2Z 보상기를 필요로 하는 전압 모드 제어 컨버터와는 달리 전류 모드 제어 컨버터는 2P1Z 보상기를 필요로 합니다.
+
+### 피크 전류 모드 제어의 단점
+- 
