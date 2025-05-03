@@ -116,7 +116,7 @@ $$
 하지만 듀티 비가 $$0.5$$보다 큰 경우는 달라집니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/전류 외란 안정.png" alt="전류 외란 안정" width="100%"/>
+  <img src="./PEFigure/전류 외란 불안정.png" alt="전류 외란 불안정" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. \(D>0.5\)일 때의 외란 파형)
   </figcaption>
