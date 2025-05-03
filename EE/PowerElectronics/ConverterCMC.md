@@ -24,7 +24,19 @@
 
 [전압 모드 제어](./ConverterVMC.md)를 활용한 벅 컨버터는 다음과 같습니다.
 
-(VMC)
+<figure style="text-align: center;">
+  <img src="./PEFigure/VMC회로.png" alt="VMC회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전압 모드 제어 컨버터)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/VMC PWM.png" alt="VMC PWM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전압 모드 제어의 PWM)
+  </figcaption>
+</figure>
 
 제어 메커니즘을 다시 떠올려 봅시다.
 잘 설계된 제어 회로의 경우, 정상 상태에서 $$Z_1$$의 크기가 유한하고, $$Z_2$$가 발산합니다.
@@ -37,7 +49,19 @@
 
 이제 피크 전류 모드 제어를 활용한 벅 컨버터를 살펴봅시다.
 
-(CMC)
+<figure style="text-align: center;">
+  <img src="./PEFigure/CMC회로.png" alt="CMC회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어 컨버터)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/CMC PWM.png" alt="CMC PWM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어의 PWM)
+  </figcaption>
+</figure>
 
 전압 모드 제어 회로에 인덕터 전류 감지 회로가 추가되었고, 이 신호가 PWM 비교기의 $$(-)$$단자에 연결되었습니다.
 기존의 PWM의 기준 신호로 톱니파가 활용되었습니다.
@@ -78,7 +102,12 @@ $$
 우선 다음의 두 경우에 대해 살펴봅시다.
 먼저 듀티 비가 $$0.5$$보다 작은 경우입니다.
 
-(<0.5 waveform)
+<figure style="text-align: center;">
+  <img src="./PEFigure/전류 외란 안정.png" alt="전류 외란 안정" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. \(D<0.5\)일 때의 외란 파형)
+  </figcaption>
+</figure>
 
 실선은 원래의 전류 피드백 신호이고, 점선은 외란에 의해 변화된 피드백 신호입니다.
 두 신호는 이전에 언급한 PWM 메커니즘에 따라 클럭 신호가 입력될 때 증가하고, 피크 값에 도달할 때, 감소합니다.
@@ -86,7 +115,12 @@ $$
 즉, 컨버터가 안정된 상태입니다.
 하지만 듀티 비가 $$0.5$$보다 큰 경우는 달라집니다.
 
-(>0.5 waveform)
+<figure style="text-align: center;">
+  <img src="./PEFigure/전류 외란 안정.png" alt="전류 외란 안정" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. \(D>0.5\)일 때의 외란 파형)
+  </figcaption>
+</figure>
 
 두 신호를 그려보면 시간이 지날 수록 간격이 더 벌어집니다.
 오차가 점점 커진다는 의미이고, 이로 인해 컨버터가 불안정해집니다.
@@ -101,7 +135,12 @@ $$
 전압 모드 제어에서 사용한 기준 신호를 다시 이용하는 것입니다.
 전류 피드백 신호와 기준 신호(톱니파)를 더하면 파형이 다음과 같습니다.
 
-(ramp wf)
+<figure style="text-align: center;">
+  <img src="./PEFigure/보상 신호.png" alt="보상 신호" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 보상 신호를 이용한 제어)
+  </figcaption>
+</figure>
 
 이제 제어 메커니즘이 약간 바뀌었습니다.
 스위치가 켜지는 타이밍은 이전과 동일하게 클럭 신호를 따릅니다.
@@ -116,7 +155,12 @@ $$
 
 듀티 비를 $$0.5$$보다 크게 설정한 뒤 전류 피드백 신호에 외란을 가하면 다음과 같이 나타납니다.
 
-(vi dist)
+<figure style="text-align: center;">
+  <img src="./PEFigure/보상 외란.png" alt="보상 외란" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 보상 신호가 적용된 외란 파형)
+  </figcaption>
+</figure>
 
 두 신호를 그려보면 이전과는 달리 간격이 점점 줄어듭니다.
 클럭 신호가 입력될 때마다 피드백 신호가 초기화되기 때문입니다.
@@ -134,6 +178,13 @@ $$
 이와 동등한 효과를 나타내는 다른 방법이 있습니다.
 바로 제어 전압에서 보상 신호를 빼는 형태입니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/등가 보상.png" alt="등가 보상" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 보상 신호 모델의 등가 모델)
+  </figcaption>
+</figure>
+
 $$
 q(t)=\begin{cases}
 	1\ \ \ \text{(CLK on)}\\
@@ -145,11 +196,24 @@ $$
 이러한 형태가 인덕터 전류에 외란이 가해졌을 때 더 분석하기 쉬우므로 이를 이용해서 분석해봅시다.
 다음과 같이 인덕터 전류에 외란이 가해진 경우를 생각해봅시다.
 
-(dist)
+<figure style="text-align: center;">
+  <img src="./PEFigure/보상 정량화 1.png" alt="보상 정량화 1" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 외란 분석 1)
+  </figcaption>
+</figure>
 
 $$k$$번째 전류 피드백 신호 오차는 $$\Delta v_{I,k}$$이고, 두 신호가 $$v_{ctrl}-v_{ramp}$$와 같아지는 시각은 $$T_s\Delta d$$만큼 차이납니다.
 $$S_n$$은 인덕터 전류가 상승하는 구간에서의 전류 피드백 신호의 기울기, $$S_e$$는 보상 신호의 기울기, 그리고 $$S_f$$는 인덕터 전류가 하강하는 구간에서의 전류 피드백 신호의 기울기입니다.
 이 기울기들은 모두 절댓값을 나타냅니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/보상 정량화 2.png" alt="보상 정량화 2" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 외란 분석 2)
+  </figcaption>
+</figure>
+
 이 변수들을 이용하면 $$k$$번째 전류 피드백 신호 오차는 다음과 같습니다.
 
 $$
@@ -199,8 +263,19 @@ $$
 벅 컨버터의 경우, 스위치가 켜진 상태에서는 스위치 전류와 인덕터 전류가 같고, 스위치가 꺼진 상태에서는 스위치 전류가 $$0$$이고, 인덕터 전류는 감소합니다.
 필요한 정보는 인덕터 전류가 피크 값이 되는 시점이므로 스위치 전류를 이용할 수도 있습니다.
 
-(iq csn)
-(waveform)
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위치 전류 감지.png" alt="스위치 전류 감지" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 스위치 전류 감지 회로)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위치 전류 감지 파형.png" alt="스위치 전류 감지 파형" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 스위치 전류 감지 회로 파형)
+  </figcaption>
+</figure>
 
 그림과 같이 스위치가 꺼지고 켜지는 타이밍이 인덕터 전류를 감지한 경우와 같음을 알 수 있습니다.
 스위치 전류를 활용한 경우는 다음과 같은 이점들이 있습니다.
@@ -213,6 +288,13 @@ $$
 
 ### 전류 감지 회로
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/CSN.png" alt="CSN" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전류 감지 회로)
+  </figcaption>
+</figure>
+
 이제 전류 감지 회로가 어떻게 구성되어 있는지 살펴봅시다.
 우선 스위치가 켜진 경우, 스위치 전류를 턴 비가 $$1:n$$인 변류기를 이용하여 감지 회로로 흐르게 합니다.
 이 전류는 제너 다이오드 $$D_z$$를 따라 감지 저항 $$R_s$$에서 전압 정보로 변환되고, 저항 $$R_f$$와 축전기 $$C_f$$로 구성된 저역 필터를 통과하여 전류 피드백 신호 $$v_I$$로 변환됩니다.
@@ -222,7 +304,12 @@ $$
 먼저 전류 피드백 신호의 식을 구해봅시다.
 이 회로는 다음과 같이 모델링할 수 있습니다.
 
-(cs RC)
+<figure style="text-align: center;">
+  <img src="./PEFigure/VI 회로.png" alt="VI 회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전류 피드백 회로의 등가 모델)
+  </figcaption>
+</figure>
 
 이때 $$C_f$$에 걸리는 전압은 다음과 같습니다.
 
@@ -249,7 +336,12 @@ $$
 다음으로 보상 신호의 식을 구해봅시다.
 이 회로는 다음과 같이 모델링할 수 있습니다.
 
-(ramp rc)
+<figure style="text-align: center;">
+  <img src="./PEFigure/보상 회로.png" alt="보상 회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 보상 신호 회로의 등가 모델)
+  </figcaption>
+</figure>
 
 클럭 신호가 계단 함수 형태로 입력되므로 보상 신호는 다음과 같습니다.
 
@@ -309,11 +401,21 @@ $$
 
 우선 피크 전류 모드 제어를 활용한 벅 컨버터는 다음과 같습니다.
 
-(peak cmc buck)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅 CMC.png" alt="벅 CMC" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어 벅 컨버터)
+  </figcaption>
+</figure>
 
 이를 소신호 모델로 나타내면 다음과 같습니다.
 
-(pcmc ss buck)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅 소신호 CMC.png" alt="벅 소신호 CMC" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어 벅 컨버터의 소신호 모델)
+  </figcaption>
+</figure>
 
 스위칭 모델은 스위치 전류 정보를 이용하지만, 소신호 모델의 경우는 인덕터 전류 정보를 이용합니다.
 피크 전류 모드 제어에서는 두 전류가 기능적으로 같기 때문에 무방합니다.
@@ -333,7 +435,12 @@ $$
 이제 PWM 이득을 구해봅시다.
 인덕터 전류에 약간의 외란이 발생했다고 해봅시다.
 
-(wf)
+<figure style="text-align: center;">
+  <img src="./PEFigure/VI 평균.png" alt="VI 평균" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전류 외란 파형)
+  </figcaption>
+</figure>
 
 스위치가 켜져 있을 때와 꺼져 있을 때의 각각의 전류 피드백 신호의 평균 값은 다음과 같습니다.
 
@@ -440,6 +547,13 @@ $$
 
 듀티 비 $$0.5$$를 기준으로 세 경우에 대해 다음과 같이 쓸 수 있습니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/듀티 경우의 수.png" alt="듀티 경우의 수" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 듀티 비에 따른 외란 파형)
+  </figcaption>
+</figure>
+
 $$
 \begin{cases}
 	D<0.5\leftrightarrow S_n>S_f\leftrightarrow F_m'>0\leftrightarrow\text{(안정)}\\
@@ -447,8 +561,6 @@ $$
 	D>0.5\leftrightarrow S_n<S_f\leftrightarrow F_m'<0\leftrightarrow\text{(불안정)}
 \end{cases}
 $$
-
-(wf)
 
 즉, 듀티 비가 $$0.5$$ 미만일 때만 안정 상태이고, 이는 PWM 이득을 통해서도 알 수 있습니다.
 
