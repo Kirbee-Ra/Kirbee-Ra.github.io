@@ -290,8 +290,139 @@ $$
 ### 피크 전류 모드 제어의 장점
 
 - 동적 성능 개선: 부스트 컨버터와 벅-부스트 컨버터는 우반면 영점으로 인해 전압 모드 제어만으로는 제어가 어려웠습니다. 이는 전류 모드 제어를 통해 안정성과 성능을 확보할 수 있습니다.
-- 컨버터의 동 특성의 민감도 감소: 전류 모드 제어로 동작하는 컨버터는 전압 모드 제어로 동작하는 컨버터에 비해 전원 임피던스와 동작 모드 전환(CCM, DCM)에 의한 영향을 덜 받습니다. (참고: B. Choi, D. Kim, D. Lee, S. Choi, and J. Sun, "Analysis of input filter interactions in switching power converters," IEEE Trans. Power Electron., vol. 22, no. 2, pp. 452-460, Mar. 2007., D. Kim, B. Choi, D. Lee, and J. Sun, "Dynamics of current-mode controlled dc-to-dc converters with input filter stage," in Proc. IEEE Power Electron. Specialists' Conf., 2005, pp 2648-2656. D. Sable, R. Ridley, and B. Cho, "Comparison of performance of single-loop and current-injection control for PWM converters that operate in both continuous and discontinuous modes of operation," IEEE Trans. Power Electron., vol. 7, no. 1, pp. 136-142, Jan. 1992.)
+- 컨버터 동 특성의 민감도 감소: 전류 모드 제어로 동작하는 컨버터는 전압 모드 제어로 동작하는 컨버터에 비해 전원 임피던스와 동작 모드 전환(CCM, DCM)에 의한 영향을 덜 받습니다. (참고: [논문 1](https://ieeexplore.ieee.org/document/4118289), [논문 2](https://ieeexplore.ieee.org/document/1582007), [논문 3](https://ieeexplore.ieee.org/document/124586))
 - 보상기 설계의 간소화: 3P2Z 보상기를 필요로 하는 전압 모드 제어 컨버터와는 달리 전류 모드 제어 컨버터는 2P1Z 보상기를 필요로 합니다.
 
 ### 피크 전류 모드 제어의 단점
-- 
+- 다중 루프 분석: 인덕터 전류 정보를 추출하는 새 루프로 인해 시스템 분석이 비교적 복잡합니다.
+- 샘플링 효과: 컨버터의 제어 회로의 업데이트 주기는 스위칭 주기와 같습니다. 이는 이산적인 시스템이라고 볼 수 있고, 분석하고자 하는 주파수가 스위칭 주파수의 절반에 가까워질 수록 오차가 커지면서 위상이 떨어집니다.
+
+---
+
+## 피크 전류 모드 제어기 설계
+
+앞서 언급했듯이 샘플링 효과로 인해 피크 전류 모드 제어기는 이산적인 시스템입니다.
+따라서 $$z$$ 영역에서 해석하는 게 맞습니다.
+하지만 샘플링 효과가 컨버터 동 특성에 영향을 거의 미치지 않는다고 가정하면 주파수 영역에서 해석할 수 있습니다.
+
+### 피크 전류 모드 제어기의 소신호 모델
+
+우선 피크 전류 모드 제어를 활용한 벅 컨버터는 다음과 같습니다.
+
+(peak cmc buck)
+
+이를 소신호 모델로 나타내면 다음과 같습니다.
+
+(pcmc ss buck)
+
+스위칭 모델은 스위치 전류 정보를 이용하지만, 소신호 모델의 경우는 인덕터 전류 정보를 이용합니다.
+피크 전류 모드 제어에서는 두 전류가 기능적으로 같기 때문에 무방합니다.
+
+먼저 전압 피드백 보상기는 다음과 같습니다.
+
+$$
+	F_v(s)=\frac{Z_2(s)}{Z_1(s)}
+$$
+
+그리고 전류 감지 회로의 이득은 다음과 같습니다.
+
+$$
+R_i=\frac{R_s}{n}
+$$
+
+이제 PWM 이득을 구해봅시다.
+인덕터 전류에 약간의 외란이 발생했다고 해봅시다.
+
+(wf)
+
+스위치가 켜져 있을 때와 꺼져 있을 때의 각각의 전류 피드백 신호의 평균 값은 다음과 같습니다.
+
+$$
+\begin{cases}
+			\overline{v}_{I,on}=v_{ctrl}-S_eT_sd-\displaystyle\frac{1}{2}S_nT_sd\\
+			\overline{v}_{I,off}=v_{ctrl}-S_eT_sd-\displaystyle\frac{1}{2}S_fT_s\left(1-d\right)
+		\end{cases}
+$$
+
+외란이 매우 작다는 가정 하에 다음과 같이 근사할 수 있습니다.
+
+$$
+\overline{v}_{I,on}\approx\overline{v}_{I,off}
+$$
+
+정리하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+			&v_{ctrl}-S_eT_sd-\displaystyle\frac{1}{2}S_nT_sd=v_{ctrl}-S_eT_sd-\displaystyle\frac{1}{2}S_fT_s\left(1-d\right)\\
+			&\rightarrow \left(S_n+S_f\right)d=S_f
+	\end{align*}
+$$
+
+그리고 이러한 가정 하에 두 전류 피드백 신호의 평균 값은 전체의 평균으로 근사할 수 있습니다.
+
+$$
+\overline{v}_{I,on}\approx\overline{v}_{I,off}\approx\overline{v}_I
+$$
+
+따라서 오프 타임에서의 전류 피드백 신호의 평균 값은 다음과 같이 쓸 수 있습니다..
+
+$$
+	\begin{align*}
+\overline{v}_{I,off}&=\overline{v}_I\\
+&=v_{ctrl}-S_eT_sd-\displaystyle\frac{1}{2}S_fT_s\left(1-d\right)\\
+&=v_{ctrl}-S_eT_sd-\displaystyle\frac{1}{2}\left(S_n+S_f\right)T_sd\left(1-d\right)
+	\end{align*}
+$$
+
+이제 선형화를 해봅시다.
+각 변수를 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{cases}
+	\overline{v}_I=V_I+\hat{v}_I\\
+	v_{ctrl}=V_{ctrl}+\hat{v}_{ctrl}\\
+	d=D+\hat{d}
+\end{cases}
+$$
+
+대입하면 다음과 같습니다.
+
+$$
+V_I+\hat{v}_I=\left(V_{ctrl}+\hat{v}_{ctrl}\right)-S_eT_s\left(D+\hat{d}\right)-\displaystyle\frac{1}{2}\left(S_n+S_f\right)T_s\left(D+\hat{d}\right)\left(1-\left(D+\hat{d}\right)\right)
+$$
+
+소신호 항만 정리하면 다음과 같습니다.
+
+$$
+\hat{v}_I=\hat{v}_{ctrl}-\left(S_e+\frac{1}{2}\left(S_n+S_f\right)\left(1-2D\right)\right)T_s\hat{d}
+$$
+
+정상 상태에서 이전에 구한 기울기 관계식은 다음과 같이 나타납니다.
+
+$$
+\left(S_n+S_f\right)D=S_f
+$$
+
+따라서 소신호 표현식은 다음과 같습니다.
+
+$$
+\hat{v}_I=\hat{v}_{ctrl}-\left(S_e+\frac{1}{2}\left(S_n-S_f\right)\right)T_s\hat{d}
+$$
+
+PWM 이득은 다음과 같이 정의됩니다.
+
+$$
+F_m'=\frac{\hat{d}}{\hat{v}_{ctrl}-\hat{v}_I}
+$$
+
+대입하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+&\frac{\hat{d}}{\hat{v}_{ctrl}-\hat{v}_I}=\frac{1}{\left(S_e+\displaystyle\frac{1}{2}\left(S_n-S_f\right)\right)T_s}=\frac{2}{\left(S_n-S_f+2S_e\right)T_s}\\
+&\rightarrow F_m'=\frac{2}{\left(S_n-S_f+2S_e\right)T_s}
+\end{align*}
+$$
+
+이 PWM 이득 식은 
