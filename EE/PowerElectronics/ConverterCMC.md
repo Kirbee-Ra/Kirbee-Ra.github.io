@@ -425,4 +425,55 @@ $$
 \end{align*}
 $$
 
-이 PWM 이득 식은 
+이 PWM 이득 식은 저조파 진동 또한 잘 예측합니다.
+저조파 진동을 없애기 위해 보상 신호를 도입한 것이므로 보상 신호를 없애봅시다.
+
+$$
+S_e=0
+$$
+
+이때 PWM 이득은 다음과 같습니다.
+
+$$
+F_m'=\frac{2}{\left(S_n-S_f\right)T_s}
+$$
+
+듀티 비 $$0.5$$를 기준으로 세 경우에 대해 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{cases}
+	D<0.5\leftrightarrow S_n>S_f\leftrightarrow F_m'>0\leftrightarrow\text{(안정)}\\
+	D=0.5\leftrightarrow S_n=S_f\leftrightarrow F_m'\rightarrow\infty\leftrightarrow\text{(불안정)}\\
+	D>0.5\leftrightarrow S_n<S_f\leftrightarrow F_m'<0\leftrightarrow\text{(불안정)}
+\end{cases}
+$$
+
+(wf)
+
+즉, 듀티 비가 $$0.5$$ 미만일 때만 안정 상태이고, 이는 PWM 이득을 통해서도 알 수 있습니다.
+
+### 피크 전류 모드 제어 컨버터의 블록 다이어그램
+
+피크 전류 모드 제어를 이용하는 컨버터의 블록 다이어그램 표현은 다음과 같습니다.
+
+(BD)
+
+전압 모드 제어를 이용할 때에 비해 복잡합니다.
+먼저 전압 피드백 루프는 다음과 같습니다.
+
+$$
+	\begin{align*}
+		T_v(s)&=-\frac{\hat{v}_{ctrl}(s)}{\hat{v}_o(s)}\frac{\hat{d}(s)}{\hat{v}_{ctrl}(s)}\frac{\hat{v}_o(s)}{\hat{d}(s)}\\
+		&=F_v(s)F_m'G_{vd}(s)
+\end{align*}
+$$
+
+전류 피드백 루프는 다음과 같습니다.
+
+$$
+	\begin{align*}
+		T_i(s)&=-\frac{\hat{v}_I(s)}{\hat{i}_L(s)}\frac{\hat{d}(s)}{\hat{v}_I(s)}\frac{\hat{i}_L(s)}{\hat{d}(s)}\\
+		&=F_v(s)F_m'G_{vd}(s)
+\end{align*}
+$$
+
