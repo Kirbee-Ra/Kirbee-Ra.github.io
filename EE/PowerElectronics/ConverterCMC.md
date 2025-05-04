@@ -577,7 +577,7 @@ $$
 2. 개루프 듀티 비-인덕터 전류 전달 함수 $$G_{is}(s)=\displaystyle\frac{\hat{i}_L(s)}{\hat{d}(s)}$$
 3. 개루프 출력 전류-인덕터 전류 전달 함수 $$Z_q(s)=\displaystyle\frac{\hat{i}_L(s)}{\hat{i}_o(s)}$$
 
-### 피드백 루프
+### 전압 피드백 루프
 
 이제 피드백 루프를 살펴봅시다.
 먼저 전압 피드백 루프는 다음과 같습니다.
@@ -589,6 +589,8 @@ $$
 \end{align*}
 $$
 
+### 전류 피드백 루프
+
 다음으로 전류 피드백 루프는 다음과 같습니다.
 
 $$
@@ -597,4 +599,205 @@ $$
 		&=F_v(s)F_m'G_{vd}(s)
 \end{align*}
 $$
+
+### 메이슨 법칙
+
+루프 이득을 구하기 전에 **메이슨 법칙(Mason's Rule)**을 떠올려봅시다.
+전압 모드 제어의 경우는 피드백 루프가 복잡하지 않아서 직관적으로 구할 수 있었습니다.
+하지만 피크 전류 모드 제어의 경우, 피드백 루프가 비교적 복잡하여 메이슨 규칙을 이용하는 것이 좋습니다.
+
+메이슨 규칙에 따르면 전달 함수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+F(s)=\frac{1}{\Delta}\displaystyle\sum_kM_k\Delta_k
+\end{align*}
+$$
+
+이제 각 변수가 의미하는 바가 무엇인지 설명하겠습니다.
+
+$$
+	\begin{align*}
+&\Delta:1-\text{(모든 루프의 루프 이득의 합)}+(\text{임의의 독립된 두 루프의 루프 이득의 곱의 합})-\cdots\\
+&M_k:k\text{번째 경로의 이득}\\
+&\Delta_k:1-(k\text{번째 경로와 독립된 모든 루프의 루프 이득의 합})+(k\text{번째 경로와 독립된 루프 중에서 서로 독립된 두 루프의 루프 이득의 곱의 합})-\cdots
+\end{align*}
+$$
+
+다소 복잡한 법칙이지만 적용해보면 어렵지 않습니다.
+
+### 전체 루프 이득
+
+이제 메이슨 법칙을 이용해 루프 이득을 구해봅시다.
+구할 루프 이득은 총 두 개입니다.
+먼저 **전체 루프 이득(Overall Loop Gain)**은 다음과 같이 점 $$A$$를 기준으로 구합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD T1.png" alt="BD T1" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전체 루프 이득)
+  </figcaption>
+</figure>
+
+전체 루프 이득 $$T_1(s)$$는 다음과 같습니다.
+
+$$
+	\begin{align*}
+T_1(s)=-\frac{\hat{v}_y}{\hat{v}_x}
+\end{align*}
+$$
+
+메이슨 법칙으로 구하는 것은 다음의 식입니다.
+
+$$
+F(s)=\frac{\hat{v}_y}{\hat{v}_x}
+$$
+
+따라서 $$F(s)$$를 구하고 $$-1$$을 곱해주면 됩니다.
+루프는 다음과 같이 나눌 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD T1 Color.png" alt="BD T1 Color" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전체 루프 이득과 각 루프)
+  </figcaption>
+</figure>
+
+각 변수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+&\Delta=1\\
+&M_1=G_{id}\left(-R_i\right)F_m'=-G_{id}R_iF_m'\\
+&\Delta_1=1\\
+&M_2=G_{vd}\left(-F_v\right)F_m'=-G_{vd}F_vF_m'\\
+&\Delta_2=1
+\end{align*}
+$$
+
+따라서 전체 루프 이득은 다음과 같습니다.
+
+$$
+	\begin{align*}
+T_1(s)&=-\frac{1}{\Delta}\left(M_1\Delta_1+M_2\Delta_2\right)\\
+&=-\left(-G_{id}R_iF_m'-G_{vd}F_vF_m'\right)\\
+&=G_{id}R_iF_m'+G_{vd}F_vF_m'\\
+&=T_i(s)+T_v(s)
+\end{align*}
+$$
+
+전류 피드백 루프의 루프 이득과 전압 피드백 루프의 루프 이득의 합으로 나타납니다.
+
+### 외곽 루프 이득
+
+다음으로 구할 루프 이득은 **외곽 루프 이득(Outer Loop Gain)**입니다.
+이는 다음과 같이 점 $$B$$를 기준으로 구합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD T2.png" alt="BD T2" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 외곽 루프 이득)
+  </figcaption>
+</figure>
+
+외곽 루프 이득 $$T_2(s)$$ 또한 다음과 같이 나타납니다.
+
+$$
+	\begin{align*}
+T_1(s)=-\frac{\hat{v}_y'}{\hat{v}_x'}
+\end{align*}
+$$
+
+이 또한 $$\displaystyle\frac{\hat{v}_y'}{\hat{v}_x'}$$를 메이슨 규칙을 이용하여 구한 뒤 $$-1$$을 곱하면 됩니다.
+루프는 다음과 같이 나눌 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD T2 Color.png" alt="BD T2 Color" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 외곽 루프 이득과 각 루프)
+  </figcaption>
+</figure>
+
+각 변수는 다음과 같습니다.
+
+$$
+	\begin{align*}
+&\Delta=1-F_m'G_{vd}\left(-F_v\right)=1+F_m'G_{vd}F_v\\
+&M_1=F_m'G_{vd}\left(-F_v\right)=-F_m'G_{vd}F_v\\
+&\Delta_1=1
+\end{align*}
+$$
+
+따라서 외곽 루프 이득은 다음과 같습니다.
+
+$$
+	\begin{align*}
+T_2(s)&=-\frac{1}{\Delta}M_1\Delta_1\\
+&=-\frac{-F_m'G_{vd}F_v}{1+F_m'G_{vd}F_v}\\
+&=\frac{F_m'G_{vd}F_v}{1+F_m'G_{vd}F_v}\\
+&=\frac{T_v(s)}{1+T_i(s)}
+\end{align*}
+$$
+
+이 또한 전류 피드백 루프의 루프 이득과 전압 피드백 루프의 루프 이득으로 나타낼 수 있습니다.
+
+### 절대 안정도
+
+이제 피크 전류 모드 제어기의 절대 안정도를 분석해봅시다.
+절대 안정도 판별을 위해 음파 민감도를 구해봅시다.
+메이슨 법칙을 이용하면 음파 민감도는 다음과 같이 나타납니다.
+
+$$
+A_u(s)=\frac{\hat{v}_o}{\hat{v}_{in}}
+$$
+
+$$
+	\begin{align*}
+		&\Delta=1-\left(G_{vd}\left(-F_v\right)F_m'-\left(-R_i\right)F_m'G_{id}\right)=1+G_{vd}F_vF_m'+G_{id}R_iF_m'\\
+		&M_1=G_{vs}\\
+		&\Delta_1=1-\left(-R_i\right)F_m'G_{id}=1+G_{id}R_iF_m'\\
+		&M_2=G_{is}\left(-R_i\right)F_m'G_{vd}=-G_{is}R_iF_m'G_{vd}\\
+		&\Delta_2=1
+\end{align*}
+$$
+
+$$
+	\begin{align*}
+A_u(s)&=\frac{1}{\Delta}\left(M_1\Delta_1+M_2\Delta_2\right)\\
+&=\frac{G_{vs}\left(1+G_{id}R_iF_m'\right)+\left(-G_{is}R_iF_m'G_{vd}\right)}{1+G_{vd}F_vF_m'+G_{id}R_iF_m'}\\
+&=\frac{G_{vs}\left(1+G_{id}R_iF_m'\right)-G_{is}R_iF_m'G_{vd}}{1+T_v(s)+T_i(s)}
+\end{align*}
+$$
+
+특성 방정식은 다음과 같습니다.
+
+$$
+1+T_v(s)+T_i(s)=0
+$$
+
+이는 전체 루프 이득으로 나타낼 수 있습니다.
+
+$$
+
+$$1+T_1(s)=0$$
+
+이번에는 양 변을 $$1+T_i(s)$$로 나눠봅시다.
+
+$$
+1+\frac{T_v(s)}{1+T_i(s)}=0
+$$
+
+이는 외곽 루프 이득으로 나타낼 수 있습니다.
+
+$$
+1+T_2(s)=0
+$$
+
+즉, 어떤 루프 이득을 이용하여 분석하더라도 같은 정보를 얻을 수 있습니다.
+
+### 상대 안정도
+
+### 단일 적분 보상기
+
+### 2P1Z 보상기
 
