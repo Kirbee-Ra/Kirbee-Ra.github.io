@@ -745,6 +745,23 @@ $$
 
 이제 피크 전류 모드 제어기의 절대 안정도를 분석해봅시다.
 절대 안정도 판별을 위해 음파 민감도를 구해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD AS.png" alt="BD AS" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어의 음파 민감도)
+  </figcaption>
+</figure>
+
+각 루프는 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD AS Color.png" alt="BD AS Color" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어의 음파 민감도)
+  </figcaption>
+</figure>
+
 메이슨 법칙을 이용하면 음파 민감도는 다음과 같이 나타납니다.
 
 $$
