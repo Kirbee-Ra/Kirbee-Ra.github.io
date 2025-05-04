@@ -568,7 +568,12 @@ $$
 
 피크 전류 모드 제어를 이용하는 컨버터의 블록 다이어그램 표현은 다음과 같습니다.
 
-(BD)
+<figure style="text-align: center;">
+  <img src="./PEFigure/BD Full.png" alt="BD Full" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피크 전류 모드 제어 컨버터의 블록 다이어그램)
+  </figcaption>
+</figure>
 
 전압 모드 제어를 이용할 때에 비해 복잡합니다.
 새롭게 추가된 부분의 전달 함수는 다음과 같습니다.
@@ -758,7 +763,7 @@ $$
 <figure style="text-align: center;">
   <img src="./PEFigure/BD AS Color.png" alt="BD AS Color" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 피크 전류 모드 제어의 음파 민감도)
+    (그림. 피크 전류 모드 제어의 음파 민감도와 각 루프)
   </figcaption>
 </figure>
 
