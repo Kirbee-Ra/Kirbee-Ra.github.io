@@ -601,9 +601,33 @@ $$
 $$
 	\begin{align*}
 		T_i(s)&=-\frac{\hat{v}_I(s)}{\hat{i}_L(s)}\frac{\hat{d}(s)}{\hat{v}_I(s)}\frac{\hat{i}_L(s)}{\hat{d}(s)}\\
-		&=F_v(s)F_m'G_{vd}(s)
+		&=R_i(s)F_m'G_{id}(s)
 \end{align*}
 $$
+
+앞서 구한 식을 이용하면 다음과 같이 나타납니다.
+
+$$
+	\begin{align*}
+T_i(s)&=R_iK_{id}\frac{1+\displaystyle\frac{s}{\omega_{id}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}\frac{2}{\left(S_n-S_f+2S_e\right)T_s}\\
+&=K_i\frac{1+\displaystyle\frac{s}{\omega_{id}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}\ \ \ \text{where }K_i=K_{id}R_i\frac{2}{\left(S_n-S_f+2S_e\right)T_s}
+\end{align*}
+$$
+
+이를 보드 선도로 나타내면 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BP Current Feedback.png" alt="BP Current Feedback" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전류 피드백 루프의 보드 선도)
+  </figcaption>
+</figure>
+
+먼저 상수인 상태에서 영점 $$\omega_{id}$$를 지나 기울기가 $$+1$$이 됩니다.
+다음으로 이중 극점 $$\omega_0$$를 지나 기울기가 $$-1$$이 됩니다.
+그리고 계수를 살펴보면 $$S_e$$가 분모에 위치합니다.
+즉, $$S_e$$가 증가할수록 이득이 감소합니다.
+이는 보상 신호의 기울기가 증가할수록 전압 모드 제어에 가까워진다는 의미입니다.
 
 ### 메이슨 법칙
 
@@ -817,9 +841,101 @@ $$
 
 즉, 어떤 루프 이득을 이용하여 분석하더라도 같은 정보를 얻을 수 있습니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/CMC Stable.png" alt="CMC Stable" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 안정 상태)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/CMC MStable.png" alt="CMC MStable" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 임계 안정 상태)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/CMC Unstable.png" alt="CMC Unstable" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 불안정 상태)
+  </figcaption>
+</figure>
+
 ### 상대 안정도
 
-### 단일 적분 보상기
+다음으로 상대 안정도를 살펴봅시다.
+각 루프 이득은 다음과 같이 쓸 수 있습니다.
+
+$$
+	\begin{align*}
+&T_1(j\omega)=\left\vert T_i(j\omega)+T_v(j\omega)\right\vert\angle\left( T_i(j\omega)+T_v(j\omega)\right)\\
+&T_2(j\omega)=\left\vert\frac{T_v(j\omega)}{1+T_i(j\omega)}\right\vert\angle\left(\frac{T_v(j\omega)}{1+T_i(j\omega)}\right)
+\end{align*}
+$$
+
+이득 여유는 각 루프 이득의 크기를 컨버터가 불안정해질 때까지 얼마나 늘릴 수 있는지를 의미합니다.
+위상 여유는 각 루프 이득의 위상을 컨버터가 불안정해질 때까지 얼마나 줄일 수 있는지(지연시킬 수 있는지)를 의미합니다.
+
+### 단일 적분 보상기의 문제점
+
+보상기를 설계하기 위해 먼저 전류 피드백 루프와 전압 피드백 루프를 살펴봅시다.
+전류 피드백 루프는 다음과 같습니다.
+
+$$
+T_i(s)=\frac{V_{in}}{R}\frac{1+\displaystyle\frac{s}{\omega_{id}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}R_iF_m'
+$$
+
+전류 피드백 루프는 $$G_{id}$$의 극점과 영점의 위치에 의해 결정되는 것을 알 수 있습니다.
+다음으로 전압 피드백 루프는 다음과 같습니다.
+
+$$
+T_v(s)=F_vF_m'V_{in}\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
+$$
+
+전압 피드백 루프의 경우, 전류 피드백 루프와는 다르게 보상기로부터 영향을 받습니다.
+단일 적분기를 통해 전체 루프 이득을 설계해봅시다.
+
+$$
+T_1(s)=T_i(s)+T_v(s)=\begin{cases}
+	T_i(s)\ \ \ \text{for }\left\vert T_i\right\vert\gg\left\vert T_v\right\vert\\
+	T_v(s)\ \ \ \text{for }\left\vert T_i\right\vert\ll\left\vert T_v\right\vert
+\end{cases}
+$$
+
+두 피드백 루프의 보드 선도는 다음과 같이 나타납니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BP T1.png" alt="BP T1" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전체 루프 이득의 보드 선도)
+  </figcaption>
+</figure>
+
+언뜻 보면 별 문제가 없어보입니다.
+하지만 위상 선도를 보면 문제점이 보입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/PP T1.png" alt="PP T1" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전체 루프 이득의 위상 선도)
+  </figcaption>
+</figure>
+
+두 피드백 루프가 교차하는 지점에서 두 피드백 루프의 위상이 $$180^{\circ}$$만큼 차이가 납니다.
+교차 지점이므로 크기는 같습니다.
+크기는 같고 방향은 반대이므로 이 지점에서 전달 함수의 크기는 $$0$$이 됩니다.
+그러므로 다음과 같이 보드 선도에서는 $$-\infty$$로 발산합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BP T1 inf.png" alt="BP T1 inf" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전체 루프 이득의 보드 선도)
+  </figcaption>
+</figure>
+
+이런 문제로 인해 컨버터가 불안정해집니다.
 
 ### 2P1Z 보상기
 
+이러한 문제점을 없애기 위해 새로운 형태의 보상기가 필요합니다.
