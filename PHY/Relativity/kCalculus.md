@@ -1501,3 +1501,140 @@ $$4$$-벡터는 다음 세 가지로 분류됩니다.
 즉, 두 사건이 발생하는 장소가 동일한 관성 좌표계가 존재한다는 의미입니다.
 공간같은 벡터의 경우, 시간 성분이 $$0$$이 되는 관성 좌표계가 존재합니다.
 즉, 두 사건이 동시에 발생한다고 관측되는 관성 좌표계가 존재합니다.
+
+## $$4$$-가속도
+
+이제 가속도에 대해 알아봅시다.
+어떤 입자가 다음의 세계선에서 가속 운동을 하고 있다고 해봅시다.
+
+$$
+\begin{cases}
+	x=x(t)\\
+	y=y(t)\\
+	z=z(t)
+\end{cases}
+$$
+
+여기서 $$t,x,y,z$$는 관성 좌표계입니다.
+그리고 두 사건 $$E$$와 $$E'$$이 매우 짧은 시간 간격 $$\delta t$$에 대해 다음의 시각에서 발생했다고 해봅시다.
+
+$$
+\begin{cases}
+E:t\\
+E:t+\delta t
+\end{cases}
+$$
+
+이 상황에서 고유 시간 $$\delta\tau$$는 입자와 같이 운동하는 관찰자가 사건 $$E$$에서 순간적으로 정지할 때, 측정한 시간입니다.
+
+(4a)
+
+$$(t,x,y,z)$$좌표계에서 두 사건 사이의 변위는 다음과 같이 기술할 수 있습니다.
+
+$$
+X=\left(c,\mathbf{v}\right)\delta t
+$$
+
+따라서 다음과 같습니다.
+
+$$
+	\begin{align*}
+c^2\delta\tau^2&=g(X,X)\\
+&=\left(c^2-\mathbf{v}\cdot\mathbf{v}\right)\delta t^2
+\end{align*}
+$$
+
+양 변을 $$c^2$$으로 나누고 제곱근을 취하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+&\delta\tau^2=\frac{c^2-\mathbf{v}\cdot\mathbf{v}}{c^2}\delta t^2=\left(1-\frac{\mathbf{v}\cdot\mathbf{v}}{c^2}\right)\delta t^2\\
+&\delta\tau=\sqrt{1-\frac{\mathbf{v}\cdot\mathbf{v}}{c^2}}\delta t=\frac{\delta t}{\gamma_v}\\
+&\frac{\delta t}{\delta\tau}=\gamma_v
+\end{align*}
+$$
+
+가속하지 않는 입자의 경우와 마찬가지로 로런츠 인자가 곱해집니다.
+여기서 고유 시간은 **시계 가설(Clock Hypothesis)**에 따라 가속에 영향을 받지 않는 시계를 이용하여 측정했다고 가정합니다.
+
+입자의 $$4$$-속도 또한 등속도 운동하는 입자의 경우와 마찬가지로 정의됩니다.
+
+$$
+	\begin{align*}
+&V^a=\frac{dx^a}{d\tau}\\
+&V=\gamma_v\left(c,\mathbf{v}\right)
+\end{align*}
+$$
+
+하지만 이제 $$V$$는 $$\tau$$에 의존하는 양입니다.
+그리고 $$V$$를 $$\tau$$로 미분한 양 또한 $$4$$-벡터이고, 이를 **$$4$$-가속도(Four-Acceleration)**라고 합니다.
+
+$$
+A^a=\frac{dV^a}{d\tau}
+$$
+
+연쇄 법칙을 이용하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+A&=\frac{dV}{d\tau}=\frac{dt}{d\tau}\frac{dA}{dt}\\
+&=\gamma_v\frac{dA}{dt}
+\end{align*}
+$$
+
+이 또한 시간 성분과 공간 성분으로 표기할 수 있습니다.
+
+$$
+A=\gamma_v\frac{d}{dt}\left(\gamma_v\left(c,\mathbf{v}\right)\right)
+$$
+
+시간 성분을 계산하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+\frac{d\gamma_v}{dt}&=\frac{d\beta}{dt}\frac{d\gamma_v}{d\beta}\\
+&=\frac{1}{c}\frac{dv}{dt}\left(-\frac{1}{2}\left(1-\beta^2\right)^{-\frac{3}{2}}\frac{d}{d\beta}\left(1-\beta^2\right)\right)\\
+&=\frac{1}{c}\frac{dv}{dt}\frac{\beta}{\left(1-\beta^2\right)^{\frac{3}{2}}}\\
+&=\frac{\gamma_v^3v}{c^2}\frac{dv}{dt}
+\end{align*}
+$$
+
+공간 성분을 계산하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+\frac{d}{dt}\left(\gamma_v\mathbf{v}\right)&=\frac{d\gamma_v}{dt}\mathbf{v}+\gamma_v\frac{d\mathbf{v}}{dt}\\
+&=\frac{\gamma_v^3v}{c^2}\frac{dv}{dt}\mathbf{v}+\gamma_v\frac{d\mathbf{v}}{dt}
+\end{align*}
+$$
+
+이를 대입하면 다음과 같습니다.
+
+$$
+	\begin{align*}
+A&=\gamma_v\left(c\frac{\gamma_v^3v}{c^2}\frac{dv}{dt},\frac{\gamma_v^3v}{c^2}\frac{dv}{dt}\mathbf{v}+\gamma_v\frac{d\mathbf{v}}{dt}\right)\\
+&=\gamma_v\left(\left(c\frac{\gamma_v^3v}{c^2}\frac{dv}{dt},\frac{\gamma_v^3v}{c^2}\frac{dv}{dt}\mathbf{v}\right)+\left(0,\gamma_v\frac{d\mathbf{v}}{dt}\right)\right)\\
+&=\frac{\gamma_v^4v}{c^2}\frac{dv}{dt}\left(c,\mathbf{v}\right)+\gamma_v^2\left(0,\mathbf{a}\right)\ \ \ \text{where }\mathbf{a}=\frac{d\mathbf{v}}{dt}
+\end{align*}
+$$
+
+입자가 순간적으로 정지했다면 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{cases}
+	V=\left(c,0\right)\\
+	A=\left(0,\mathbf{a}\right)
+\end{cases}
+$$
+
+$$4$$-속도와 $$4$$-가속도의 내적 관계는 다음과 같습니다.
+
+$$
+\begin{cases}
+	g(V,V)=c^2\\
+	g(A,V)=0\\
+	g(A,A)=-a^2
+\end{cases}
+$$
+
+$$a$$는 **고유 가속도(Proper Acceleration)**로, 입자와 같이 움직이는 관찰자가 측정한 양입니다.
