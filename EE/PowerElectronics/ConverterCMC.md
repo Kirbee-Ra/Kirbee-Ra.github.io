@@ -4,10 +4,13 @@
 ---
 
 ## 목차
+- [컨버터의 전류 모드 제어](#converter-cmc)
+- [피크 전류 모드 제어](#피크-전류-모드-제어)
+- [피크 전류 모드 제어기 설계](#피크-전류-모드-제어기-설계)
 
 ---
 
-## 컨버터의 전류 모드 제어
+<h2 id="converter-cmc">컨버터의 전류 모드 제어</h2>
 
 **전류 모드 제어(Current Mode Control, CMC)**는 출력 전압 및 인덕터 전류 정보를 바탕으로 피드백을 하여 출력 전압을 제어하는 기법입니다.
 전류를 감지하는 방법 및 감지된 전류를 활용하는 법에는 여러 가지가 있습니다.
@@ -619,7 +622,7 @@ $$
 <figure style="text-align: center;">
   <img src="./PEFigure/BP Current Feedback.png" alt="BP Current Feedback" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전류 피드백 루프의 보드 선도)
+    (그림. 전류 피드백 루프의 크기 보드 선도)
   </figcaption>
 </figure>
 
@@ -635,7 +638,7 @@ $$
 전압 모드 제어의 경우는 피드백 루프가 복잡하지 않아서 직관적으로 구할 수 있었습니다.
 하지만 피크 전류 모드 제어의 경우, 피드백 루프가 비교적 복잡하여 메이슨 규칙을 이용하는 것이 좋습니다.
 
-메이슨 규칙에 따르면 전달 함수는 다음과 같습니다.
+메이슨 법칙에 따르면 전달 함수는 다음과 같습니다.
 
 $$
 	\begin{align*}
@@ -908,7 +911,7 @@ $$
 <figure style="text-align: center;">
   <img src="./PEFigure/BP T1.png" alt="BP T1" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전체 루프 이득의 보드 선도)
+    (그림. 전체 루프 이득의 크기 보드 선도)
   </figcaption>
 </figure>
 
@@ -918,7 +921,7 @@ $$
 <figure style="text-align: center;">
   <img src="./PEFigure/PP T1.png" alt="PP T1" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전체 루프 이득의 위상 선도)
+    (그림. 전체 루프 이득의 위상 보드 선도)
   </figcaption>
 </figure>
 
@@ -930,7 +933,7 @@ $$
 <figure style="text-align: center;">
   <img src="./PEFigure/BP T1 inf.png" alt="BP T1 inf" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전체 루프 이득의 보드 선도)
+    (그림. 전체 루프 이득의 크기 보드 선도)
   </figcaption>
 </figure>
 
@@ -939,3 +942,4 @@ $$
 ### 2P1Z 보상기
 
 이러한 문제점을 없애기 위해 새로운 형태의 보상기가 필요합니다.
+핵심은 두 피드백 루프가 교차하는 지점에서 위상차가 $$180^{\circ}$$가 되지 않게 방지하는 것입니다.
