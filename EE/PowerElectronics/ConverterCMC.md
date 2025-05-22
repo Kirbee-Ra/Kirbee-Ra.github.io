@@ -956,6 +956,22 @@ $$
 F_v(s)=\frac{K_v}{s}\frac{1+\displaystyle\frac{s}{\omega_{zc}}}{1+\displaystyle\frac{s}{\omega_{pc}}}
 $$
 
+전압 피드백 루프는 다음과 같습니다.
+
+$$
+\begin{align*}
+T_v(s)&=F_v(s)F_m'G_{vd}\\
+&=\frac{K_v}{s}\frac{1+\displaystyle\frac{s}{\omega_{zc}}}{1+\displaystyle\frac{s}{\omega_{pc}}}F_m'V_s\frac{1+\displaystyle\frac{s}{\omega_{esr}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}\\
+&=\frac{K_1}{s}\frac{1+\displaystyle\frac{s}{\omega_{zc}}}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}\ \ \ \text{where }K_1=K_vF_m'V_s
+\end{align*}
+$$
+
+전체 루프 이득은 다음과 같이 나타낼 수 있습니다.
+
+$$
+T_1(s)=\frac{K_1}{s}\frac{\left(1+\displaystyle\frac{s}{\omega_{zc}}\right)\left(1+\displaystyle\frac{s}{\omega_{cr}}\right)}{1+\displaystyle\frac{s}{Q\omega_0}+\displaystyle\frac{s^2}{\omega_0^2}}
+$$
+
 <figure style="text-align: center;">
   <img src="./PEFigure/BP T1 2P1Z.png" alt="BP T1 2P1Z" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
@@ -977,3 +993,24 @@ $$
 
 ### 2P1Z 보상기를 이용해 설계한 외곽 루프 이득
 
+외곽 루프 이득은 다음과 같이 나타낼 수 있습니다.
+
+$$
+T_2(s)=\frac{T_v(s)}{1+T_i(s)}=\begin{cases}
+	\displaystyle\frac{T_v(s)}{T_i(s)}\ \ \ \text{for }\left\vert T_i\right\vert\gg1\\
+	T_v(s)\ \ \ \text{for }\left\vert T_i\right\vert\ll1
+	\end{cases}
+$$
+
+앞서 구한 2P1Z 보상기를 이용하여 점근적 분석을 통해 구한 외곽 루프 이득은 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BP T2 2P1Z.png" alt="BP T2 2P1Z" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 2P1Z 보상기를 이용한 전체 루프 이득의 크기 보드 선도)
+  </figcaption>
+</figure>
+
+$$
+
+$$
