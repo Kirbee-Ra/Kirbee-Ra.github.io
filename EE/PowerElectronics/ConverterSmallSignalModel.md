@@ -490,6 +490,55 @@ $$
 실제 컨버터에서는 전원과 파워 스테이지 사이에 필터를 이용합니다.
 이는 노이즈 및 리플을 감쇠하기 위해 활용됩니다.
 
+---
+
+## DCM에서의 소신호 모델
+
+지금까지 살펴본 소신호 모델은 모두 CCM에서의 동작을 모델링한 것입니다.
+이제 DCM에서 대해 생각해봅시다.
+인덕터 전류 파형은 다음과 같이 나타납니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/DCM 인덕터 전류.png" alt="DCM 인덕터 전류" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. DCM에서의 인덕터 전류)
+  </figcaption>
+</figure>
+
+보시는 바와 같이 전류가 흐르지 않는 구간이 존재합니다.
+PWM 스위치를 다시 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/DCM PWM 스위치.png" alt="DCM PWM 스위치" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. PWM 스위치)
+  </figcaption>
+</figure>
+
+CCM과 달리 살펴볼 변수는 $$v_{ac},v_{cp},i_a,i_p$$입니다.
+$$i_a$$의 평균은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\overline{i}_a&=\frac{1}{T_s}\int_{T_s}i_adt=\frac{dT_s}{T_s}\frac{1}{dT_s}\int_{0}^{dT_s}i_adt\\
+&=\frac{i_{L,pk}}{2}d
+\end{align*}
+$$
+
+또한 $$i_p$$의 평균은 다음과 같습니다.
+
+$$
+	\begin{align*}
+\overline{i}_p&=\frac{1}{T_s}\int_{T_s}i_pdt=\frac{d_1T_s}{T_s}\frac{1}{d_1T_s}\int_{dT_s}^{dT_s+d_1T_s}i_pdt\\
+&=\frac{i_{L,pk}}{2}d
+\end{align*}
+$$
+
+이제 인덕터 전류의 피크 값을 구해봅시다.
+
+
+---
+
 ## 절연형 파워 스테이지의 소신호 모델
 
 절연형 파워 스테이지는 변압기를 활용하여 1차측과 2차측을 전기적으로 절연하는 형태를 띱니다.
