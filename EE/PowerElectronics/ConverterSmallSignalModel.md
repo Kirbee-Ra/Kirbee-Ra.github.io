@@ -552,6 +552,144 @@ $$
 먼저 포워드 컨버터를 살펴봅시다.
 포워드 컨버터는 벅 컨버터 기반의 절연형 컨버터로, 주로 권선 리셋형이 이용됩니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/권선 리셋 포워드.png" alt="권선 리셋 포워드" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 권선 리셋형 포워드 컨버터)
+  </figcaption>
+</figure>
+
+리셋 권선은 그저 코어의 감자를 위해 존재할 뿐, 컨버터의 동특성에는 영향을 미치지 않습니다.
+따라서 리셋 회로와 자화 인덕턴스를 생략할 수 있습니다.
+그리고 상단 다이오드의 도통 여부는 1차측 스위치의 도통 여부와 동일하므로 다음과 같이 나타낼 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/권선 리셋 포워드 2.png" alt="권선 리셋 포워드 2" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 단순화된 권선 리셋형 포워드 컨버터)
+  </figcaption>
+</figure>
+
+이는 입력단을 절연시킨 벅 컨버터입니다.
+2차측 스위치와 다이오드는 이전에 살펴본 PWM 스위치와 동일합니다.
+따라서 다음과 같이 모델링할 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/권선 리셋 포워드 3.png" alt="권선 리셋 포워드 3" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 2차측 PWM 스위치를 평균화한 권선 리셋형 포워드 컨버터)
+  </figcaption>
+</figure>
+
+이 두 변압기는 다음과 같이 턴 비가 $$1:nd$$인 하나의 변압기로 나타낼 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/권선 리셋 포워드 평균화.png" alt="권선 리셋 포워드 평균화" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 권선 리셋형 포워드 컨버터의 평균화 모델)
+  </figcaption>
+</figure>
+
+이 모델은 다음과 같이 표현할 수 있습니다.
+
+$$
+\begin{align*}
+	\begin{cases}
+		\overline{i}_a(t)=n\overline{i}_c(t)d(t)\\
+		\overline{v}_{cp}(t)=n\overline{v}_{ap}(t)d(t)
+	\end{cases}
+\end{align*}
+$$
+
+각 변수를 동작점과 소신호로 표현하면 다음과 같습니다.
+
+$$
+\begin{cases}
+			\overline{v}_{ap}=V_{ap}+\hat{v}_{ap}\\
+			\overline{v}_{cp}=V_{cp}+\hat{v}_{cp}\\
+			\overline{i}_{a}=I_{a}+\hat{i}_{a}\\
+			\overline{i}_{c}=I_{c}+\hat{i}_{c}\\
+   \overline{d}=D+\hat{d}
+		\end{cases}
+$$
+
+대입을 통해 
+이 식을 평균화 모델 표현식에 대입하면 다음과 같습니다.
+
+$$
+\begin{cases}
+	V_{cp}+\hat{v}_{cp}=n\left(V_{ap}+\hat{v}_{ap}\right)\left(D+\hat{d}\right)\\
+	I_{a}+\hat{i}_{a}=n\left(I_{c}+\hat{i}_{c}\right)\left(D+\hat{d}\right)
+\end{cases}
+$$
+
+식을 전개하면 다음과 같습니다.
+
+$$
+\begin{cases}
+	V_{cp}+\hat{v}_{cp}=nV_{ap}D+nV_{ap}\hat{d}+n\hat{v}_{ap}D+n\hat{v}_{ap}\hat{d}\\
+	I_a+\hat{i}_a=nI_cD+nI_c\hat{d}+n\hat{i}_cD+n\hat{i}_c\hat{d}
+\end{cases}
+$$
+
+이전과 같이 근사하면 소신호 표현은 다음과 같습니다.
+
+$$
+\begin{cases}
+	\hat{v}_{cp}=nV_{ap}\hat{d}+n\hat{v}_{ap}D\\
+	\hat{i}_a=nI_c\hat{d}+n\hat{i}_cD
+\end{cases}
+$$
+
+따라서 권선 리셋형 포워드 컨버터의 소신호 모델은 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/권선 리셋 포워드 소신호.png" alt="권선 리셋 포워드 소신호" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 권선 리셋형 포워드 컨버터의 소신호 모델)
+  </figcaption>
+</figure>
+
+예상했던 바와 같이 벅 컨버터의 소신호 모델에 턴 비만 곱해진 형태입니다.
+
+### 센터탭 구조의 풀-브릿지 컨버터
+
+풀-브릿지 컨버터 또한 벅 컨버터 기반의 컨버터입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/센터탭 풀브릿지.png" alt="센터탭 풀브릿지" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 센터탭 구조의 풀-브릿지 컨버터)
+  </figcaption>
+</figure>
+
+
+
+다음 부분을 모델링해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/센터탭 풀브릿지 모델링.png" alt="센터탭 풀브릿지 모델링" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 센터탭 구조의 풀-브릿지 컨버터의 PWM 스위치)
+  </figcaption>
+</figure>
+
+### 브릿지 구조의 하프-브릿지 컨버터
+
+### 플라이백 컨버터
+
+플라이백 컨버터는 벅-부스트 컨버터 기반의 컨버터입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/플라이백.png" alt="플라이백" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 플라이백 컨버터)
+  </figcaption>
+</figure>
+
+이전과 달리 등가 벅-부스트 컨버터로 먼저 바꿔줄 필요가 있습니다.
+
+
 
 ---
 
