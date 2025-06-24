@@ -28,10 +28,10 @@
 추가 요소 정리는 다음과 같이 나타납니다.
 
 $$
-H(s)=H_{\infty}(s)\frac{1+\displaystyle\frac{\overline{\zeta}(s)}{Z(s)}}{1+\displaystyle\frac{\overline{z}(s)}{Z(s)}}
+H(s)=H_{\infty}(s)\frac{1+\displaystyle\frac{Z_n(s)}{Z(s)}}{1+\displaystyle\frac{Z_d(s)}{Z(s)}}
 $$
 
-여기서 $H_{\infty}(s)$는 비결합 컨버터(추가 요소가 개방된 상태)의 전달 함수, $\overline{z}(s)$는 구동점 임피던스(Driving Point Impedance), $\overline{\zeta}(s)$는 영 구동점 임피던스(Null Driving Point Impedance), $Z(s)$는 추가 요소의 임피던스입니다.
+여기서 $H_{\infty}(s)$는 비결합 컨버터(추가 요소가 개방된 상태)의 전달 함수, $Z_d(s)$는 구동점 임피던스(Driving Point Impedance), $Z_n(s)$는 영 구동점 임피던스(Null Driving Point Impedance), $Z(s)$는 추가 요소의 임피던스입니다.
 
 ### 구동점 임피던스
 
