@@ -69,6 +69,7 @@
 - [컨버터의 성능](./ConverterDynamics.md)
 - [컨버터의 전압 모드 제어](./ConverterVMC.md)
 - [컨버터의 전류 모드 제어](./ConverterCMC.md)
+- [추가 요소 정리](./EET.md)
 
 ---
 
