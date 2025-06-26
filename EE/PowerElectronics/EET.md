@@ -111,6 +111,22 @@ $$
 
 이 식의 분모와 분자에 각각 $Z(s)$를 곱한 뒤, 분배 법칙을 통해 분모와 분자를 각각 $Z_d(s)$와 $Z_n(s)$으로 묶으면 다음과 같습니다.
 
+$$
+H(s)=H_{oc}(s)\frac{Z_n(s)}{Z_d(s)}\frac{1+\displaystyle\frac{Z(s)}{Z_n(s)}}{1+\displaystyle\frac{Z(s)}{Z_d(s)}}
+$$
+
+추가 요소가 직렬로 연결된 경우 $Z(s)=0$일 때, $H(s)$는 비결합 컨버터(추가 요소가 단락된 단락 회로)의 전달 함수입니다.
+이를 다음과 같이 씁시다.
+
+$$
+H_{sc}(s)=H_(s)\vert_{Z(s)=0}=H_{oc}(s)\frac{Z_n(s)}{Z_d(s)}
+$$
+
+따라서 직렬 추가 요소에 대한 정리는 다음과 같습니다.
+
+$$
+H(s)=H_{sc}(s)\frac{1+\displaystyle\frac{Z(s)}{Z_n(s)}}{1+\displaystyle\frac{Z(s)}{Z_d(s)}}
+$$
 
 
 ### 확장된 추가 요소 정리
