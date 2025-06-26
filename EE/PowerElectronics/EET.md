@@ -31,13 +31,18 @@
 
 **추가 요소 정리(Extra Element Theorem, EET)**는 비결합 컨버터에 어떤 소자(추가 요소) 등이 결합된 경우, 전달 함수가 어떻게 변하는지를 나타내는 정리입니다.
 즉, 비결합 컨버터와 결합 컨버터의 관계를 나타내는 정리입니다.
-추가 요소 정리는 다음과 같이 나타납니다.
+추가 요소가 컨버터에 직렬로 연결되는 경우와 병렬로 연결되는 경우로 나눌 수 있습니다.
+
+### 병렬 추가 요소
+
+먼저 추가 요소가 병렬로 연결되는 경우를 살펴봅시다.
+이때 추가 요소 정리는 다음과 같이 나타납니다.
 
 $$
-H(s)=H_{\infty}(s)\frac{1+\displaystyle\frac{Z_n(s)}{Z(s)}}{1+\displaystyle\frac{Z_d(s)}{Z(s)}}
+H_C(s)=H_U(s)\frac{1+\displaystyle\frac{Z_n(s)}{Z(s)}}{1+\displaystyle\frac{Z_d(s)}{Z(s)}}
 $$
 
-여기서 $H_{\infty}(s)$는 비결합 컨버터(추가 요소가 개방된 상태)의 전달 함수, $Z_d(s)$는 구동점 임피던스(Driving Point Impedance), $Z_n(s)$는 영 구동점 임피던스(Null Driving Point Impedance), $Z(s)$는 추가 요소의 임피던스입니다.
+여기서 $H_U(s)$는 비결합 컨버터(추가 요소가 개방된 상태)의 전달 함수, $Z_d(s)$는 구동점 임피던스(Driving Point Impedance), $Z_n(s)$는 영 구동점 임피던스(Null Driving Point Impedance), $Z(s)$는 추가 요소의 임피던스입니다.
 
 ### 구동점 임피던스
 
