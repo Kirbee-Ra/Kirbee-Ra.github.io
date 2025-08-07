@@ -19,6 +19,17 @@
 
 ### 전력 다이오드의 구조
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/전력 다이오드 구조.png" alt="전력 다이오드 구조" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전력 다이오드의 구조)
+  </figcaption>
+</figure>
+
+전력 다이오드의 구조는 그림과 같습니다.
+일반적인 다이오드와는 달리 $N^-$ 영역이 존재합니다.
+이 영역을 
+
 ### 전력 다이오드의 종류
 
 ---
