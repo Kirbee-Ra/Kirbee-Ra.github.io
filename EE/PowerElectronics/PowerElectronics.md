@@ -12,7 +12,7 @@
 - [전력 반도체]
 - [전력 다이오드](./PowerDiode.md)
 - [BJT]
-- [전력 MOSFET]
+- [전력 MOSFET](./PowerMOSFET.md)
 - [IGBT]
 - [축전기]
 - [인덕터](../CircuitTheory/Inductor.md)
