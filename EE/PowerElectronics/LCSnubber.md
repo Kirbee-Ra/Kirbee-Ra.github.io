@@ -9,18 +9,62 @@ LC 스너버
 
 ## LC 스너버
 
-LC 스너버는 그림과 같은 회로로 구성됩니다.
-먼저 누설 인덕턴스에 저장된 에너지가 스위치가 켜지는 타이밍에 스너버 축전기로 전달됩니다.
-이때 상단의 다이오드는 역 바이어스가 걸린 상태로, 도통되지 않습니다.
-이후에 하단의 다이오드를 거쳐 스너버 인덕터를 지나며 스너버 축전기가 극성이 반대가 되어 충전됩니다.
-버스 전압과 스너버 축전기의 전압이 동일해지는 순간부터 상단의 다이오드가 도통됩니다.
-그리고 에너지가 입력단으로 되돌아갑니다.
-이 과정이 기본적인 LC 스너버의 원리입니다.
+LC 스너버는 무손실 스너버(Lossless Snubber)의 일종입니다.
+말 그대로 이론적으로 손실 없이 전압을 클램핑합니다.
+LC 스너버를 적용한 플라이백 컨버터는 그림과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/LC스너버.png" alt="LC스너버" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. LC 스너버를 적용한 플라이백 컨버터)
+  </figcaption>
+</figure>
+
+누설 인덕터에 저장된 에너지가 스너버 커패시터와 스너버 인덕터를 거쳐 다시 입력단으로 되돌아갑니다.
 
 ---
 
 ## 동작 원리
 
+먼저 스위치가 턴-오프 상태일 때부터 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/LCph1.png" alt="LCph1" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 턴-오프 상태)
+  </figcaption>
+</figure>
+
+이전 사이클에 의해 스너버 커패시터는 충전된 상태입니다.
+
+<!-- 두 이미지를 감싸는 행 컨테이너 -->
+<div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+
+  <!-- 첫 번째 이미지 -->
+  <figure style="text-align: center; flex: 1 1 45%;">
+    <img src="./PEFigure/CSN.png" alt="LCph1" style="width: 100%;" />
+    <figcaption style="margin-top: 8px; font-size: 0.9em; color: #555;">
+      (그림 1. 턴-오프 상태)
+    </figcaption>
+  </figure>
+
+  <!-- 두 번째 이미지 -->
+  <figure style="text-align: center; flex: 1 1 45%;">
+    <img src="./PEFigure/3P2Z.png" alt="LCph2" style="width: 100%;" />
+    <figcaption style="margin-top: 8px; font-size: 0.9em; color: #555;">
+      (그림 2. 턴-온 상태)
+    </figcaption>
+  </figure>
+
+</div>
+
+
 ---
 
-## 스너버 설계
+## 스너버 설계 고려 사항
+
+### 스너버 커패시턴스
+
+### 스너버 인덕턴스
+
+### 다이오드 역 회복 특성
