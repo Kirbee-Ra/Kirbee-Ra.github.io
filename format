@@ -1,0 +1,13 @@
+그림 포맷
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/VMC회로.png" alt="VMC회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전압 모드 제어 컨버터)
+  </figcaption>
+</figure>
+
+문단 포맷
+
+- [컨버터의 전류 모드 제어](#converter-cmc)
+<h2 id="converter-cmc">컨버터의 전류 모드 제어</h2>
