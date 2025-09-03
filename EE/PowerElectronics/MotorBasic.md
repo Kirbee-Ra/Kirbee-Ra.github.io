@@ -174,3 +174,16 @@ $$
 
 ### 자기 포화
 
+일반적으로 인덕터에 흐르는 전류와 자속은 다음의 관계에 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/i_phi.png" alt="i_phi" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 인덕터 전류와 자속의 관계)
+  </figcaption>
+</figure>
+
+소전류 영역에서는 자속이 선형적으로 증가합니다.
+특정 구간부터 증가율이 줄어듭니다.
+그 이후부터는 자속이 거의 일정합니다.
+
