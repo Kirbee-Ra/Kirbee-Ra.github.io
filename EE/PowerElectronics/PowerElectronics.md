@@ -21,6 +21,7 @@
 - [변압기]
 - [전력 변환 회로](./PowerConversionCircuit.md)
 - [컨버터의 기초](./ConverterBasic.md)
+- [전동기의 기초](./MotorBasic.md)
 
 ---
 
