@@ -211,7 +211,29 @@ $$
   </figcaption>
 </figure>
 
+위 그래프에서 자기 에너지는 다음과 같이 쓸 수 있습니다.
 
+$$
+W_m=\int id\lambda
+$$
+
+그리고 또 다른 양인 **수반 에너지(Coenergy)**는 다음과 같이 정의됩니다.
+
+$$
+W_m'=\int \lambda di
+$$
+
+수반 에너지는 물리적인 양은 아니며, 그저 시스템을 분석하기 위해 정의된 양입니다.
+전류와 자속이 비례 관계라면, 자기 에너지와 수반 에너지는 같습니다.
+
+$$
+\begin{align*}
+		&\lambda=Li\\
+		&W_m=\int id\lambda=\int\frac{\lambda}{L}d\lambda=\frac{\lambda^2}{2L}\\
+		&W_m'=\int \lambda di=\int Lidi=\frac{1}{2}Li^2\\
+		&W_m=W_m'
+\end{align*}
+$$
 
 ---
 
@@ -269,7 +291,7 @@ $$
   </figcaption>
 </figure>
 
-힘 $$F_{mec}$$가 이동자에 하는 일이 출력된 역학적 에너지입니다.
+힘 $$F_{mec}$$가 이동자에 하는 일이 바로 출력된 역학적 에너지입니다.
 다음과 같이 쓸 수 있습니다.
 
 $$
