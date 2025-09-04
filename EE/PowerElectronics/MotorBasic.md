@@ -200,6 +200,19 @@ $$
 
 자기 회로에 대해 전기 회로에 비유하여 간단하게 설명하겠습니다.
 
+### 수반 에너지
+
+전류와 자속이 비례한다는 가정을 많이 하지만 실제로는 선형적이지 않습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/i_phi_real.png" alt="i_phi_real" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 비선형적인 전류와 자속의 관계)
+  </figcaption>
+</figure>
+
+
+
 ---
 
 ## 전동기의 동작 원리
@@ -216,3 +229,88 @@ $$
 **고정자(Stator)**는 전동기 내에 고정된 부분으로, 전기 에너지를 자기 에너지로 전환하는 역할을 수행합니다.
 **이동자(Mover)**는 전동기 내에서 움직이는 부분으로, 자기 에너지를 역학적 에너지로 전환하는 역할을 수행합니다.
 
+총 에너지 보존 식은 다음과 같이 쓸 수 있습니다.
+
+$$
+W_e=W_m+W_{mec}
+$$
+
+$$W_e$$는 공급된 전기 에너지, $$W_m$$은 저장된 자기 에너지, 그리고 $$W_{mec}$$는 출력된 역학적 에너지입니다.
+좌표계를 다음과 같이 설정합시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터좌표.png" alt="모터좌표" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전동기와 좌표계)
+  </figcaption>
+</figure>
+
+고정자에 공급되는 전기 에너지는 다음과 같습니다.
+
+$$
+W_e=\int \mathcal{E}i dt
+$$
+
+패러데이 법칙을 이용하면 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{align*}
+	&\mathcal{E}=\frac{d\Lambda}{dt}\\
+	&\rightarrow W_e=\int \frac{d\Lambda}{dt}idt=\int id\Lambda
+\end{align*}
+$$
+
+이제 이동자에 가해지는 힘을 $$F_{mec}$$라고 해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터힘.png" alt="모터힘" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 이동자가 받는 힘)
+  </figcaption>
+</figure>
+
+힘 $$F_{mec}$$가 이동자에 하는 일이 출력된 역학적 에너지입니다.
+다음과 같이 쓸 수 있습니다.
+
+$$
+W_{mec}=\int F_{mec}dx
+$$
+
+저장된 자기 에너지는 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{align*}
+	W_m&=W_e-W_{mec}\\
+	&=\int id\Lambda-\int F_{mec}dx
+\end{align*}
+$$
+
+적당한 수학적 가정 하에 미소 자기 에너지는 다음과 같이 쓸 수 있습니다.
+
+$$
+dW_m=id\Lambda-F_{mec}dx
+$$
+
+이 식은 자기 에너지의 전미분입니다.
+전미분은 다음과 같이 쓸 수 있습니다.
+
+$$
+dW_m=\frac{\partial W_m}{\partial\Lambda}d\Lambda+\frac{\partial W_m}{\partial x}dx
+$$
+
+각 항을 비교하면 다음과 같습니다.
+
+$$
+\begin{cases}
+		&\frac{\partial W_m}{\partial\Lambda}=i\\
+  &\frac{\partial W_m}{\partial x}=-F_{mec}
+	\end{cases}
+$$
+
+따라서 이동자에 가해지는 힘은 다음과 같습니다.
+
+$$
+F_{mec}=-\frac{\partial W_m}{\partial x}
+$$
+
+저장된 자기 에너지를 줄이도록 힘이 가해지는 것을 알 수 있습니다.
