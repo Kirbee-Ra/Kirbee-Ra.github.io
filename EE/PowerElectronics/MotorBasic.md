@@ -388,7 +388,54 @@ $$
 
 ---
 
-## 직류 전동기
+## 토크
+
+회전자는 토크를 받아 회전합니다.
+자기력에 의한 토크에 대해 설명하겠습니다.
+
+### 자기 모멘트
+
+다음과 같이 전류가 흐르는 고리를 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전류고리.png" alt="전류고리" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전류가 흐르는 고리)
+  </figcaption>
+</figure>
+
+**자기 모멘트(Magnetic Moment)**는 모멘트라는 이름에서 알 수 있듯이 자기력에 의한 토크를 결정짓는 물리량입니다.
+이 상황에서는 다음과 같이 쓸 수 있습니다.
+
+$$
+\mathbf{m}=iA\hat{\mathbf{n}}
+$$
+
+### 자기력에 의한 토크
+
+다음과 같이 전류가 흐르는 고리가 자기장 내에 있다고 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전류고리자기장.png" alt="전류고리자기장" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 자기장 내의 전류가 흐르는 고리)
+  </figcaption>
+</figure>
+
+외부 자기장에 의해 전류 고리가 회전합니다.
+이때 토크는 다음과 같습니다.
+
+$$
+\mathbf{N}=\mathbf{m}\times\mathbf{B}
+$$
+
+자기력과 법선 벡터 사이의 각을 $$\theta$$라고 한다면, 토크의 크기는 다음과 같습니다.
+
+$$
+N=iAB\sin\theta
+$$
+
+따라서 $$\theta=90^{\circ}$$일 때, 토크의 크기가 최대가 되는 것을 알 수 있습니다.
 
 ---
 
