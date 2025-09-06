@@ -439,4 +439,35 @@ $$
 
 ---
 
+## 직류 전동기
+
+**직류 전동기(DC Motor)**는 직류 전력를 공급받아 동력을 생성하는 전동기입니다.
+직류 전동기의 구조는 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/직류전동기.png" alt="직류전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 직류 전동기)
+  </figcaption>
+</figure>
+
+고정자에 감긴 권선에 전류를 흘리면 전자석이 되어 외부 자기장의 역할을 합니다.
+가운데 회전자에 감긴 권선에 전류를 흘리면 자기력을 받아 회전하기 시작합니다.
+하지만 반 바퀴 회전을 하면 코일에 흐르는 전류의 방향이 바뀌기 때문에 자기력을 반대 방향으로 받습니다.
+따라서 전류의 방향을 유지하기 위해 **브러시(Brush)**와 **정류자(Commutator)**를 이용합니다.
+정류자를 살펴보면 끊긴 부분이 있습니다.
+
+---
+
 ## 교류 전동기
+
+**교류 전동기(AC Motor)**는 교류 전력를 공급받아 동력을 생성하는 전동기입니다.
+교류 전동기의 구조는 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/교류전동기.png" alt="교류전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 교류 전동기)
+  </figcaption>
+</figure>
+
