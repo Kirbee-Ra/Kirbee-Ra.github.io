@@ -471,3 +471,23 @@ $$
   </figcaption>
 </figure>
 
+직류 전동기와는 달리 고정자 자석과 회전자 자석이 모두 회전하는 구조입니다.
+두 자석 사이의 각이 일정하다면, 일정한 토크가 지속적으로 발생합니다.
+따라서 회전자가 계속 회전할 수 있습니다.
+
+고정자 자석의 회전은 평형 3상 전력을 공급하여 구현할 수 있습니다.
+다음 그림을 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/3상자기장.png" alt="3상자기장" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 3상 전력에 의한 자기장)
+  </figcaption>
+</figure>
+
+권선이 $$120^{\circ}$$ 간격으로 배치되어 3개의 전자석을 형성합니다.
+이 권선에 평형 3상 전력을 공급하면 [회전하는 자기장](https://www.ece.umn.edu/users/riaz/animations/spacevecmovie.html)이 형성됩니다.
+
+### 동기 전동기
+
+### 유도 전동기
