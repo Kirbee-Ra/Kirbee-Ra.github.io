@@ -214,13 +214,13 @@ $$
 위 그래프에서 자기 에너지는 다음과 같이 쓸 수 있습니다.
 
 $$
-W_m=\int id\lambda
+W_m=\int id\Lambda
 $$
 
 그리고 또 다른 양인 **수반 에너지(Coenergy)**는 다음과 같이 정의됩니다.
 
 $$
-W_m'=\int \lambda di
+W_m'=\int \Lambda di
 $$
 
 수반 에너지는 물리적인 양은 아니며, 그저 시스템을 분석하기 위해 정의된 양입니다.
@@ -228,9 +228,9 @@ $$
 
 $$
 \begin{align*}
-		&\lambda=Li\\
-		&W_m=\int id\lambda=\int\frac{\lambda}{L}d\lambda=\frac{\lambda^2}{2L}\\
-		&W_m'=\int \lambda di=\int Lidi=\frac{1}{2}Li^2\\
+		&\Lambda=Li\\
+		&W_m=\int id\Lambda=\int\frac{\Lambda}{L}d\Lambda=\frac{\Lambda^2}{2L}\\
+		&W_m'=\int \Lambda di=\int Lidi=\frac{1}{2}Li^2\\
 		&W_m=W_m'
 \end{align*}
 $$
@@ -342,7 +342,7 @@ $$
 선형 매질이라는 가정 하에 자기 에너지 식을 다시 살펴봅시다.
 
 $$
-W_m=\frac{\lambda^2}{2L(x)}
+W_m=\frac{\Lambda^2}{2L(x)}
 $$
 
 기자력에 의해 공급되는 자속은 일정합니다.
@@ -352,8 +352,8 @@ $$x$$에 따라 인덕턴스가 달라지므로 위와 같이 표기했습니다
 $$
 \begin{align*}
 		F_{mec}&=-\frac{\partial W_m}{\partial x}\\
-		&=-\frac{\partial }{\partial x}\left(\frac{\lambda^2}{2L(x)}\right)\\
-		&=\frac{\lambda^2}{2L(x)^2}\frac{dL(x)}{dx}\\
+		&=-\frac{\partial }{\partial x}\left(\frac{\Lambda^2}{2L(x)}\right)\\
+		&=\frac{\Lambda^2}{2L(x)^2}\frac{dL(x)}{dx}\\
 		&=\frac{1}{2}i^2\frac{dL(x)}{dx}
 \end{align*}
 $$
