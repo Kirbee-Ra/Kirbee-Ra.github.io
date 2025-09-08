@@ -406,56 +406,6 @@ $$
 토크 또한 뉴턴의 운동 제2법칙과 같은 형태로 표기할 수 있습니다.
 
 $$
-\mathbf{N}=\mathbf{J}\boldsymbol{\alpha}
-$$
-
-여기서 $$\mathbf{J}$$, $$\boldsymbol{\alpha}$$는 각각 **관성 모멘트(Moment of Inertia)**, **각가속도(Angular Acceceleration)**입니다.
-
-회전자는 토크를 받아 회전합니다.
-또한 부하의 속도는 생성된 토크에 따라 달라집니다.
-부하의 위치, 유량, 압력, 장력 등이 제어됩니다.
-
-### 관성 모멘트
-
-관성 모멘트는 회전 운동을 하는 물체가 운동 상태를 유지하려는 성질이며, **회전 관성(Inertial Moment)**이라고도 부릅니다.
-다음과 같## 전동기의 구조
-
-앞서 설명한 구조는 동작 원리를 설명하기 위한 것이었습니다.
-실제로 쓰이는 전동기는 다음과 같은 구조입니다.
-
-<figure style="text-align: center;">
-  <img src="./PEFigure/전동기구조실제.png" alt="전동기구조실제" width="100%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 실제 전동기의 구조)
-  </figcaption>
-</figure>
-
-두 그림 모두 고정자는 전자석입니다.
-회전자의 경우 왼쪽 그림에서는 자석이고, 오른쪽 그림에서는 자성체입니다.
-토크는 고정자와 회전자의 상호작용을 통해 생성됩니다.
-회전자가 자석인 경우, 인력이 발생합니다.
-회전자가 자성체인 경우, 자기 에너지를 감소시키는 힘이 발생합니다.
-
----
-
-## 토크
-
-**토크(Torque)**는 물체를 회전시키기 위한 힘이며, 힘(Force)와는 차원이 다른 양입니다.
-
-$$
-\mathbf{N}=\mathbf{r}\times\mathbf{F}
-$$
-
-여기서 $$\mathbf{r}$$는 회전축으로부터 작용점 사이의 변위이고, $$\mathbf{F}$$는 작용하는 힘입니다.
-변위와 힘 사이의 각도를 $$\theta$$라고 하면, 토크의 크기는 다음과 같습니다.
-
-$$
-N=rF\sin\theta
-$$
-
-토크 또한 뉴턴의 운동 제2법칙과 같은 형태로 표기할 수 있습니다.
-
-$$
 \mathbf{N}=J\boldsymbol{\alpha}
 $$
 
