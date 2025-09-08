@@ -392,11 +392,19 @@ $$
 
 **토크(Torque)**는 물체를 회전시키기 위한 힘이며, 힘(Force)와는 차원이 다른 양입니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/토크.png" alt="토크" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 토크)
+  </figcaption>
+</figure>
+
 $$
 \mathbf{N}=\mathbf{r}\times\mathbf{F}
 $$
 
 여기서 $$\mathbf{r}$$는 회전축으로부터 작용점 사이의 변위이고, $$\mathbf{F}$$는 작용하는 힘입니다.
+단위는 $$\text{N}\cdot\text{m}$$이지만 에너지의 단위인 $$\text{J}$$과는 다른 물리량이기 때문에 구분합니다.
 변위와 힘 사이의 각도를 $$\theta$$라고 하면, 토크의 크기는 다음과 같습니다.
 
 $$
@@ -420,12 +428,26 @@ $$
 관성 모멘트는 회전 운동을 하는 물체가 운동 상태를 유지하려는 성질이며, **회전 관성(Inertial Moment)**이라고도 부릅니다.
 다음과 같이 정의됩니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/관성모멘트.png" alt="관성모멘트" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 관성 모멘트)
+  </figcaption>
+</figure>
+
 $$
 J=\int r^2dm
 $$
 
 일반적으로 물체는 회전축이 바뀌면서 회전할 수 있습니다.
 즉, 각운동량과 각속도가 일반적으로 평행이 아닙니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/세차운동.png" alt="세차운동" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 강체의 세차 운동)
+  </figcaption>
+</figure>
 
 $$
 \mathbf{L}=\mathbf{J}\boldsymbol{\omega}
@@ -457,9 +479,6 @@ $$
 $$
 
 선가속도와 비슷하게 토크를 받아 변하는 양입니다.
-
-
-
 
 ### 자기 모멘트
 
@@ -561,3 +580,30 @@ $$
 ### 유도 전동기
 
 ---
+
+## 부하 시스템
+
+전동기의 부하에는 그림과 같이 두 종류의 토크가 작용합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기시스템.png" alt="전동기시스템" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전동기 시스템)
+  </figcaption>
+</figure>
+
+$$\mathbf{N}_M$$은 전동기 토크입니다.
+전기 에너지를 받아 부하를 회전시키기 위해 작용하는 토크입니다.
+$$\mathbf{N}_L$$은 부하 토크입니다.
+부하 토크는 중력이나 마찰력 등의 부하를 극복하여 전동기를 구동하기 위한 필요한 토크입니다.
+알짜 토크는 다음과 같이 기술됩니다.
+
+$$
+\mathbf{N}_{net}=\mathbf{N}_M-\mathbf{N}_L
+$$
+
+$$\mathbf{N}_M>\mathbf{N}_L$$이면 알짜 토크가 양수이므로 각속도가 증가합니다.
+$$\mathbf{N}_M<\mathbf{N}_L$$이면 알짜 토크가 음수이므로 각속도가 감소합니다.
+
+### 부하 시스템의 운동 방정식
+
