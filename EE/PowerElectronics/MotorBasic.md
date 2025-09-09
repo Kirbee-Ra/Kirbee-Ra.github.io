@@ -416,7 +416,7 @@ $$
 **각속도(Angular Velocity)**는 속도와 비슷하게 각변위의 시간 미분입니다.
 
 $$
-\boldsymbol{\omega}=\frac{d\boldsymbol{theta}}{dt}
+\boldsymbol{\omega}=\frac{d\boldsymbol{\theta}}{dt}
 $$
 
 <figure style="text-align: center;">
@@ -517,6 +517,15 @@ $$
 		&\mathbf{N}=\frac{d\mathbf{L}}{dt}\\
 		&\rightarrow \mathbf{N}=\mathbf{r}\times\mathbf{F}\ \ \ \text{since }\frac{d\mathbf{r}}{dt}=\mathbf{0}\ \text{(강체)},\frac{d\mathbf{p}}{dt}=\mathbf{F}
 \end{align*}
+$$
+
+### 회전 운동 에너지
+
+회전하는 물체 또한 운동 에너지를 갖습니다.
+관성 모멘트를 이용하며 다음과 같이 나타낼 수 있습니다.
+
+$$
+K=\frac{1}{2}J\omega^2
 $$
 
 ### 자기 모멘트
@@ -661,3 +670,31 @@ $$
 N=J\alpha
 $$
 
+전동기 토크는 다음과 같이 나타낼 수 있습니다.
+
+$$
+N_M=J\alpha+N_L
+$$
+
+### 마찰을 고려한 운동 방정식
+
+다음과 같이 마찰력에 의한 토크가 작용한다고 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/마찰전동기시스템.png" alt="마찰전동기시스템" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 마찰을 고려한 전동기 시스템)
+  </figcaption>
+</figure>
+
+$$
+-T_F=B\omega
+$$
+
+이때 알짜 토크는 다음과 같습니다.
+
+$$
+N_{net}=N_M-N_L-N_F
+$$
+
+ jifjeswoif'jsdoifjdsoifjdsoihgjiodshgdosiJFIOAEFJAOPSFJSDAOPIFJ
