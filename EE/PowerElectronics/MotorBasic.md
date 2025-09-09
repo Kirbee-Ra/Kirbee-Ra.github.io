@@ -388,7 +388,56 @@ $$
 
 ---
 
-## 토크
+## 회전 운동
+
+주로 회전 운동을 하는 시스템에 대해 다룰 예정이므로, 회전 운동에 대해 설명하겠습니다.
+
+### 각변위
+
+**각변위(Angular Displacement)**는 변위와 비슷하게 처음의 각위치와 나중의 각위치의 차이를 나타냅니다.
+
+$$
+\Delta\theta=\theta_f-\theta_i
+$$
+
+각변위의 방향은 그림과 같이 오른손 규칙에 따라 정합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/각변위.png" alt="각변위" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 각변위)
+  </figcaption>
+</figure>
+
+주로 반시계 방향으로 회전하면 양수, 시계 방향으로 회전하면 음수로 둡니다.
+
+### 각속도
+
+**각속도(Angular Velocity)**는 속도와 비슷하게 각변위의 시간 미분입니다.
+
+$$
+\boldsymbol{\omega}=\frac{d\boldsymbol{theta}}{dt}
+$$
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/각속도.png" alt="각속도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 각속도)
+  </figcaption>
+</figure>
+
+평균 각속도는 한 바퀴$$(2\pi)$$와 회전 주기에 대한 비율입니다.
+주기적으로 변하며 방향성이 없는 물리량에는 스칼라로 사용할 수 있으며, 다른 말로는 **각진동수(Angular Frequency)**라고 합니다.
+
+### 각가속도
+
+각가속도는 각속도의 시간에 대한 변화율입니다.
+
+$$
+\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}
+$$
+
+### 토크
 
 **토크(Torque)**는 물체를 회전시키기 위한 힘이며, 힘(Force)와는 차원이 다른 양입니다.
 
@@ -469,16 +518,6 @@ $$
 		&\rightarrow \mathbf{N}=\mathbf{r}\times\mathbf{F}\ \ \ \text{since }\frac{d\mathbf{r}}{dt}=\mathbf{0}\ \text{(강체)},\frac{d\mathbf{p}}{dt}=\mathbf{F}
 \end{align*}
 $$
-
-### 각가속도
-
-각가속도는 각속도의 시간에 대한 변화율입니다.
-
-$$
-\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}
-$$
-
-선가속도와 비슷하게 토크를 받아 변하는 양입니다.
 
 ### 자기 모멘트
 
@@ -583,7 +622,7 @@ $$
 
 ## 부하 시스템
 
-전동기의 부하에는 그림과 같이 두 종류의 토크가 작용합니다.
+다음 전동기 시스템을 살펴봅시다.
 
 <figure style="text-align: center;">
   <img src="./PEFigure/전동기시스템.png" alt="전동기시스템" width="100%"/>
@@ -592,10 +631,12 @@ $$
   </figcaption>
 </figure>
 
+관성모멘트가 각각 $$J_M$$, $$J_L$$인 전동기와 부하가 커플링에 의해 연결되어 동일한 각속도로 회전합니다.
+이 시스템에는 그림과 같이 두 종류의 토크가 작용합니다.
 $$\mathbf{N}_M$$은 전동기 토크입니다.
 전기 에너지를 받아 부하를 회전시키기 위해 작용하는 토크입니다.
 $$\mathbf{N}_L$$은 부하 토크입니다.
-부하 토크는 중력이나 마찰력 등의 부하를 극복하여 전동기를 구동하기 위한 필요한 토크입니다.
+부하 토크는 중력이나 마찰력 등의 부하를 극복하여 전동기를 구동하기 위해 필요한 토크입니다.
 알짜 토크는 다음과 같이 기술됩니다.
 
 $$
@@ -606,4 +647,17 @@ $$\mathbf{N}_M>\mathbf{N}_L$$이면 알짜 토크가 양수이므로 각속도�
 $$\mathbf{N}_M<\mathbf{N}_L$$이면 알짜 토크가 음수이므로 각속도가 감소합니다.
 
 ### 부하 시스템의 운동 방정식
+
+총 관성 모멘트 $$J=J_M+J_L$$인 물체가 알짜 토크 $$\mathbf{N}=\mathbf{N_M}-\mathbf{N_L}$$을 받아 각가속도 $$\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}$$로 운동합니다.
+이는 다음과 같이 표현할 수 있습니다.
+
+$$
+\mathbf{N}=J\boldsymbol{\alpha}
+$$
+
+1차원 운동이므로 다음과 같이 모두 스칼라로 나타낼 수 있습니다.
+
+$$
+N=J\alpha
+$$
 
