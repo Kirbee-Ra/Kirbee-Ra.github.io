@@ -199,6 +199,24 @@ $$
 ### 자기 회로
 
 자기 회로에 대해 전기 회로에 비유하여 간단하게 설명하겠습니다.
+자기 회로는 다음과 같이 나타낼 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/magcircuit.png" alt="magcircuit" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 자기 회로)
+  </figcaption>
+</figure>
+
+철심에 권선이 감겨있고, 중간에 공극이 있습니다.
+먼저 회로에는 **기자력(Magnetomotive Force, mmf)**에 의해 에너지가 공급됩니다.
+권선에 흐르는 전류에 의해 기자력이 발생합니다.
+전기 회로에서의 기전력과 유사합니다.
+다음으로 에너지가 자속에 의해 철심을 따라 운반됩니다.
+전기 회로에서의 전류와 유사합니다.
+철심과 공극에는 자속의 흐름을 방해하는 저항 성분이 있습니다.
+이를 **자기 저항(Reluctance,$$\mathcal{R}$$)**이라고 하며, 전기 회로에서의 저항과 유사합니다.
+자기 저항은 투자율에 반비례하며, 철심보다 공극에서 더 큽니다.
 
 ### 수반 에너지
 
@@ -366,6 +384,15 @@ $$
 다음으로 이동자 대신 **회전자(Rotor)**로 동력이 전달되는 전동기를 살펴봅시다.
 회전자 또한 자기 에너지를 역학적 에너지로 변환하는 부분으로, 병진 이동자와 달리 회전 운동을 합니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터회전.png" alt="모터회전" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 회전자로 이루어진 전동기의 구조)
+  </figcaption>
+</figure>
+
+
+
 ---
 
 ## 전동기의 구조
@@ -397,7 +424,7 @@ $$
 **각변위(Angular Displacement)**는 변위와 비슷하게 처음의 각위치와 나중의 각위치의 차이를 나타냅니다.
 
 $$
-\Delta\theta=\theta_f-\theta_i
+\Delta\boldsymbol{\theta}**=\boldsymbol{\theta}_f-\boldsymbol{\theta}_i
 $$
 
 각변위의 방향은 그림과 같이 오른손 규칙에 따라 정합니다.
@@ -416,7 +443,7 @@ $$
 **각속도(Angular Velocity)**는 속도와 비슷하게 각변위의 시간 미분입니다.
 
 $$
-\boldsymbol{\omega}=\frac{d\boldsymbol{\theta}}{dt}
+\boldsymbol{\omega}=\dot{\boldsymbol{\theta}}
 $$
 
 <figure style="text-align: center;">
@@ -431,10 +458,18 @@ $$
 
 ### 각가속도
 
-각가속도는 각속도의 시간에 대한 변화율입니다.
+**각가속도(Angular Acceleration)**는 각속도의 시간에 대한 변화율입니다.
 
 $$
-\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}
+\boldsymbol{\alpha}=\dot{\boldsymbol{\omega}}
+$$
+
+### 각운동량
+
+**각운동량(Angular Momentum)**은 회전축으로부터 작용점 사이의 변위와 운동량의 외적으로 정의됩니다.
+
+$$
+\mathbf{L}=\mathbf{r}\times\mathbf{p}
 $$
 
 ### 토크
@@ -460,13 +495,24 @@ $$
 N=rF\sin\theta
 $$
 
+각운동량과는 다음의 관계에 있습니다.
+
+$$
+\begin{align*}
+		\mathbf{N}&=\mathbf{r}\times\mathbf{F}\\
+		&=\mathbf{r}\times\dot{\mathbf{p}}\\
+		&=\frac{d}{dt}\left(\mathbf{r}\times\mathbf{p}\right)\ \ \ \text{since}\ \frac{d\mathbf{r}}{dt}=\mathbf{0}\ \text{(강체)}\\
+		&=\dot{\mathbf{L}}
+\end{align*}
+$$
+
 토크 또한 뉴턴의 운동 제2법칙과 같은 형태로 표기할 수 있습니다.
 
 $$
 \mathbf{N}=J\boldsymbol{\alpha}
 $$
 
-여기서 $$\mathbf{J}$$, $$\boldsymbol{\alpha}$$는 각각 **관성 모멘트(Moment of Inertia)**, **각가속도(Angular Acceceleration)**입니다.
+여기서 $$J$$는 **관성 모멘트(Moment of Inertia)**입니다.
 
 회전자는 토크를 받아 회전합니다.
 또한 부하의 속도는 생성된 토크에 따라 달라집니다.
@@ -507,16 +553,6 @@ $$
 
 $$
 \mathbf{L}=J\boldsymbol{\omega}
-$$
-
-토크는 각운동량의 시간 미분이므로 다음과 같습니다.
-
-$$
-\begin{align*}
-		&\mathbf{L}=\mathbf{r}\times\mathbf{p}\\
-		&\mathbf{N}=\frac{d\mathbf{L}}{dt}\\
-		&\rightarrow \mathbf{N}=\mathbf{r}\times\mathbf{F}\ \ \ \text{since }\frac{d\mathbf{r}}{dt}=\mathbf{0}\ \text{(강체)},\frac{d\mathbf{p}}{dt}=\mathbf{F}
-\end{align*}
 $$
 
 ### 회전 운동 에너지
@@ -571,6 +607,10 @@ N=iAB\sin\theta
 $$
 
 따라서 $$\theta=90^{\circ}$$일 때, 토크의 크기가 최대가 되는 것을 알 수 있습니다.
+
+### 토크와 일률
+
+
 
 ---
 
