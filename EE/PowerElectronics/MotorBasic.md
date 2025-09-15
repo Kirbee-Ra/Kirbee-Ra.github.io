@@ -418,6 +418,25 @@ $$
 ## 회전 운동
 
 주로 회전 운동을 하는 시스템에 대해 다룰 예정이므로, 회전 운동에 대해 설명하겠습니다.
+더 자세한 회전 운동은 고전역학에서 다룹니다.
+
+### 강체
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/강체.png" alt="강체" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 강체)
+  </figcaption>
+</figure>
+
+**강체(Rigid Body)**는 입자계로 이루어진 물체로, 변형이 일어나지 않는 이상적인 물체입니다.
+기준점으로부터 임의의 입자까지의 위치를 $$\mathbf{r}_k$$라고 하면 다음이 성립합니다.
+
+$$
+d\mathbf{r}_k=0
+$$
+
+앞으로 다룰 물체들은 모두 강체라고 가정합니다.
 
 ### 각변위
 
@@ -437,6 +456,13 @@ $$
 </figure>
 
 주로 반시계 방향으로 회전하면 양수, 시계 방향으로 회전하면 음수로 둡니다.
+선변위(Linear Displacement)와는 다음의 관계에 있습니다.
+
+$$
+\Delta\mathbf{x}=\Delta\boldsymbol{\theta}\times\mathbf{r}
+$$
+
+여기서 $$\mathbf{r}$$은 회전축으로부터 작용점 사이의 변위입니다.
 
 ### 각속도
 
@@ -453,8 +479,15 @@ $$
   </figcaption>
 </figure>
 
-평균 각속도는 한 바퀴$$(2\pi)$$와 회전 주기에 대한 비율입니다.
+평균 각속도는 한 바퀴$$(2\pi)$$와 회전 주기의 비율입니다.
 주기적으로 변하며 방향성이 없는 물리량에는 스칼라로 사용할 수 있으며, 다른 말로는 **각진동수(Angular Frequency)**라고 합니다.
+선속도와는 다음의 관계에 있습니다.
+
+$$
+\mathbf{v}=\boldsymbol{\omega}\times\mathbf{r}
+$$
+
+선변위를 시간에 대해 미분하면 됩니다.
 
 ### 각가속도
 
@@ -463,6 +496,14 @@ $$
 $$
 \boldsymbol{\alpha}=\dot{\boldsymbol{\omega}}
 $$
+
+선가속도와는 다음의 관계에 있습니다.
+
+$$
+\mathbf{a}=\boldsymbol{\alpha}\times\mathbf{r}
+$$
+
+선속도를 시간에 대해 미분하면 됩니다.
 
 ### 각운동량
 
@@ -506,6 +547,12 @@ $$
 \end{align*}
 $$
 
+회전자는 토크를 받아 회전합니다.
+또한 부하의 속도는 생성된 토크에 따라 달라집니다.
+부하의 위치, 유량, 압력, 장력 등이 제어됩니다.
+
+### 관성 모멘트
+
 토크 또한 뉴턴의 운동 제2법칙과 같은 형태로 표기할 수 있습니다.
 
 $$
@@ -513,12 +560,6 @@ $$
 $$
 
 여기서 $$J$$는 **관성 모멘트(Moment of Inertia)**입니다.
-
-회전자는 토크를 받아 회전합니다.
-또한 부하의 속도는 생성된 토크에 따라 달라집니다.
-부하의 위치, 유량, 압력, 장력 등이 제어됩니다.
-
-### 관성 모멘트
 
 관성 모멘트는 회전 운동을 하는 물체가 운동 상태를 유지하려는 성질이며, **회전 관성(Inertial Moment)**이라고도 부릅니다.
 다음과 같이 정의됩니다.
@@ -558,7 +599,56 @@ $$
 ### 회전 운동 에너지
 
 회전하는 물체 또한 운동 에너지를 갖습니다.
-관성 모멘트를 이용하며 다음과 같이 나타낼 수 있습니다.
+먼저 힘이 물체에 한 일은 다음과 같습니다.
+
+$$
+W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\mathbf{F}\cdot d\mathbf{x}
+$$
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/미소각변위.png" alt="미소각변위" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 미소 변위와 미소 각변위)
+  </figcaption>
+</figure>
+
+미소 변위와 미소 각변위의 관계는 다음과 같습니다.
+
+$$
+d\mathbf{x}=d\boldsymbol{\theta}\times\mathbf{r}
+$$
+
+이를 대입하면 다음과 같습니다.
+
+$$
+W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\mathbf{F}\cdot d\boldsymbol{\theta}\times\mathbf{r}
+$$
+
+피적분 함수는 스칼라 삼중곱에 의해 다음과 같이 쓸 수 있습니다.
+
+$$
+\mathbf{F}\cdot d\boldsymbol{\theta}\times\mathbf{r}=\mathbf{r}\times\mathbf{F}\cdot d\boldsymbol{\theta}
+$$
+
+이를 대입하면 다음과 같습니다.
+
+$$
+W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\mathbf{r}\times\mathbf{F}\cdot d\boldsymbol{\theta}
+$$
+
+토크를 이용하여 표현하면 다음과 같습니다.
+
+$$
+W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\mathbf{N}\cdot d\boldsymbol{\theta}
+$$
+
+계산 결과는 다음과 같습니다.
+
+$$
+W=K=\frac{1}{2}mv^2
+$$
+
+이는 선속도와 각속도의 관계 및 관성 모멘트를 이용하며 다음과 같이 나타낼 수 있습니다.
 
 $$
 K=\frac{1}{2}J\omega^2
@@ -607,10 +697,6 @@ N=iAB\sin\theta
 $$
 
 따라서 $$\theta=90^{\circ}$$일 때, 토크의 크기가 최대가 되는 것을 알 수 있습니다.
-
-### 토크와 일률
-
-
 
 ---
 
@@ -736,5 +822,3 @@ $$
 $$
 N_{net}=N_M-N_L-N_F
 $$
-
- jifjeswoif'jsdoifjdsoifjdsoihgjiodshgdosiJFIOAEFJAOPSFJSDAOPIFJ
