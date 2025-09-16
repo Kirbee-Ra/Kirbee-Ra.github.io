@@ -443,7 +443,7 @@ $$
 **각변위(Angular Displacement)**는 변위와 비슷하게 처음의 각위치와 나중의 각위치의 차이를 나타냅니다.
 
 $$
-\Delta\boldsymbol{\theta}**=\boldsymbol{\theta}_f-\boldsymbol{\theta}_i
+\Delta\boldsymbol{\theta}=\boldsymbol{\theta}_f-\boldsymbol{\theta}_i
 $$
 
 각변위의 방향은 그림과 같이 오른손 규칙에 따라 정합니다.
@@ -645,13 +645,13 @@ $$
 계산 결과는 다음과 같습니다.
 
 $$
-W=K=\frac{1}{2}mv^2
+W=T=\frac{1}{2}mv^2
 $$
 
 이는 선속도와 각속도의 관계 및 관성 모멘트를 이용하며 다음과 같이 나타낼 수 있습니다.
 
 $$
-K=\frac{1}{2}J\omega^2
+T=\frac{1}{2}J\omega^2
 $$
 
 ### 자기 모멘트
@@ -717,6 +717,7 @@ $$
 하지만 반 바퀴 회전을 하면 코일에 흐르는 전류의 방향이 바뀌기 때문에 자기력을 반대 방향으로 받습니다.
 따라서 전류의 방향을 유지하기 위해 **브러시(Brush)**와 **정류자(Commutator)**를 이용합니다.
 정류자를 살펴보면 끊긴 부분이 있습니다.
+권선이 회전하면서 끊긴 부분을 지날 때마다 전류의 방향이 유지되도록 해줍니다.
 
 ---
 
@@ -733,8 +734,7 @@ $$
 </figure>
 
 직류 전동기와는 달리 고정자 자석과 회전자 자석이 모두 회전하는 구조입니다.
-두 자석 사이의 각이 일정하다면, 일정한 토크가 지속적으로 발생합니다.
-따라서 회전자가 계속 회전할 수 있습니다.
+두 자석이 동일한 각속도로 회전해야 일정한 토크를 얻을 수 있습니다.
 
 고정자 자석의 회전은 평형 3상 전력을 공급하여 구현할 수 있습니다.
 다음 그림을 살펴봅시다.
@@ -751,7 +751,25 @@ $$
 
 ### 동기 전동기
 
+**동기 전동기(Synchronous Motor)**는 회전자의 속도와 고정자 자석의 속도가 동일한 전동기입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/동기전동기.png" alt="동기전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 동기 전동기)
+  </figcaption>
+</figure>
+
 ### 유도 전동기
+
+**유도 전동기(Induction Motor)**는 회전자의 속도와 회전자 자석의 속도의 합이 고정자 자석의 속도와 동일한 전동기입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/유도전동기.png" alt="유도전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 유도 전동기)
+  </figcaption>
+</figure>
 
 ---
 
@@ -814,7 +832,7 @@ $$
 </figure>
 
 $$
--T_F=B\omega
+-N_F=b\omega
 $$
 
 이때 알짜 토크는 다음과 같습니다.
@@ -822,3 +840,21 @@ $$
 $$
 N_{net}=N_M-N_L-N_F
 $$
+
+전동기 토크는 다음과 같이 나타낼 수 있습니다.
+
+$$
+N_M=J\alpha+B\omega+N_L
+$$
+
+### 기어/벨트 시스템
+
+그림과 같이 전동기와 부하가 기어 또는 벨트에 의해 결합된 상황을 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/기어벨트전동기시스템.png" alt="기어벨트전동기시스템" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 기어/벨트로 결합된 전동기 시스템)
+  </figcaption>
+</figure>
+
