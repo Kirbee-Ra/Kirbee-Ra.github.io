@@ -832,19 +832,19 @@ $$
 </figure>
 
 $$
--N_F=b\omega
+N_F=-b\omega
 $$
 
 이때 알짜 토크는 다음과 같습니다.
 
 $$
-N_{net}=N_M-N_L-N_F
+N_{net}=N_M-N_L+N_F
 $$
 
 전동기 토크는 다음과 같이 나타낼 수 있습니다.
 
 $$
-N_M=I\alpha+B\omega+N_L
+N_M=I\alpha+b\omega+N_L
 $$
 
 ### 기어/벨트 시스템
@@ -858,3 +858,11 @@ $$
   </figcaption>
 </figure>
 
+먼저 부하에 대해 생각해봅시다.
+부하에 연결된 기어가 각속도 $$\omega_L$$로 회전하면 부하 또한 동일한 각속도로 회전합니다.
+부하에 작용하는 마찰력에 의한 토크가 $$N_F=-b_L\omega_L$$이면 부하에 작용하는 알짜 토크는 다음과 같습니다.
+
+$$
+
+N_M'=I_L\alpha_L+b_L\omega_L
+$$
