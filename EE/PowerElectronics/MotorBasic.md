@@ -556,10 +556,10 @@ $$
 토크 또한 뉴턴의 운동 제2법칙과 같은 형태로 표기할 수 있습니다.
 
 $$
-\mathbf{N}=J\boldsymbol{\alpha}
+\mathbf{N}=I\boldsymbol{\alpha}
 $$
 
-여기서 $$J$$는 **관성 모멘트(Moment of Inertia)**입니다.
+여기서 $$I$$는 **관성 모멘트(Moment of Inertia)**입니다.
 
 관성 모멘트는 회전 운동을 하는 물체가 운동 상태를 유지하려는 성질이며, **회전 관성(Inertial Moment)**이라고도 부릅니다.
 다음과 같이 정의됩니다.
@@ -572,7 +572,7 @@ $$
 </figure>
 
 $$
-J=\int r^2dm
+I=\int r^2dm
 $$
 
 일반적으로 물체는 회전축이 바뀌면서 회전할 수 있습니다.
@@ -586,14 +586,14 @@ $$
 </figure>
 
 $$
-\mathbf{L}=\mathbf{J}\boldsymbol{\omega}
+\mathbf{L}=\mathbf{I}\boldsymbol{\omega}
 $$
 
 이때는 관성 모멘트가 아닌 **관성 텐서(Inertia Tensor)**로서 $$3\times 3$$ 행렬로 기술됩니다.
 하지만 전동기의 경우, 각운동량과 각속도가 평행이므로 스칼라로 취급할 수 있습니다.
 
 $$
-\mathbf{L}=J\boldsymbol{\omega}
+\mathbf{L}=I\boldsymbol{\omega}
 $$
 
 ### 회전 운동 에너지
@@ -651,7 +651,7 @@ $$
 이는 선속도와 각속도의 관계 및 관성 모멘트를 이용하며 다음과 같이 나타낼 수 있습니다.
 
 $$
-T=\frac{1}{2}J\omega^2
+T=\frac{1}{2}I\omega^2
 $$
 
 ### 자기 모멘트
@@ -784,7 +784,7 @@ $$
   </figcaption>
 </figure>
 
-관성모멘트가 각각 $$J_M$$, $$J_L$$인 전동기와 부하가 커플링에 의해 연결되어 동일한 각속도로 회전합니다.
+관성모멘트가 각각 $$I_M$$, $$I_L$$인 전동기와 부하가 커플링에 의해 연결되어 동일한 각속도로 회전합니다.
 이 시스템에는 그림과 같이 두 종류의 토크가 작용합니다.
 $$\mathbf{N}_M$$은 전동기 토크입니다.
 전기 에너지를 받아 부하를 회전시키기 위해 작용하는 토크입니다.
@@ -801,23 +801,23 @@ $$\mathbf{N}_M<\mathbf{N}_L$$이면 알짜 토크가 음수이므로 각속도�
 
 ### 부하 시스템의 운동 방정식
 
-총 관성 모멘트 $$J=J_M+J_L$$인 물체가 알짜 토크 $$\mathbf{N}=\mathbf{N_M}-\mathbf{N_L}$$을 받아 각가속도 $$\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}$$로 운동합니다.
+총 관성 모멘트 $$I=I_M+I_L$$인 물체가 알짜 토크 $$\mathbf{N}=\mathbf{N_M}-\mathbf{N_L}$$을 받아 각가속도 $$\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}$$로 운동합니다.
 이는 다음과 같이 표현할 수 있습니다.
 
 $$
-\mathbf{N}=J\boldsymbol{\alpha}
+\mathbf{N}=I\boldsymbol{\alpha}
 $$
 
 1차원 운동이므로 다음과 같이 모두 스칼라로 나타낼 수 있습니다.
 
 $$
-N=J\alpha
+N=I\alpha
 $$
 
 전동기 토크는 다음과 같이 나타낼 수 있습니다.
 
 $$
-N_M=J\alpha+N_L
+N_M=I\alpha+N_L
 $$
 
 ### 마찰을 고려한 운동 방정식
@@ -844,7 +844,7 @@ $$
 전동기 토크는 다음과 같이 나타낼 수 있습니다.
 
 $$
-N_M=J\alpha+B\omega+N_L
+N_M=I\alpha+B\omega+N_L
 $$
 
 ### 기어/벨트 시스템
