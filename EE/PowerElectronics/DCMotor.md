@@ -23,7 +23,8 @@
 </figure>
 
 **고정자(Stator)**는 전동기 내에서 고정된 부분입니다.
-고정자에는 **계자 권선(Field Winding)**이 감겨 있습니다.
+고정자에는 **계자(Field Magnet)**가 연결되어 자기장을 형성합니다.
+영구자석보다는 **계자 권선(Field Winding)**을 감아서 전자석의 형태로 자기장을 형성합니다.
 이 계자 권선에 전류를 흘려서 외부 자기장을 형성합니다.
 형성된 자기장의 자속을 **계자 자속(Field Flux)**라고 하며, 보통 일정하게 유지합니다.
 고정자에서는 전기 에너지가 자기 에너지로 전환됩니다.
@@ -78,7 +79,7 @@
 <figure style="text-align: center;">
   <img src="./PEFigure/자기장도선.png" alt="자기장도선" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 자기장도선)
+    (그림. 자기장내에서 운동하는 도선)
   </figcaption>
 </figure>
 
@@ -97,7 +98,7 @@ $$
   </figcaption>
 </figure>
 
-도선에 유도된 기전력은 이전과 같습니다.
+고리에 유도된 기전력은 이전과 같습니다.
 
 $$
 \mathcal{E}=Blv
@@ -135,4 +136,73 @@ $$
 \mathcal{E}=K_e\omega_m\ \ \ \text{where }K_e=k_e\Phi_f
 $$
 
+새로운 기전력 상수 $$K_T$$는 단위가 $$text{V/(rad/s)}$$입니다.
 이 기전력을 역기전력이라고 하며, 전기자 단자 전압과 반대 극성으로 유도되었기 때문에 반대를 의미하는 '역'이 붙습니다.
+
+### 토크
+
+그림과 같이 자속 밀도 $$B$$인 균일한 자기장 내에 있는 길이가 $$l$$인 도선에 전류 $$i$$를 흘린다고 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/자기장도선2.png" alt="자기장도선2" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 자기장 내에서 전류가 흐르는 도선)
+  </figcaption>
+</figure>
+
+이때 도선이 받는 자기력은 다음과 같습니다.
+
+$$
+F=Bil
+$$
+
+이제 다음과 같이 세로 길이가 $$l$$인 직사각형의 전류 $$i_a$$가 흐르는 고리가 균일한 자속 밀도 $$B$$의 자기장 내에 있다고 해봅시다.
+
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/자기장고리2.png" alt="자기장고리2" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 자기장내에서 전류가 흐르는 고리)
+  </figcaption>
+</figure>
+
+고리가 받는 자기력은 이전과 같습니다.
+
+$$
+F=Bi_al
+$$
+
+회전축으로부터 고리의 끝 부분까지의 길이를 $$r$$이라고 하면, 고리에 작용하는 토크는 다음과 같습니다.
+
+$$
+T=rBi_al
+$$
+
+자속 밀도는 다음과 같이 계자 자속 $$\Phi_f$$와 도선의 단면적 $$A$$를 이용하여 나타낼 수 있습니다.
+
+$$
+B=\frac{\Phi_f}{A}
+$$
+
+자기력에 의한 토크는 다음과 같습니다.
+
+$$
+T=\frac{r\Phi_fi_al}{A}
+$$
+
+$$A$$와 $$lr$$은 차원이 같으므로 $$\frac{lr}{A}$$을 상수 $$k_T$$으로 나타낼 수 있습니다.
+
+$$
+T=k_T\Phi_fi_a
+$$
+
+상수 $$k_T$$는 토크 상수로 단위는 $$\text{N}\cdot\text{m/Wb/A}$$입니다.
+일반적으로 계자 자속은 일정합니다.
+따라서 토크를 다음과 같이 나타낼 수 있습니다.
+
+$$
+T=K_Ti_a\ \ \ \text{where }K_T=k_T\Phi_f
+$$
+
+새로운 토크 상수 $$K_T$는 단위가 $$\text{N}\cdot\text{m/A}$$입니다.
+MKS 단위계에서는 기전력 상수와 토크 상수가 동일합니다.
