@@ -11,7 +11,12 @@
 
 DC-DC 전력 변환 장치의 구조는 다음과 같습니다.
 
-(dcdc)
+<figure style="text-align: center;">
+  <img src="./PEFigure/컨버터.png" alt="컨버터" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. DC-DC 전력 변환 장치의 구조)
+  </figcaption>
+</figure>
 
 입력을 받아서 전압 레벨을 변환한 뒤, 부하로 출력합니다.
 여기서 전압 레벨을 변환하는 부분을 **파워 스테이지(Power Stage)**라고 합니다.
@@ -30,19 +35,34 @@ DC-DC 전력 변환 장치의 구조는 다음과 같습니다.
 파워 스테이지에서 전력 변환을 어떻게 수행하는지 알아봅시다.
 기본적으로 다음과 같은 스위칭 파워-폴로 구성됩니다.
 
-(spp)
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위칭파워폴.png" alt="스위칭파워폴" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 스위칭 파워-폴)
+  </figcaption>
+</figure>
 
 이는 컨버터의 종류에 따라 구조가 조금씩 다르지만 전력 변환 원리는 동일합니다.
 트랜지스터를 구동하면 전력이 전달되고, 끄면 전달되지 않습니다.
 다이오드 양단의 전압은 다음과 같이 나타납니다.
 
-(va)
+<figure style="text-align: center;">
+  <img src="./PEFigure/다이오드전압.png" alt="다이오드전압" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 다이오드 양단의 전압 파형)
+  </figcaption>
+</figure>
 
 이런 펄스 트레인 전압을 그대로 부하로 전달할 수 없습니다.
 일정한 전압을 출력하는 것이 목표이기 때문입니다.
 따라서 고주파 성분 및 노이즈를 거르기 위해 저역 필터를 추가로 달아줍니다.
 
-(lc)
+<figure style="text-align: center;">
+  <img src="./PEFigure/lpf전압.png" alt="lpf전압" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 저주파 필터를 거친 전압 파형)
+  </figcaption>
+</figure>
 
 필터를 통과한 전압은 거의 일정한 레벨로 출력됩니다.
 전압 레벨은 스위치의 구동 시간과 관련되어 있습니다.
