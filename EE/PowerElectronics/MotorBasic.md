@@ -488,6 +488,12 @@ $$
 
 평균 각속도는 한 바퀴$$(2\pi)$$와 회전 주기의 비율입니다.
 주기적으로 변하며 방향성이 없는 물리량에는 스칼라로 사용할 수 있으며, 다른 말로는 **각진동수(Angular Frequency)**라고 합니다.
+이때는 주기 $$T$$를 이용하여 다음과 같이 나타낼 수 있습니다.
+
+$$
+\omega=\frac{2\pi}{T}
+$$
+
 선속도와는 다음의 관계에 있습니다.
 
 $$
@@ -532,7 +538,7 @@ $$
 </figure>
 
 $$
-\mathbf{N}=\mathbf{r}\times\mathbf{F}
+\boldsymbol{\tau}=\mathbf{r}\times\mathbf{F}
 $$
 
 여기서 $$\mathbf{r}$$는 회전축으로부터 작용점 사이의 변위이고, $$\mathbf{F}$$는 작용하는 힘입니다.
@@ -540,14 +546,14 @@ $$
 변위와 힘 사이의 각도를 $$\theta$$라고 하면, 토크의 크기는 다음과 같습니다.
 
 $$
-N=rF\sin\theta
+\tau=rF\sin\theta
 $$
 
 각운동량과는 다음의 관계에 있습니다.
 
 $$
 \begin{align*}
-		\mathbf{N}&=\mathbf{r}\times\mathbf{F}\\
+		\boldsymbol{\tau}&=\mathbf{r}\times\mathbf{F}\\
 		&=\mathbf{r}\times\dot{\mathbf{p}}\\
 		&=\frac{d}{dt}\left(\mathbf{r}\times\mathbf{p}\right)\ \ \ \text{since}\ \frac{d\mathbf{r}}{dt}=\mathbf{0}\ \text{(강체)}\\
 		&=\dot{\mathbf{L}}
@@ -563,7 +569,7 @@ $$
 토크 또한 뉴턴의 운동 제2법칙과 같은 형태로 표기할 수 있습니다.
 
 $$
-\mathbf{N}=I\boldsymbol{\alpha}
+\boldsymbol{\tau}=I\boldsymbol{\alpha}
 $$
 
 여기서 $$I$$는 **관성 모멘트(Moment of Inertia)**입니다.
@@ -646,10 +652,10 @@ $$
 토크를 이용하여 표현하면 다음과 같습니다.
 
 $$
-W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\mathbf{N}\cdot d\boldsymbol{\theta}
+W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\boldsymbol{\tau}\cdot d\boldsymbol{\theta}
 $$
 
-계산 결과는 다음과 같습니다.
+운동 에너지 $$T$$는 다음과 같습니다.
 
 $$
 W=T=\frac{1}{2}mv^2
@@ -676,7 +682,7 @@ $$
 이 상황에서는 다음과 같이 쓸 수 있습니다.
 
 $$
-\mathbf{m}=iA\hat{\mathbf{n}}
+\mathbf{m}=iA\hat{\boldsymbol{\tau}}
 $$
 
 ### 자기력에 의한 토크
@@ -694,13 +700,13 @@ $$
 이때 토크는 다음과 같습니다.
 
 $$
-\mathbf{N}=\mathbf{m}\times\mathbf{B}
+\boldsymbol{\tau}=\mathbf{m}\times\mathbf{B}
 $$
 
 자기력과 법선 벡터 사이의 각을 $$\theta$$라고 한다면, 토크의 크기는 다음과 같습니다.
 
 $$
-N=iAB\sin\theta
+\tau=iAB\sin\theta
 $$
 
 따라서 $$\theta=90^{\circ}$$일 때, 토크의 크기가 최대가 되는 것을 알 수 있습니다.
@@ -793,38 +799,38 @@ $$
 
 관성모멘트가 각각 $$I_M$$, $$I_L$$인 전동기와 부하가 커플링에 의해 연결되어 동일한 각속도로 회전합니다.
 이 시스템에는 그림과 같이 두 종류의 토크가 작용합니다.
-$$\mathbf{N}_M$$은 전동기 토크입니다.
+$$\boldsymbol{\tau}_M$$은 전동기 토크입니다.
 전기 에너지를 받아 부하를 회전시키기 위해 작용하는 토크입니다.
-$$\mathbf{N}_L$$은 부하 토크입니다.
+$$\boldsymbol{\tau}_L$$은 부하 토크입니다.
 부하 토크는 중력이나 마찰력 등의 부하를 극복하여 전동기를 구동하기 위해 필요한 토크입니다.
 알짜 토크는 다음과 같이 기술됩니다.
 
 $$
-\mathbf{N}_{net}=\mathbf{N}_M-\mathbf{N}_L
+\boldsymbol{\tau}_{net}=\boldsymbol{\tau}_M-\boldsymbol{\tau}_L
 $$
 
-$$\mathbf{N}_M>\mathbf{N}_L$$이면 알짜 토크가 양수이므로 각속도가 증가합니다.
-$$\mathbf{N}_M<\mathbf{N}_L$$이면 알짜 토크가 음수이므로 각속도가 감소합니다.
+$$\boldsymbol{\tau}_M>\boldsymbol{\tau}_L$$이면 알짜 토크가 양수이므로 각속도가 증가합니다.
+$$\boldsymbol{\tau}_M<\boldsymbol{\tau}_L$$이면 알짜 토크가 음수이므로 각속도가 감소합니다.
 
 ### 부하 시스템의 운동 방정식
 
-총 관성 모멘트 $$I=I_M+I_L$$인 물체가 알짜 토크 $$\mathbf{N}=\mathbf{N_M}-\mathbf{N_L}$$을 받아 각가속도 $$\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}$$로 운동합니다.
+총 관성 모멘트 $$I=I_M+I_L$$인 물체가 알짜 토크 $$\boldsymbol{\tau}=\boldsymbol{\tau}_M-\boldsymbol{\tau}_L$$을 받아 각가속도 $$\boldsymbol{\alpha}=\frac{d\boldsymbol{\omega}}{dt}$$로 운동합니다.
 이는 다음과 같이 표현할 수 있습니다.
 
 $$
-\mathbf{N}=I\boldsymbol{\alpha}
+\boldsymbol{\tau}=I\boldsymbol{\alpha}
 $$
 
 1차원 운동이므로 다음과 같이 모두 스칼라로 나타낼 수 있습니다.
 
 $$
-N=I\alpha
+\tau=I\alpha
 $$
 
 전동기 토크는 다음과 같이 나타낼 수 있습니다.
 
 $$
-N_M=I\alpha+N_L
+\tau_M=I\alpha+\tau_L
 $$
 
 ### 마찰을 고려한 운동 방정식
@@ -839,19 +845,19 @@ $$
 </figure>
 
 $$
-N_F=-b\omega
+\tau_F=-b\omega
 $$
 
 이때 알짜 토크는 다음과 같습니다.
 
 $$
-N_{net}=N_M-N_L+N_F
+\tau_{net}=\tau_M-\tau_L+\tau_F
 $$
 
 전동기 토크는 다음과 같이 나타낼 수 있습니다.
 
 $$
-N_M=I\alpha+b\omega+N_L
+\tau_M=I\alpha+b\omega+N_L
 $$
 
 ### 기어/벨트 시스템
@@ -867,9 +873,9 @@ $$
 
 먼저 부하에 대해 생각해봅시다.
 부하에 연결된 기어가 각속도 $$\omega_L$$로 회전하면 부하 또한 동일한 각속도로 회전합니다.
-부하에 작용하는 마찰력에 의한 토크가 $$N_F=-b_L\omega_L$$이면 부하에 작용하는 알짜 토크는 다음과 같습니다.
+부하에 작용하는 마찰력에 의한 토크가 $$\tau_F=-b_L\omega_L$$이면 부하에 작용하는 알짜 토크는 다음과 같습니다.
 
 $$
 
-N_M'=I_L\alpha_L+b_L\omega_L
+\tau_M'=I_L\alpha_L+b_L\omega_L
 $$
