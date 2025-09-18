@@ -857,7 +857,7 @@ $$
 전동기 토크는 다음과 같이 나타낼 수 있습니다.
 
 $$
-\tau_M=I\alpha+b\omega+N_L
+\tau_M=I\alpha+b\omega+\tau_L
 $$
 
 ### 기어/벨트 시스템
