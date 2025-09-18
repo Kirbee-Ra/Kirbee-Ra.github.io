@@ -122,7 +122,7 @@ $$
 \mathcal{E}=\frac{\Phi_f lr\omega_m}{A}
 $$
 
-$$A$$와 $$lr$$은 차원이 같으므로 $$\frac{lr}{A}$$을 상수 $$k_e$$로 나타낼 수 있습니다.
+$$A$$와 $$lr$$은 차원이 같으므로 $$\displaystyle\frac{lr}{A}$$을 상수 $$k_e$$로 나타낼 수 있습니다.
 
 $$
 \mathcal{E}=k_e\Phi_f\omega_m
@@ -136,7 +136,7 @@ $$
 \mathcal{E}=K_e\omega_m\ \ \ \text{where }K_e=k_e\Phi_f
 $$
 
-새로운 기전력 상수 $$K_T$$는 단위가 $$text{V/(rad/s)}$$입니다.
+새로운 기전력 상수 $$K_T$$는 단위가 $$\text{V/(rad/s)}$$입니다.
 이 기전력을 역기전력이라고 하며, 전기자 단자 전압과 반대 극성으로 유도되었기 때문에 반대를 의미하는 '역'이 붙습니다.
 
 ### 토크
@@ -190,7 +190,7 @@ $$
 T=\frac{r\Phi_fi_al}{A}
 $$
 
-$$A$$와 $$lr$$은 차원이 같으므로 $$\frac{lr}{A}$$을 상수 $$k_T$$으로 나타낼 수 있습니다.
+$$A$$와 $$lr$$은 차원이 같으므로 $$\displaystyle\frac{lr}{A}$$을 상수 $$k_T$$으로 나타낼 수 있습니다.
 
 $$
 T=k_T\Phi_fi_a
@@ -204,5 +204,5 @@ $$
 T=K_Ti_a\ \ \ \text{where }K_T=k_T\Phi_f
 $$
 
-새로운 토크 상수 $$K_T$는 단위가 $$\text{N}\cdot\text{m/A}$$입니다.
+새로운 토크 상수 $$K_T$$는 단위가 $$\text{N}\cdot\text{m/A}$$입니다.
 MKS 단위계에서는 기전력 상수와 토크 상수가 동일합니다.
