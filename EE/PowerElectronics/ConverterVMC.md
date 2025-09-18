@@ -25,7 +25,12 @@
 **전압 모드 제어(Voltage Mode Control, VMC)**는 출력 전압의 정보를 바탕으로 피드백을 하여 출력 전압을 제어하는 기법입니다.
 전압 모드 제어에 활용되는 회로는 다음과 같은 형태입니다.
 
-(VMC)
+<figure style="text-align: center;">
+  <img src="./PEFigure/VMC기본.png" alt="VMC기본" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 컨버터의 전압 모드 제어 회로로)
+  </figcaption>
+</figure>
 
 이와 같이 출력 전압이 전압 분배기에 입력됩니다.
 그리고 기준 전압과 비교하여 출력된 제어 전압이 PWM 비교기에 입력됩니다.
@@ -92,22 +97,42 @@ $$
 
 먼저 $$20\log\left\vert G(j\omega)\right\vert$$와 $$20\log\left\vert T(j\omega)\right\vert$$를 그립니다.
 
-(G, T)
+<figure style="text-align: center;">
+  <img src="./PEFigure/AA1.png" alt="AA1" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 개루프 전달 함수와 루프 이득)
+  </figcaption>
+</figure>
 
 다음으로 $$20\log\left\vert F(j\omega)\right\vert$$를 고주파 대역부터 그려야 합니다.
 교차 주파수 이상의 대역에서는 $$\left\vert T(j\omega)\right\vert$$가 $$1$$에 비해 매우 작아서 분모를 $$1$$로 근사합니다.
 따라서 $$20\log\left\vert G(j\omega)\right\vert$$와 동일합니다.
 
-(F G)
+<figure style="text-align: center;">
+  <img src="./PEFigure/AA2.png" alt="AA2" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 고주파 대역에서의 폐루프 전달 함수)
+  </figcaption>
+</figure>
 
 교차 주파수에서는 $$20\log\left\vert F(j\omega)\right\vert$$와 $$20\log\left\vert G(j\omega)\right\vert$$가 만납니다.
 
-(F G intersect)
+<figure style="text-align: center;">
+  <img src="./PEFigure/AA3.png" alt="AA3" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 폐루프 전달 함수와 개루프 전달 함수의 교점)
+  </figcaption>
+</figure>
 
 교차 주파수 이하의 대역에서는 $$\left\vert T(j\omega)\right\vert$$가 $$1$$에 비해 매우 커서 분모를 $$T(s)$$로 근사합니다.
 따라서 $$20\log\left\vert G(j\omega)\right\vert$$애서 $$20\log\left\vert T(j\omega)\right\vert$$를 뺀 그래프를 그리면 됩니다.
 
-(G-T)
+<figure style="text-align: center;">
+  <img src="./PEFigure/AA4.png" alt="AA4" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 폐루프 전달 함수)
+  </figcaption>
+</figure>
 
 ### 전달 함수 구하기
 
@@ -130,7 +155,12 @@ $$
 먼저 교차 주파수 이후로는 개루프 전달 함수를 따라 그리면 됩니다.
 이제 주파수를 줄여가며 표시해둔 지점마다 기울기의 차이를 구하여 저주파 대역까지 그리면 됩니다.
 
-(G-T)
+<figure style="text-align: center;">
+  <img src="./PEFigure/AA5.png" alt="AA5" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 폐루프 전달 함수)
+  </figcaption>
+</figure>
 
 마지막으로 적분 이득 $$K$$를 구하면 됩니다.
 $$K$$는 저주파 대역, 고주파 대역, 교차 주파수 등의 정보를 활용하여 구하면 됩니다.
