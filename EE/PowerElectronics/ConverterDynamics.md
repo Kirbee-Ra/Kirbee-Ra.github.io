@@ -38,7 +38,12 @@
 
 다음 컨버터의 블록 다이어그램을 살펴봅시다.
 
-(BD)
+<figure style="text-align: center;">
+  <img src="./PEFigure/컨버터bd.png" alt="컨버터bd" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 컨버터의 블록 다이어그램)
+  </figcaption>
+</figure>
 
 이 시스템에서 설계해야 하는 부분이 어디인지 살펴봅시다.
 먼저 파워 스테이지를 설계했다면, 개루프 전달 함수는 수정할 수 없습니다.
@@ -51,7 +56,12 @@ PWM 블록의 경우, 기준 신호의 최댓값에만 의존합니다.
 
 ### 루프 이득
 
-(BD)
+<figure style="text-align: center;">
+  <img src="./PEFigure/컨버터bd.png" alt="컨버터bd" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 컨버터의 블록 다이어그램)
+  </figcaption>
+</figure>
 
 블록 다이어그램을 살펴보면 루프 이득은 다음과 같음을 알 수 있습니다.
 
@@ -117,7 +127,12 @@ $$
 실제로 많은 상황에서 부하가 급격하게 변동하는 경우가 있습니다.
 다음과 같이 순간적으로 부하가 줄어드는 경우를 생각해봅시다.
 
-(step load)
+<figure style="text-align: center;">
+  <img src="./PEFigure/계단부하.png" alt="계단부하" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계단 함수 형태의 부하 변동)
+  </figcaption>
+</figure>
 
 이때, 순간적으로 출력 전압에 오버슛이 발생합니다.
 정상 상태에서 일정한 전력이 출력되는 상황을 생각해봅시다.
@@ -167,7 +182,12 @@ $$
 
 다음과 같이 순간적으로 입력이 줄어드는 경우를 생각해봅시다.
 
-(in step)
+<figure style="text-align: center;">
+  <img src="./PEFigure/계단입력.png" alt="계단입력" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계단 함수 형태의 입력 변동)
+  </figcaption>
+</figure>
 
 이때, 순간적으로 출력 전압에 언더슛이 발생합니다.
 입력 전압이 줄어들면, 출력단으로 전달되는 전력이 줄어듭니다.
@@ -236,7 +256,7 @@ LTI 시스템은 모든 극점이 좌반면에 위치할 때만 안정합니다.
 소신호 모델로부터 정의된 안정도를 **국소 안정도(Local Stability)** 혹은 **소신호 안정도(Small-Signal Stability)**라고 합니다.
 국소적인 이유는 소신호 모델 자체가 동작점 근처에서만 성립하는 근사이기 때문입니다.
 
-### [나이퀴스트 안정도 판별]
+### 나이퀴스트 안정도 판별
 
 어떤 전달 함수가 우반면에 극점을 가진다고 해봅시다.
 그 극점을 둘러싸는 경로를 전달 함수의 복소 평면에 사상하면 원점을 둘러싸는 경로를 얻을 수 있습니다.
@@ -315,7 +335,12 @@ $$
 
 또한 보드 선도에서는 다음과 같이 나타납니다.
 
-(BP)
+<figure style="text-align: center;">
+  <img src="./PEFigure/보드gm.png" alt="보드gm" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 보드 선도에서의 이득 여유유)
+  </figcaption>
+</figure>
 
 ### 위상 여유
 
