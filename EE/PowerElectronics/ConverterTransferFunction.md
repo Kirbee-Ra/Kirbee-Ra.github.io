@@ -58,7 +58,12 @@ $$
 
 다음은 컨버터의 블록 다이어그램입니다.
 
-(BD)
+<figure style="text-align: center;">
+  <img src="./PEFigure/컨버터bd.png" alt="컨버터bd" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 컨버터의 블록 다이어그램)
+  </figcaption>
+</figure>
 
 컨버터를 분석하기 위해 각 부분의 개루프 전달 함수를 알아야 합니다.
 $$F_m,-F_v$$는 [컨버터의 소신호 모델](./ConverterSmallSignalModel.md)에서 다뤘습니다.
@@ -100,7 +105,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Gvs sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Gvs.png" alt="벅Gvs" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 입력 전압 변동을 고려한 벅 파워 스테이지)
+  </figcaption>
+</figure>
 
 변압기의 2차 측에 전압 $$D\hat{v}_{in}(s)$$가 걸립니다.
 전압 분배를 이용하면 다음과 같습니다.
@@ -124,7 +134,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Gvd sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Gvd.png" alt="벅Gvd" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 듀티 비 변동을 고려한 벅 파워 스테이지)
+  </figcaption>
+</figure>
 
 변압기의 2차 측에 전압 $$V_{in}\hat{d}(s)$$가 걸립니다.
 전압 분배를 이용하면 다음과 같습니다.
@@ -148,7 +163,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Zp sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Zp.png" alt="벅Zp" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 부하 변동을 고려한 벅 파워 스테이지)
+  </figcaption>
+</figure>
 
 변압기의 2차 측이 단락되었습니다.
 변압기의 2차 측과 출력단을 거치는 폐회로를 따라 KVL을 적용하면 다음과 같습니다.
@@ -178,7 +198,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Gvd sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Gvs.png" alt="벅Gvs" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 입력 전압 변동을 고려한 부스트트 파워 스테이지)
+  </figcaption>
+</figure>
 
 이제 다음과 같이 입력단과 변압기를 거치는 폐회로를 따라 KVL을 적용하고, 출력단에 KCL을 적용하면 다음과 같습니다.
 
@@ -210,7 +235,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Gvs sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Gvd.png" alt="벅Gvd" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 듀티 비 변동을 고려한 부스트 파워 스테이지)
+  </figcaption>
+</figure>
 
 이제 다음과 같이 입력단과 출력단을 거치는 폐회로를 따라 KVL을 적용하고, 출력단에 KCL을 적용하면 다음과 같습니다.
 
@@ -243,7 +273,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Zp sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Zp.png" alt="벅Zp" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 부하 변동을 고려한 부스트트 파워 스테이지)
+  </figcaption>
+</figure>
 
 이제 다음과 같이 입력단과 출력단을 거치는 폐회로를 따라 KVL을 적용하고, 출력단에 KCL을 적용하면 다음과 같습니다.
 
@@ -273,7 +308,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Gvs sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Gvs.png" alt="벅Gvs" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 입력 전압 변동을 고려한 벅-부스트트 파워 스테이지)
+  </figcaption>
+</figure>
 
 이제 다음과 같이 출력단과 변압기를 거치는 폐회로를 따라 KVL을 적용하고, 출력단에 KCL을 적용하면 다음과 같습니다.
 
@@ -296,7 +336,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Gvs sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Gvd.png" alt="벅Gvd" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 듀티 비 변동을 고려한 벅-부스트 파워 스테이지)
+  </figcaption>
+</figure>
 
 이제 다음과 같이 변압기와 출력단을 거치는 폐회로를 따라 KVL을 적용하고, 출력단에 KCL을 적용하면 다음과 같습니다.
 
@@ -319,7 +364,12 @@ $$
 
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
-(Zp sch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅Zp.png" alt="벅Zp" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 부하 변동을 고려한 벅-부스트 파워 스테이지)
+  </figcaption>
+</figure>
 
 이제 다음과 같이 변압기와 출력단을 거치는 폐회로를 따라 KVL을 적용하고, 출력단에 KCL을 적용하면 다음과 같습니다.
 
