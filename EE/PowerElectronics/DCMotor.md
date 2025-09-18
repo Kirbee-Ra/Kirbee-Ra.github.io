@@ -71,6 +71,45 @@
 </figure>
 
 전기자 전류 $$i_a$$가 전기자 권선의 인덕턴스 $$L_a$$와 기생 저항 $$R_a$$를 따라 흐르며, 역기전력 $$\mathcal{E}_a$$가 유도됩니다.
+각 부분에 대해 자세히 설명하겠습니다.
+
+### 계자
+
+계자는 고정자에 고정된 자석으로, 외부 자기장을 형성합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/계자.png" alt="계자" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계자)
+  </figcaption>
+</figure>
+
+보통 전자석의 형태로 만들어지며, 다음과 같이 고정자에 권선을 감아 전류를 흘려서 자기장을 형성합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/계자권선.png" alt="계자권선" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전자석을 이용한 계자)
+  </figcaption>
+</figure>
+
+계자 권선을 등가 회로로 모델링하면 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/계자권선등가회로.png" alt="계자권선등가회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계자 권선의 등가회로)
+  </figcaption>
+</figure>
+
+권선의 인덕턴스 $$L_f$$와 기생 저항 $$R_f$$로 모델링할 수 있습니다.
+권선 양단에 전압 $$v_f$$를 인가하여 전류 $$i_f$$를 흘리면 KVL을 다음과 같이 쓸 수 있습니다.
+
+$$
+v_f=R_fi_f+\frac{d\Lambda_f}{dt}=R_fi_f+L_f\frac{di_f}{dt}
+$$
+
+이는 과도 상태까지 고려한 식이며, 정상 상태에서는 $$\displaystyle\frac{di_f}{dt}=0$$이므로 계자 자속이 일정합니다.
 
 ### 역기전력
 
@@ -175,7 +214,7 @@ $$
 회전축으로부터 고리의 끝 부분까지의 길이를 $$r$$이라고 하면, 고리에 작용하는 토크는 다음과 같습니다.
 
 $$
-T=rBi_al
+\tau_e=rBi_al
 $$
 
 자속 밀도는 다음과 같이 계자 자속 $$\Phi_f$$와 도선의 단면적 $$A$$를 이용하여 나타낼 수 있습니다.
@@ -187,21 +226,95 @@ $$
 자기력에 의한 토크는 다음과 같습니다.
 
 $$
-T=\frac{r\Phi_fi_al}{A}
+\tau_e=\frac{r\Phi_fi_al}{A}
 $$
 
 $$A$$와 $$lr$$은 차원이 같으므로 $$\displaystyle\frac{lr}{A}$$을 상수 $$k_T$$으로 나타낼 수 있습니다.
 
 $$
-T=k_T\Phi_fi_a
+\tau_e=k_T\Phi_fi_a
 $$
 
 일반적으로 계자 자속은 일정합니다.
 따라서 토크를 다음과 같이 나타낼 수 있습니다.
 
 $$
-T=K_Ti_a\ \ \ \text{where }K_T=k_T\Phi_f
+\tau_e=K_Ti_a\ \ \ \text{where }K_T=k_T\Phi_f
 $$
 
 $$K_T$$는 토크 상수이며, 단위가 $$\text{N}\cdot\text{m/A}$$입니다.
 SI 단위계에서는 기전력 상수와 토크 상수가 동일합니다.
+
+### 회전자의 운동 방정식
+
+[이전](./MotorBasic.md#마찰을-고려한-운동-방정식)에 언급했던 시스템의 운동 방정식은 다음과 같습니다.
+
+$$
+\tau_e=I\alpha+b\omega+\tau_L
+$$
+
+### 시스템 방정식
+
+직류 전동기의 등가 회로를 다시 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/직류전동기등가회로.png" alt="직류전동기등가회로" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 직류 전동기의 등가 회로)
+  </figcaption>
+</figure>
+
+이 시스템은 다음의 방정식들로 기술할 수 있습니다.
+
+$$
+\begin{cases}
+			v_a=R_ai_a+L_a\displaystyle\frac{di_a}{dt}+\mathcal{E}_a\\
+			\mathcal{E}_a=k_e\Phi_f\omega_m\\
+			\tau_e=k_T\Phi_fi_a\\
+			\tau_e=I\alpha_m+b\omega_m+\tau_L\\
+			v_f=R_fi_f+L_a\displaystyle\frac{di_f}{dt}
+		\end{cases}
+$$
+
+### 정상 상태에서의 토크와 각속도의 관계
+
+정상 상태에서는 전류의 변화가 없습니다.
+
+$$
+\frac{di_a}{dt}=\frac{di_f}{dt}=0
+$$
+
+이때 마찰이 없다는 가정 하에 전기자 토크와 부하 토크가 동일하다면, 각가속도 또한 $$0$$입니다.
+
+$$
+\begin{align*}
+		&\tau_e=I\alpha_m+\tau_L\ \ \ \text{since }b=0\\
+		&\rightarrow\alpha_m=0\ \ \ \ \text{since }\tau_e=\tau_L
+\end{align*}
+$$
+
+시스템 방정식은 다음과 같이 나타납니다.
+
+$$
+\begin{cases}
+			v_a=R_ai_a+\mathcal{E}_a\\
+			\mathcal{E}_a=k_e\Phi_f\omega_m\\
+			\tau_e=\tau_L=k_T\Phi_fi_a\\
+			v_f=R_fi_f\\
+   \Lambda_f=L_fi_f
+		\end{cases}
+$$
+
+전기자 전류를 소거하고, 기전력 상수와 토크 상수가 동일한 점을 이용하면, 각속도를 다음과 같이 나타낼 수 있습니다.
+
+$$
+\begin{align*}
+&k_e=k_T=k\\
+&\tau_e=\tau_L\\
+&i_a=\frac{\tau_L}{k\Phi_f}\\
+&\mathcal{E}_a=k\Phi_f\omega_m\\
+&v_a=\frac{R_a\tau_e}{k\Phi_f}+k\Phi_f\omega_m\\
+&\rightarrow\omega_m=\frac{v_a}{k\Phi_f}-\frac{R_a}{\left(k\Phi_f\right)^2}\tau_L
+\end{align*}
+$$
+
