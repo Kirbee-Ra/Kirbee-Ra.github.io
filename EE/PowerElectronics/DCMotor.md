@@ -7,6 +7,7 @@
 
 - [직류 전동기](#dc-motor)
 - [직류 전동기 모델링](#직류-전동기-모델링)
+- [직류 전동기의 제어 방법](#직류-전동기의-제어-방법)
 
 ---
 
@@ -276,7 +277,7 @@ $$
 		\end{cases}
 $$
 
-## 속도 제어
+## 직류 전동기의 제어 방법
 
 ### 정상 상태에서의 토크와 각속도의 관계
 
@@ -322,4 +323,78 @@ $$
 
 변수가 전기자 전압과 계자 자속 뿐입니다.
 따라서 정상 상태에서 각속도를 변화시키려면 전기자 전압이나 계자 자속을 변하게 해야 합니다.
+
+### 전기자 전압 제어
+
+먼저 제어 변수가 전기자 전압인 경우에 대해 생각해봅시다.
+계자 자속은 이때 일정하다고 가정합니다.
+따라서 각속도는 다음과 같이 표현할 수 있습니다.
+
+$$
+\omega_m=k_1v_a-k_2\tau_L\ \ \ \text{where }k_1=\frac{1}{k\Phi_f},k_2=\frac{R_a}{\left(k\Phi_f\right)^2}
+$$
+
+이를 3차원 공간에 그리면 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전기자전압3d.png" alt="전기자전압3d" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전기자 전압에 따른 토크와 각속도의 관계: 3차원)
+  </figcaption>
+</figure>
+
+토크가 일정한 경우, 전기자 전압이 증가하면 각속도가 증가합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전기자전압각속도.png" alt="전기자전압각속도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 토크가 일정할 때 전기자 전압과 각속도의 관계)
+  </figcaption>
+</figure>
+
+전기자 전압이 일정한 경우, 각속도가 증가하면 토크는 감소합니다.
+전기자 전압의 변화를 함께 나타내면 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전기자전압제어토크각속도.png" alt="전기자전압제어토크각속도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전기자 전압에 따른 토크와 각속도의 관계)
+  </figcaption>
+</figure>
+
+이 그래프에 임의의 부하 곡선을 함께 나타내면 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전기자전압제어토크각속도.png" alt="전기자전압제어토크각속도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전기자 전압에 따른 토크와 각속도의 관계 및 부하)
+  </figcaption>
+</figure>
+
+형성된 교점들이 전기자 전압에 따른 동작점들이고, 안정된 상태입니다.
+전기자 전압이 변하는 순간 당연히 정상 상태에서 벗어나게 됩니다.
+일련의 과정을 거쳐 또 다른 정상 상태에 도달하게 되고, 동작점의 변화가 이를 나타냅니다.
+그 일련의 과정이 바로 과도 상태이며, 자세한 내용은 과도 상태를 다룰 때 설명하겠습니다.
+
+전기자 전압을 변화시키기 위해 전력 변환 장치를 이용할 수 있습니다.
+전력 변환 장치의 출력단에 다음과 같이 직류 전동기를 연결하면 됩니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터컨버터.png" alt="모터컨버터" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전력 변환 장치에 연결된 직류 전동기)
+  </figcaption>
+</figure>
+
+이렇게 연결하면, 전력 변환 장치의 출력 전압이 정격 전압으로 제한됩니다.
+이를 통해 각속도를 조정할 수 있습니다.
+
+### 계자 자속 제어
+
+전기자 전압이 일정한 경우, 계자 자속을 이용하여 각속도를 변화시킬 수 있습니다.
+이때 각속도를 다음과 같이 나타낼 수 있습니다.
+
+$$
+\omega_m=\frac{k_1'}{\Phi_f}-\frac{k_2'}{\Phi_f^2}\tau_L\ \ \ \text{where }k_1'=\frac{v_a}{k},k_2'=\frac{R_a}{k^2}
+$$
 
