@@ -351,8 +351,8 @@ $$
 
 $$
 \begin{cases}
-		&\frac{\partial W_m}{\partial\Lambda}=i\\
-  &\frac{\partial W_m}{\partial x}=-F_{mec}
+		&\displaystyle\frac{\partial W_m}{\partial\Lambda}=i\\
+  &\displaystyle\frac{\partial W_m}{\partial x}=-F_{mec}
 	\end{cases}
 $$
 
