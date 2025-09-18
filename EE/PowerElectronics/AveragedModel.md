@@ -18,7 +18,12 @@
 즉, 시간 의존성을 없애고 시불변 시스템으로 바꾸는 과정입니다.
 다음 파형을 살펴봅시다.
 
-(switching sawtooth)
+<figure style="text-align: center;">
+  <img src="./PEFigure/과도상태스위칭파형.png" alt="과도상태스위칭파형" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 스위칭의 영향과 평균적인 파형)
+  </figcaption>
+</figure>
 
 스위칭으로 인해 톱니 파형이 나타나는 것을 볼 수 있습니다.
 매 시각마다 평균을 구하면 매끄러운 하나의 곡선으로 바뀝니다.
@@ -207,7 +212,12 @@ $$
 이러한 PWM 방식의 컨버터에서 쓰이는 스위치를 **PWM 스위치(PWM Switch)**라고 합니다.
 다음의 PWM 스위치를 살펴봅시다.
 
-(PWM Switch)
+<figure style="text-align: center;">
+  <img src="./PEFigure/PWM스위치.png" alt="PWM스위치" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. PWM 스위치)
+  </figcaption>
+</figure>
 
 $$a$$(active)단자, $$p$$(passive)단자, $$c$$(common)단자로 총 3개의 단자로 구성된 스위치입니다.
 $$a$$단자에는 직접 신호를 입력하여 구동시키는 스위치가 연결됩니다.
@@ -220,7 +230,12 @@ $$c$$단자는 각 단자에 대해 도통될 수 있는 경로를 제공합니�
 비절연형 컨버터에서는 $$a$$단자에 MOSFET이 연결되어 있고, $$p$$단자에는 다이오드가 연결되어 있으며, $$c$$단자에는 인덕터가 연결되어 있습니다.
 이 PWM 스위치를 다음과 같이 SPDT 스위치로 모델링해봅시다.
 
-(spdt)
+<figure style="text-align: center;">
+  <img src="./PEFigure/SPDT스위치.png" alt="SPDT스위치" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. SPDT 스위치)
+  </figcaption>
+</figure>
 
 우리가 주목할 변수는 $$v_{ap},v_{cp},i_a,i_c$$입니다.
 그리고 $$d$$는 온-타임(듀티 비)을 나타냅니다.
@@ -270,9 +285,14 @@ $$
 
 다음의 파형을 살펴봅시다.
 
-(waveform)
+<figure style="text-align: center;">
+  <img src="./PEFigure/정상상태스위칭파형.png" alt="정상상태스위칭파형" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 스위칭의 영향과 평균적인 파형)
+  </figcaption>
+</figure>
 
-왼쪽 파형을 평균화하면 오른쪽 파형이 도출됩니다.
+스위칭의 영향을 받는 파형을 평균화하면 매끄러운 파형이 도출됩니다.
 이와 같이 평균화를 통해 스위칭에 의한 효과가 사라집니다.
 
 ### 회로 평균화의 의의
@@ -310,13 +330,34 @@ $$
 
 벅 컨버터의 평균화 모델은 다음과 같습니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅평균.png" alt="벅평균" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 벅 컨버터의 평균화 모델)
+  </figcaption>
+</figure>
+
 ### 부스트 컨버터
 
 부스트 컨버터의 평균화 모델은 다음과 같습니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/부스트평균.png" alt="부스트평균" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 부스트 컨버터의 평균화 모델)
+  </figcaption>
+</figure>
+
 ### 벅-부스트 컨버터
 
 벅-부스트 컨버터의 평균화 모델은 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅부스트평균.png" alt="벅부스트평균" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 벅-부스트 컨버터의 평균화 모델)
+  </figcaption>
+</figure>
 
 ---
 
