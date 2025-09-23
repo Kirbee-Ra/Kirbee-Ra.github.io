@@ -277,6 +277,8 @@ $$
 		\end{cases}
 $$
 
+---
+
 ## 직류 전동기의 제어 방법
 
 ### 정상 상태에서의 토크와 각속도의 관계
@@ -398,3 +400,71 @@ $$
 \omega_m=\frac{k_1'}{\Phi_f}-\frac{k_2'}{\Phi_f^2}\tau_L\ \ \ \text{where }k_1'=\frac{v_a}{k},k_2'=\frac{R_a}{k^2}
 $$
 
+이를 3차원 공간에 그리면 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/계자자속3d.png" alt="계자자속3d" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계자 자속에 따른 토크와 각속도의 관계: 3차원)
+  </figcaption>
+</figure>
+
+토크가 일정한 경우, 계자 자속이 감소하면, 각속도가 증가합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/계자자속각속도.png" alt="계자자속각속도" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 토크가 일정할 때 계자 자속과 각속도의 관계)
+  </figcaption>
+</figure>
+
+보통 동작점을 무릎 점 부근(정격 자속)에 설계하기 때문에 자속이 감소하는 경우에 대해 고려합니다.
+이를 **약자속(Flux Weakening)**이라고 합니다.
+
+---
+
+## 직류 전동기의 능력 곡선
+
+다음 그림은 속도에 따른 물리량들을 나타낸 **능력 곡선(Capability Curve)**입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/직류전동기능력곡선.png" alt="직류전동기능력곡선" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 직류 전동기의 능력 곡선)
+  </figcaption>
+</figure>
+
+이 그래프를 해석하기 위해 다음 방정식을 다시 생각해봅시다.
+
+$$
+\begin{align*}
+&k_e=k_T=k\\
+&\tau_e=\tau_L\\
+&i_a=\frac{\tau_L}{k\Phi_f}\\
+&\mathcal{E}_a=k\Phi_f\omega_m\\
+&v_a=\frac{R_a\tau_e}{k\Phi_f}+k\Phi_f\omega_m\\
+&\rightarrow\omega_m=\frac{v_a}{k\Phi_f}-\frac{R_a}{\left(k\Phi_f\right)^2}\tau_L
+\end{align*}
+$$
+
+### 일정 토크 영역
+
+먼저 저속 구간인 일정 토크 영역을 살펴봅시다.
+각속도가 정격 속도보다 작은 구간입니다.
+이 구간에서 계자 자속은 일정합니다.
+토크가 일정하므로 전기자 전류 또한 일정합니다.
+전기자 전류가 일정하게 유지되기 위해서는 각속도가 커질수록 전기자 전압 또한 커져야 합니다.
+전력은 토크가 일정하나, 각속도가 증가하므로 각속도에 따라 증가합니다.
+혹은 전기자 전류가 일정하나, 전기자 전압이 증가하므로 전압에 따라 증가한다고 해석해도 됩니다.
+이 구간에서 전기자 전압은 전력 변환 장치에 의해 제어됩니다.
+그리고 전기자 전압이 제한되고, 전기자 전류가 정격에 도달하는 속도를 **기저 속도(Base Speed)**라고 합니다.
+
+### 일정 출력 영역
+
+다음으로 각속도가 정격 속도보다 큰 구간을 살펴봅시다.
+이 구간에서는 전기자 전압이 정격에 도달한 뒤, 계자 자속이 감소합니다.
+전기자 전압이 일정하므로 각속도가 커질수록 계자 자속이 감소합니다.
+이에 따라 토크 또한 감소합니다.
+전기자 전류는 일정합니다.
+전력은 토크가 감소하나, 각속도가 증가하므로 일정합니다.
+또는 전기자 전압과 전기자 전류가 모두 일정하므로 일정하다고 해석해도 됩니다.
