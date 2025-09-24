@@ -29,7 +29,7 @@
 전압 분배기를 통해 입력 전압을 낮춰서 출력을 얻을 수 있습니다. 다음의 회로를 살펴봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/전압 분배기.png" alt="전압 분배기" width="100%"/>
+  <img src="./PEFigure/전압분배기.png" alt="전압분배기" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 전압 분배기)
   </figcaption>
@@ -57,10 +57,13 @@ $$
 ## 스위칭 레귤레이터
 
 앞서 언급한 전압 분배기의 여러 문제들로 인해 다른 전력 변환 회로가 필요합니다.
+
+### SPDT 스위치
+
 다음의 스위치를 살펴봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/SPDT.png" alt="SPDT" width="100%"/>
+  <img src="./PEFigure/SPDT.png" alt="SPDT" width="20%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. SPDT 스위치)
   </figcaption>
@@ -68,24 +71,37 @@ $$
 
 스위치의 극(Pole)이 한개이고, 투(Throw)가 두개인 스위치입니다.
 이를 **SPDT (Single Pole Double Throw) 스위치**라고 합니다.
-스위치의 투를 옮겨가며 전력 공급을 주기적으로 차단할 수 있습니다.
-이러한 과정을 통해 전압 레벨을 낮출 수 있습니다. 다음과 같이 스위칭을 한다고 생각해봅시다.
+
+### 전력 변환 원리
+
+다음의 회로를 살펴봅시다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/스위칭 신호.png" alt="스위칭 신호" width="100%"/>
+  <img src="./PEFigure/SPDT회로.png" alt="SPDT회로" width="20%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. SPDT 스위치를 통한 전력 변환)
+  </figcaption>
+</figure>
+
+다음과 같이 스위칭을 한다고 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위칭신호.png" alt="스위칭신호" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 스위칭 신호)
   </figcaption>
 </figure>
 
+스위치의 투를 옮겨가며 전력 공급을 주기적으로 차단할 수 있습니다.
+이런 상황에서 전압은 그림과 같이 나타납니다.
+
 <figure style="text-align: center;">
-  <img src="./PEFigure/스위치 전압.png" alt="스위치 전압" width="100%"/>
+  <img src="./PEFigure/스위치전압.png" alt="스위치전압" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 스위치 양단의 전압)
   </figcaption>
 </figure>
 
-이런 상황에서 전압은 그림과 같이 나타납니다.
 하지만 전력 변환 장치는 출력이 일정하게 제어돼야 합니다.
 따라서 다른 회로를 추가해야 합니다.
 이 전압과 같은 펄스 트레인은 주파수 영역에서 다음과 같이 나타납니다.
@@ -109,6 +125,9 @@ $$
 </figure>
 
 이 SPDT 스위치와 저역 필터가 전력 변환 장치의 기본적인 구성입니다.
+
+### 스위칭 파워-폴
+
 여기서 문제가 하나 있습니다.
 SPDT 스위치같은 기계적인 스위치는 스위칭 주파수를 높게 설정할 수 없습니다.
 전력 변환 장치의 스위칭 주파수는 기본적으로 수십 $$\text{kHz}$$이고, $$\text{MHz}$$나 $$\text{GHz}$$ 단위까지 갈 수 있습니다.
