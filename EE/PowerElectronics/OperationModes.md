@@ -7,8 +7,8 @@
 
 - [인덕터 전류](#인덕터-전류)
 - [CCM 동작](#ccm-동작)
-- [BCM 동작](#bcm-동작)
 - [DCM 동작](#dcm-동작)
+- [BCM 동작](#bcm-동작)
 - [버스트 모드](#버스트-모드)
 
 ---
@@ -19,12 +19,14 @@
 임의의 구간 $$[t_0,t]$$에서 인덕턴스가 $$L$$인 인덕터에 흐르는 전류는 다음과 같습니다.
 
 $$
-i_L(t)=\int_{t_0}^{t}\frac{v_L}{L}dt'+i_L(t_1)
+i_L(t)=\int_{t_0}^{t}\frac{v_L}{L}dt'+i_L(t_0)
 $$
 
 전압이 일정하므로 다음과 같이 쓸 수 있습니다.
 
+$$
 i_L(t)=\frac{v_L\left(t-t_0\right)}{L}
+$$
 
 일차함수의 형태입니다.
 전압은 상황에 따라 다르므로 양수 또는 음수가 될 수 있습니다.
@@ -56,12 +58,33 @@ i_L(t)=\frac{v_L\left(t-t_0\right)}{L}
 
 ---
 
+## DCM 동작
+
+다음으로 인덕터 전류가 $$0$$이 되는 구간이 있는 경우입니다.
+인덕터에 전류가 흐르지 않는 구간이 있는 경우로, **DCM(Discontinuous Conduction Mode)** 동작 또는 **불연속 전도 모드** 동작이라고 합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/DCM.png" alt="DCM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. DCM에서의 인덕터 전류 파형)
+  </figcaption>
+</figure>
+
+---
+
 ## BCM 동작
 
 다음으로 인덕터 전류가 $$0$$이 되는 순간이 있는 경우입니다.
+인덕터에 전류가 흐르지 않는 구간이 있는 경우로, **BCM(Borderline(or Boundary) Conduction Mode)** 동작 또는 **경계 전도 모드 **동작이라고 합니다.
+**CrCM(Critical Conduction Mode)** 동작이라고도 합니다.
 
+<figure style="text-align: center;">
+  <img src="./PEFigure/BCM.png" alt="BCM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. BCM에서의 인덕터 전류 파형)
+  </figcaption>
+</figure>
 
+---
 
-
-
-
+## 버스트 모드
