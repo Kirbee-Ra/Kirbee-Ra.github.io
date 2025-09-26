@@ -1,8 +1,3 @@
-title: DC Motor Control        # 제목 (없어도 되지만 있으면 좋습니다)
-layout: page                   # 기본 레이아웃 지정
-
----
-
 직류 전동기의 제어
 =
 
