@@ -115,6 +115,7 @@
 
 - [전동기의 기초](./MotorBasic.md)
 - [직류 전동기](./DCMotor.md)
+- [직류 전동기의 제어](./DCMotorControl.md)
 - [교류 전동기]
 
 ---
