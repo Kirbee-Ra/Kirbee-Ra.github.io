@@ -199,7 +199,7 @@ $$
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/벅Gvs.png" alt="벅Gvs" width="100%"/>
+  <img src="./PEFigure/벅Gvs.png" alt="부스트Gvs" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 입력 전압 변동을 고려한 부스트 파워 스테이지)
   </figcaption>
@@ -236,7 +236,7 @@ $$
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/벅Gvd.png" alt="벅Gvd" width="100%"/>
+  <img src="./PEFigure/벅Gvd.png" alt="부스트Gvd" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 듀티 비 변동을 고려한 부스트 파워 스테이지)
   </figcaption>
@@ -274,7 +274,7 @@ $$
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/벅Zp.png" alt="벅Zp" width="100%"/>
+  <img src="./PEFigure/벅Zp.png" alt="부스트Zp" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 부하 변동을 고려한 부스트트 파워 스테이지)
   </figcaption>
@@ -309,7 +309,7 @@ $$
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/벅Gvs.png" alt="벅Gvs" width="100%"/>
+  <img src="./PEFigure/벅Gvs.png" alt="벅부스트Gvs" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 입력 전압 변동을 고려한 벅-부스트트 파워 스테이지)
   </figcaption>
@@ -337,7 +337,7 @@ $$
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/벅Gvd.png" alt="벅Gvd" width="100%"/>
+  <img src="./PEFigure/벅Gvd.png" alt="벅부스트Gvd" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 듀티 비 변동을 고려한 벅-부스트 파워 스테이지)
   </figcaption>
@@ -365,7 +365,7 @@ $$
 이 조건 하에 회로가 다음과 같이 바뀝니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/벅Zp.png" alt="벅Zp" width="100%"/>
+  <img src="./PEFigure/벅Zp.png" alt="벅부스트Zp" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 부하 변동을 고려한 벅-부스트 파워 스테이지)
   </figcaption>
