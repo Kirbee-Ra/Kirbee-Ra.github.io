@@ -201,7 +201,7 @@ $$
 <figure style="text-align: center;">
   <img src="./PEFigure/벅Gvs.png" alt="벅Gvs" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 입력 전압 변동을 고려한 부스트트 파워 스테이지)
+    (그림. 입력 전압 변동을 고려한 부스트 파워 스테이지)
   </figcaption>
 </figure>
 
