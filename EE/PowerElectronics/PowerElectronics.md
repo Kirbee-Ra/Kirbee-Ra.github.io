@@ -22,9 +22,16 @@
 
 ---
 
-## DC-DC 변환: 컨버터
+## 전력 변환 원리
+
+전력 변환의 원리를 다룹니다.
 
 - [전력 변환 회로](./PowerConversionCircuit.md)
+
+---
+
+## DC-DC 변환: 컨버터
+
 - [컨버터의 기초](./ConverterBasic.md)
 - [컨버터의 동작 모드](./OperationModes.md)
 
