@@ -574,7 +574,7 @@ $$
 
 여기서 $$I$$는 **관성 모멘트(Moment of Inertia)**입니다.
 
-관성 모멘트는 회전 운동을 하는 물체가 운동 상태를 유지하려는 성질이며, **회전 관성(Inertial Moment)**이라고도 부릅니다.
+관성 모멘트는 회전 운동을 하는 물체가 운동 상태를 유지하려는 성질이며, **회전 관성(Rotational Inertia)**이라고도 부릅니다.
 다음과 같이 정의됩니다.
 
 <figure style="text-align: center;">
@@ -682,7 +682,7 @@ $$
 이 상황에서는 다음과 같이 쓸 수 있습니다.
 
 $$
-\mathbf{m}=iA\hat{\boldsymbol{\tau}}
+\mathbf{m}=iA\hat{\mathbf{n}}
 $$
 
 ### 자기력에 의한 토크
