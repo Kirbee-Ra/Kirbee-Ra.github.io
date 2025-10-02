@@ -1,14 +1,14 @@
 그림 포맷
 
 <figure style="text-align: center;">
-  <img src="./-/-.png" alt="-" width="100%"/>
+  <img src="./--/-.png" alt="-" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. -)
   </figcaption>
 </figure>
 
 <figure style="text-align: center;">
-  <img src="./-/-.svg" alt="-" width="100%"/>
+  <img src="./--/-.svg" alt="-" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. -)
   </figcaption>
@@ -16,5 +16,5 @@
 
 문단 포맷
 
-- [컨버터의 전류 모드 제어](#converter-cmc)
-<h2 id="converter-cmc">컨버터의 전류 모드 제어</h2>
+- [--](#-)
+<h2 id="-">--</h2>
