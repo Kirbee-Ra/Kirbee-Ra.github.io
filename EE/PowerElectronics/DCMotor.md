@@ -107,10 +107,10 @@
 권선 양단에 전압 $$v_f$$를 인가하여 전류 $$i_f$$를 흘리면 KVL을 다음과 같이 쓸 수 있습니다.
 
 $$
-v_f=R_fi_f+\frac{d\Lambda_f}{dt}=R_fi_f+L_f\frac{di_f}{dt}
+v_f=R_fi_f+\dot{\Lambda}_f=R_fi_f+L_f\dot{i}_f
 $$
 
-이는 과도 상태까지 고려한 식이며, 정상 상태에서는 $$\displaystyle\frac{di_f}{dt}=0$$이므로 계자 자속이 일정합니다.
+이는 과도 상태까지 고려한 식이며, 정상 상태에서는 $$\dot{i}_f=0$$이므로 계자 자속이 일정합니다.
 
 ### 역기전력
 
@@ -269,11 +269,11 @@ $$
 
 $$
 \begin{cases}
-			v_a=R_ai_a+L_a\displaystyle\frac{di_a}{dt}+\mathcal{E}_a\\
+			v_a=R_ai_a+L_a\dot{i}_a+\mathcal{E}_a\\
 			\mathcal{E}_a=k_e\Phi_f\omega_m\\
 			\tau_e=k_T\Phi_fi_a\\
 			\tau_e=I\alpha_m+b\omega_m+\tau_L\\
-			v_f=R_fi_f+L_a\displaystyle\frac{di_f}{dt}
+			v_f=R_fi_f+L_a\dot{i}_f
 		\end{cases}
 $$
 
@@ -286,7 +286,7 @@ $$
 정상 상태에서는 전류의 변화가 없습니다.
 
 $$
-\frac{di_a}{dt}=\frac{di_f}{dt}=0
+\dot{i}_a=\dot{i}_f=0
 $$
 
 이때 마찰이 없다는 가정 하에 전기자 토크와 부하 토크가 동일하다면, 각가속도 또한 $$0$$입니다.
