@@ -14,13 +14,13 @@ collections:
     output: true
   Figure:
     output: true
-   MTH:
+  MTH:
     output: true
-     Notation:
+  Notation:
     output: true
-     PHY:
+  PHY:
     output: true
-     Reference:
+  Reference:
     output: true
-     terminology:
+  terminology:
     output: true
