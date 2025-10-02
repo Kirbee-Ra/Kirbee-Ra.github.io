@@ -3,10 +3,23 @@ layout: null
 permalink: /search.json
 ---
 [
-  {% assign collections_to_search = site.EE | concat: site.MTH | concat: site.PHY | concat: site.Reference | concat: site.terminology | concat: site.pages %}
+  // 1. 각 컬렉션이 nil이더라도 빈 배열과 concat하여 항상 배열임을 보장
+  {% assign ee_docs = site.EE | default: empty_array %}
+  {% assign mth_docs = site.MTH | default: empty_array %}
+  {% assign phy_docs = site.PHY | default: empty_array %}
+  {% assign ref_docs = site.Reference | default: empty_array %}
+  {% assign term_docs = site.terminology | default: empty_array %}
+  {% assign pages = site.pages | default: empty_array %}
+
+  // 2. 빈 배열 정의 (Jekyll 3.x 환경에서는 빈 배열이 필요할 수 있습니다)
+  {% assign empty_array = '' | split: ',' %}
+
+  // 3. 모든 배열을 통합
+  {% assign all_docs = ee_docs | concat: mth_docs | concat: phy_docs | concat: ref_docs | concat: term_docs | concat: pages %}
+  
   {% assign search_items = "" %}
 
-  {% for item in collections_to_search %}
+  {% for item in all_docs %}
     {% if item.layout != nil and item.url != '/search.json' and item.url != '/404.html' %}
       {% assign search_items = search_items | append: '{"title": ' %}
       {% assign search_items = search_items | append: item.title | jsonify %}
@@ -14,7 +27,6 @@ permalink: /search.json
       {% assign search_items = search_items | append: item.url | relative_url | jsonify %}
       {% assign search_items = search_items | append: ',"content": ' %}
       
-      // 검색 정확도를 위해 HTML 태그, 줄바꿈 제거 후 JSON 형식에 맞게 처리
       {% assign content = item.content | strip_html | strip_newlines %}
       {% assign search_items = search_items | append: content | jsonify %}
       
@@ -23,7 +35,6 @@ permalink: /search.json
       
       {% assign search_items = search_items | append: '}' %}
       
-      // 마지막 항목이 아니라면 쉼표를 추가
       {% unless forloop.last %}
         {% assign search_items = search_items | append: ',' %}
       {% endunless %}
