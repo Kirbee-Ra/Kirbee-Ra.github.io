@@ -1,14 +1,34 @@
 ---
-layout: none
+layout: null
+permalink: /search.json
 ---
 [
-  {% for post in site.posts %}
-    {
-      "title"    : "{{ post.title | escape }}",
-      "category" : "{{ post.category }}",
-      "tags"     : "{{ post.tags | join: ', ' }}",
-      "url"      : "{{ site.baseurl }}{{ post.url }}",
-      "date"     : "{{ post.date }}"
-    } {% unless forloop.last %},{% endunless %}
+  {% assign collections_to_search = site.EE | concat: site.MTH | concat: site.PHY | concat: site.Reference | concat: site.terminology | concat: site.pages %}
+  {% assign search_items = "" %}
+
+  {% for item in collections_to_search %}
+    {% if item.layout != nil and item.url != '/search.json' and item.url != '/404.html' %}
+      {% assign search_items = search_items | append: '{"title": ' %}
+      {% assign search_items = search_items | append: item.title | jsonify %}
+      {% assign search_items = search_items | append: ',"url": ' %}
+      {% assign search_items = search_items | append: item.url | relative_url | jsonify %}
+      {% assign search_items = search_items | append: ',"content": ' %}
+      
+      // 검색 정확도를 위해 HTML 태그, 줄바꿈 제거 후 JSON 형식에 맞게 처리
+      {% assign content = item.content | strip_html | strip_newlines %}
+      {% assign search_items = search_items | append: content | jsonify %}
+      
+      {% assign search_items = search_items | append: ',"date": ' %}
+      {% assign search_items = search_items | append: item.date | date: "%Y-%m-%d" | jsonify %}
+      
+      {% assign search_items = search_items | append: '}' %}
+      
+      // 마지막 항목이 아니라면 쉼표를 추가
+      {% unless forloop.last %}
+        {% assign search_items = search_items | append: ',' %}
+      {% endunless %}
+    {% endif %}
   {% endfor %}
+
+  {{ search_items }}
 ]
