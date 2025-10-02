@@ -1,0 +1,49 @@
+---
+layout: null
+permalink: /search.json
+---
+[
+  // 1. 빈 배열을 명시적으로 정의 (오류 방지용)
+  {% assign empty_array = "" | split: " " %} 
+  
+  // 2. 각 컬렉션에 default 값을 설정하여 nil이 아님을 보장
+  {% assign ee_docs = site.EE | default: empty_array %}
+  {% assign mth_docs = site.MTH | default: empty_array %}
+  {% assign phy_docs = site.PHY | default: empty_array %}
+  {% assign figure_docs = site.Figure | default: empty_array %}
+  {% assign ref_docs = site.Reference | default: empty_array %}
+  {% assign assign_docs = site.terminology | default: empty_array %}
+  {% assign notation_docs = site.Notation | default: empty_array %}
+  {% assign pages = site.pages | default: empty_array %}
+
+  // 3. 모든 배열을 순차적으로 하나의 배열로 통합 (이 부분이 14번째 줄 근처일 수 있습니다)
+  {% assign all_docs = empty_array | concat: ee_docs | concat: mth_docs | concat: phy_docs | concat: ref_docs | concat: assign_docs | concat: pages %}
+  
+  // 4. JSON 문자열 생성을 위한 변수 초기화
+  {% assign search_items = "" %}
+  
+  // 5. 통합된 배열을 순회하며 JSON 항목 생성
+  {% for item in all_docs %}
+    {% if item.layout != nil and item.url != '/search.json' and item.url != '/404.html' %}
+      
+      {% assign item_json = '{"title": ' | append: item.title | jsonify %}
+      {% assign item_json = item_json | append: ',"url": ' | append: item.url | relative_url | jsonify %}
+      
+      // content 처리: HTML 제거 및 JSON 인코딩
+      {% assign content = item.content | strip_html | strip_newlines | truncate: 500 %}
+      {% assign item_json = item_json | append: ',"content": ' | append: content | jsonify %}
+      
+      {% assign item_json = item_json | append: ',"date": ' | append: item.date | date: "%Y-%m-%d" | jsonify %}
+      {% assign item_json = item_json | append: '}' %}
+      
+      // 최종 search_items 문자열에 항목 추가
+      {% unless forloop.first %}
+        {% assign search_items = search_items | append: ',' %}
+      {% endunless %}
+      {% assign search_items = search_items | append: item_json %}
+      
+    {% endif %}
+  {% endfor %}
+
+  {{ search_items }}
+]
