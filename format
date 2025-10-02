@@ -1,9 +1,16 @@
 그림 포맷
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/VMC회로.png" alt="VMC회로" width="100%"/>
+  <img src="./-/-.png" alt="-" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전압 모드 제어 컨버터)
+    (그림. -)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./-/-.svg" alt="-" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. -)
   </figcaption>
 </figure>
 
