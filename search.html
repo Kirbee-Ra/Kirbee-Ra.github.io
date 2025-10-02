@@ -1,23 +1,25 @@
 ---
-layout: default # 사용하시는 레이아웃으로 설정
-title: "검색"
-permalink: /search/
+layout: default
+title: Search
 ---
 
-<h1>사이트 검색</h1>
+<h2>검색</h2>
 
-<input type="text" id="search-input" placeholder="검색어를 입력하세요..." autofocus>
+<input type="text" id="search-input" placeholder="검색어를 입력하세요...">
 
 <ul id="results-container"></ul>
 
-<script src="{{ '/assets/js/simple-jekyll-search.min.js' | relative_url }}"></script>
+<script src="/assets/js/simple-jekyll-search.min.js"></script>
+
 <script>
-  SimpleJekyllSearch({
+  var sjs = SimpleJekyllSearch({
     searchInput: document.getElementById('search-input'),
     resultsContainer: document.getElementById('results-container'),
-    json: '{{ site.baseurl }}/search.json', // 1단계에서 만든 JSON 파일 경로
-    searchResultTemplate: '<li><a href="{url}" title="{title}">{title}</a></li>', // 결과 표시 형식
-    limit: 10, // 표시할 결과 수
-    fuzzy: false // 정확한 일치만 검색 (true로 설정 시 유사 일치 검색)
-  })
+    json: '/search.json',
+    searchResultTemplate: '<li><a href="{url}">{title}</a><p>{date}</p></li>',
+    noResultsText: '검색 결과가 없습니다.',
+    limit: 10,
+    fuzzy: false,
+    exclude: ['Welcome']
+  });
 </script>
