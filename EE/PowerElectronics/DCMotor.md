@@ -6,6 +6,7 @@
 ## 목차
 
 - [직류 전동기](#dc-motor)
+- [직류 전동기의 종류](#직류-전동기의-종류)
 - [직류 전동기 모델링](#직류-전동기-모델링)
 - [직류 전동기의 제어 방법](#직류-전동기의-제어-방법)
 
@@ -49,6 +50,68 @@
 
 직류 전동기보다는 **교류 전동기(AC Motor)**나 **BLDC 전동기(Brushless DC Motor)**를 많이 사용합니다.
 이들의 동작 및 설계를 위해서는 직류 전동기를 먼저 공부할 필요가 있습니다.
+
+---
+
+## 직류 전동기의 종류
+
+직류 전동기는 전기자 권선과 계자 권선의 연결 방법에 따라 분류할 수 있습니다.
+
+### 직권 전동기
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/직권.svg" alt="직권전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 직권 전동기)
+  </figcaption>
+</figure>
+
+**직권(Series) 전동기**는 전기자 권선과 계자 권선이 직렬로 연결된 형태입니다.
+
+### 분권 전동기
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/분권.svg" alt="분권전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 분권 전동기)
+  </figcaption>
+</figure>
+
+**분권(Shunt) 전동기**는 전기자 권선과 계자 권선이 병렬로 연결된 형태입니다.
+
+### 타여자 분권 전동기
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/타분권.svg" alt="타여자분권전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 타여자 분권 전동기)
+  </figcaption>
+</figure>
+
+**타여자(Separately Excited) 분권 전동기**는 전기자 권선과 계자 권선이 독립적으로 구성된 형태입니다.
+현재 가장 많이 쓰이는 형태이며, 주로 타여자 분권 전동기에 대해 다룰 것입니다.
+
+### 가동 복권 전동기
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/가복권.svg" alt="가동복권전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 가동 복권 전동기)
+  </figcaption>
+</figure>
+
+**가동 복권(Cumulative Compound) 전동기**는  형태입니다.
+
+### 가동 복권 전동기
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/차복권.svg" alt="차동복권전동기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 차동 복권 전동기)
+  </figcaption>
+</figure>
+
+**차동 복권(Differential Compound) 전동기**는  형태입니다.
 
 ---
 
@@ -251,7 +314,7 @@ SI 단위계에서는 기전력 상수와 토크 상수가 동일합니다.
 [이전](./MotorBasic.md#마찰을-고려한-운동-방정식)에 언급했던 시스템의 운동 방정식은 다음과 같습니다.
 
 $$
-\tau_e=I\alpha+b\omega+\tau_L
+\tau_e=I\dot{\omega}+b\omega+\tau_L
 $$
 
 ### 시스템 방정식
@@ -272,7 +335,7 @@ $$
 			v_a=R_ai_a+L_a\dot{i}_a+\mathcal{E}_a\\
 			\mathcal{E}_a=k_e\Phi_f\omega_m\\
 			\tau_e=k_T\Phi_fi_a\\
-			\tau_e=I\alpha_m+b\omega_m+\tau_L\\
+			\tau_e=I\dot{\omega}_m+b\omega_m+\tau_L\\
 			v_f=R_fi_f+L_a\dot{i}_f
 		\end{cases}
 $$
@@ -293,8 +356,8 @@ $$
 
 $$
 \begin{align*}
-		&\tau_e=I\alpha_m+\tau_L\ \ \ \text{since }b=0\\
-		&\rightarrow\alpha_m=0\ \ \ \ \text{since }\tau_e=\tau_L
+		&\tau_e=I\dot{\omega}_m+\tau_L\ \ \ \text{since }b=0\\
+		&\rightarrow\dot{\omega}_m=0\ \ \ \ \text{since }\tau_e=\tau_L
 \end{align*}
 $$
 
