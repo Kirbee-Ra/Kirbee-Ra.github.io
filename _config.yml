@@ -8,3 +8,19 @@ highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
+
+collections:
+  EE:
+    output: true
+  Figure:
+    output: true
+   MTH:
+    output: true
+     Notation:
+    output: true
+     PHY:
+    output: true
+     Reference:
+    output: true
+     terminology:
+    output: true
