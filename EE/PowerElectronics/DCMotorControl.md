@@ -187,10 +187,7 @@ $$
 계단 함수 지령 값을 이용하면 오차는 다음과 같습니다.
 
 $$
-\begin{align*}
-&E(s)=R(s)-E(s)\frac{K_i}{s}G_p(s)\\
-	&\rightarrow E(s)=\frac{R_0}{s+K_pG_p(s)}
-\end{align*}
+E(s)=\frac{R_0}{s+K_pG_p(s)}
 $$
 
 최종값 정리를 통해 정상 상태 오차를 구하면 다음과 같습니다.
@@ -209,9 +206,66 @@ $$
 ### 비례적분 제어(PI 제어)
 
 비례 제어는 정상 상태 오차를 $$0$$으로 만들 수 없고, 적분 제어는 느리다는 단점이 있습니다.
-정상 상태 오차를 $$0$$으로 만들면서, 응답 속도도 개선이 된 제어 기법이 바로 **비례적분 제어(Proportional-Integral(PI) Control)**입니다. 
+정상 상태 오차를 $$0$$으로 만들면서, 응답 속도도 개선이 된 제어 기법이 바로 **비례적분 제어(Proportional-Integral(PI) Control)**입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/비례적분제어.svg" alt="비례적분제어" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 비례적분 제어 시스템)
+  </figcaption>
+</figure>
+
+비례 항과 적분 항을 합하여 시스템에 입력하는 방식입니다.
+
+$$
+u(t)=K_pe(t)+K_i\int_{t_0}^te(t')dt'
+$$
+
+비례적분 제어의 오차는 다음과 같습니다.
+
+$$
+\begin{align*}
+&E(s)=R(s)-E(s)\left(K_p+\frac{K_i}{s}\right)G_p(s)\\
+&\rightarrow E(s)=\frac{sR(s)}{s\left(1+K_pG_p(s)\right)+K_iG_p(s)}
+\end{align*}
+$$
+
+계단 함수 지령 값을 이용하면 다음과 같습니다.
+
+$$
+E(s)=\frac{R_0}{s\left(1+K_pG_p(s)\right)+K_iG_p(s)}
+$$
+
+최종값 정리를 이용하면 정상 상태 오차는 다음과 같습니다.
+
+$$
+\begin{align*}
+\lim_{t\rightarrow\infty}e(t)&=\lim_{s\rightarrow0}sE(s)\\
+&=\lim_{s\rightarrow0}\frac{sR_0}{s\left(1+K_pG_p(s)\right)+K_iG_p(s)}\\
+&=0
+\end{align*}
+$$
+
 
 ### 피드포워드 제어
+
+외란에 대해 피드백 제어보다 빠르게 제어하는 법이 있습니다.
+바로 **피드포워드 제어(Feedforward Control)**입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/피드포워드제어.svg" alt="피드포워드제어" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 피드포워드 및 피드백 제어 시스템)
+  </figcaption>
+</figure>
+
+피드포워드 제어를 이용하지 않는 경우를 생각해봅시다.
+외란에 의해 시스템 입력이 변하고, 출력에 반영됩니다.
+그리고 오차를 보상하기 위해 제어기가 작동하고, 제어기 출력이 다시 시스템에 입력되어 출력에 반영됩니다.
+많은 과정을 거치기 때문에 응답이 느립니다.
+피드포워드 제어를 이용하면, 시스템 입력에 바로 외란을 보상하는 신호가 더해지므로, 이전보다 빠르게 제어할 수 있습니다.
+일반적으로 피드백 제어를 보조하는 역할로 사용됩니다.
+만약 외란이나 시스템에 대한 정보가 부정확하다면, 피드포워드 제어에 문제가 생길 수 있습니다.
 
 ---
 
