@@ -103,6 +103,8 @@ $$
 
 ### 비례 제어
 
+먼저 **비례 제어(Proportional(P) Control)**입니다.
+
 <figure style="text-align: center;">
   <img src="./PEFigure/비례제어.svg" alt="비례제어" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
@@ -110,7 +112,6 @@ $$
   </figcaption>
 </figure>
 
-먼저 **비례 제어(Proportional(P) Control)**입니다.
 말 그대로 오차에 비례 상수 $$K_p$$를 곱하여 시스템에 다시 입력하는 방식입니다.
 
 $$
@@ -119,8 +120,53 @@ $$
 
 현재 제어 사이클의 오차를 증폭하여 다시 시스템에 입력하므로 응답 속도가 빠릅니다.
 
+비례 제어 시스템의 오차는 다음과 같이 구할 수 있습니다.
+
+$$
+\begin{align*}
+	&E(s)=R(s)-E(s)K_pG_p(s)\\
+	&\rightarrow E(s)=\frac{R(s)}{1+K_pG_p(s)}
+\end{align*}
+$$
+
+지령 값은 보통 상수(계단 함수)로, $$s$$ 영역에서는 다음과 같이 나타납니다.
+
+$$
+R(s)=\frac{R_0}{s}
+$$
+
+따라서 오차는 다음과 같습니다.
+
+$$
+E(s)=\frac{1}{1+K_pG_p(s)}\frac{R_0}{s}
+$$
+
+정상 상태 오차는 최종값 정리를 이용하면 다음과 같습니다.
+
+$$
+\begin{align*}
+	\lim_{t\rightarrow\infty}e(t)&=\lim_{s\rightarrow0}sE(s)\\
+	&=\lim_{s\rightarrow0}\frac{R_0}{1+K_pG_p(s)}\\
+	&=\frac{R_0}{1+K_p\displaystyle\lim_{s\rightarrow0}G_p(s)}
+\end{align*}
+$$
+
+일반적인 전동기 시스템에서 위 값은 양수입니다.
+즉, 오차가 $$0$$이 되지 않는다는 의미입니다.
+제어 사이클을 거듭할수록 제어량이 점점 줄어들어 더 이상 제어를 할 수 없는 상태가 됩니다.
+따라서 비례 제어만으로는 오차를 $$0$$으로 만들 수 없습니다.
 
 ### 적분 제어
+
+다음으로 **적분 제어(Integral Control)**입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/적분제어.svg" alt="적분제어" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 적분 제어 시스템)
+  </figcaption>
+</figure>
+
 
 ### 비례적분 제어
 
