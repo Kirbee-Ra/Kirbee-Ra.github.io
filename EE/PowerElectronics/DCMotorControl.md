@@ -420,14 +420,12 @@ $$
 오차가 기존보다 적게 누적되도록 하려면 적분기의 입력을 줄일 필요가 있습니다.
 이 오차는 제한기로부터 영향을 받으므로, 제한기의 입력과 출력 정보를 이용하여 다음과 같이 설계할 수 있습니다.
 
-$$
 <figure style="text-align: center;">
   <img src="./PEFigure/역계산.svg" alt="역계산" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
     (그림. 역 계산을 통한 안티 와인드업)
   </figcaption>
 </figure>
-$$
 
 제한기의 입력과 출력의 차이를 스케일링하여 적분기의 입력에서 빼줍니다.
 
