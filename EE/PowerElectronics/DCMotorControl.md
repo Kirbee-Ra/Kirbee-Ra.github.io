@@ -322,7 +322,7 @@ $$
 $$
 
 전동기 제어 시스템에서 역기전력은 전기자 전압 및 전류에 영향을 미치는 외란으로 취급됩니다.
-따라서 피드포워드 제어를 통해 보상합니다.
+역기전력은 속도에 비례하므로 속도를 측정하여 피드포워드 제어를 통해 보상합니다.
 
 <figure style="text-align: center;">
   <img src="./PEFigure/역기전력외란.svg" alt="역기전력외란" width="100%"/>
@@ -365,9 +365,73 @@ $$
 이때 폐루프 전달 함수는 다음과 같습니다.
 
 $$
-G_c(s)&=\frac{\frac{K_{pc}}{sL_a}}{1+\frac{K_{pc}}{sL_a}}\\
-&=\frac{\frac{K_{pc}}{L_a}}{s+\frac{K_{pc}}{L_a}}
+\begin{align*}
+\frac{I_a(s)}{I_a^*(s)}&=\frac{\displaystyle\frac{K_{pc}}{sL_a}}{1+\displaystyle\frac{K_{pc}}{sL_a}}\\
+&=\frac{\displaystyle\frac{K_{pc}}{L_a}}{s+\displaystyle\frac{K_{pc}}{L_a}}
+\end{align*}
 $$
+
+이는 1차 저역 필터의 전달 함수로, 차단 주파수 $$\omega_{cc}=\displaystyle\frac{K_{pc}}{L_a}=\displaystyle\frac{K_{ic}}{R_a}$$를 이용하여 다음과 같이 나타낼 수 있습니다.
+
+$$
+\frac{I_a(s)}{I_a^*(s)}=\frac{\omega_{cc}}{s+\omega_{cc}}
+$$
+
+비례적분 제어기의 이득을 조정하여 차단 주파수를 조정할 수 있습니다.
+이를 통해 입력 신호(지령 값)가 출력단에 그대로 전달되고, 고주파 노이즈는 감쇄되게 할 수 있습니다.
+
+### 적분기의 와인드업
+
+이상적인 시스템은 입력 전압(전기자 전압)을 임의로 설정할 수 있습니다.
+하지만 실제로는 다음과 같은 스위칭 회로가 이용됩니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/하프브릿지스위칭.svg" alt="하프브릿지스위칭" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 하프 브릿지 스위칭 회로)
+  </figcaption>
+</figure>
+
+따라서 입력 전압의 범위가 제한됩니다.
+이는 블록 다이어그램에서 다음과 같이 제한기를 이용하여 표현할 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전류제어제한기.svg" alt="전류제어제한기" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전기자 전압의 제한을 고려한 전류 제어기)
+  </figcaption>
+</figure>
+
+비례적분 제어기를 지나 피드포워드 제어(역기전력 보상)가 된 전기자 전압이 제한기를 거쳐서 입력되는 구조입니다.
+이 제한기로 인해서 시스템에 입력되어야 하는 전기자 전압보다 더 낮은 값이 입력됩니다.
+즉, 현재 제어 사이클에서 발생한 오차를 모두 보상하지는 못합니다.
+일부만 보상하는 제어를 반복하면서 응답 속도가 느려집니다.
+일부만 보상하기 때문에 이상적인 경우보다 제어 사이클마다 발생하는 오차가 비교적 큽니다.
+이 과정에서 오차가 과하게 누적되면서 지령 값보다 더 큰 값을 출력하게 됩니다.
+이를 **와인드업(Windup)** 현상이라고 합니다.
+와인드업이 발생하면 다시 지령 값으로 돌아가는데 시간이 오래 걸립니다.
+때로는 발산하기도 합니다.
+
+### 안티 와인드업: 역 계산
+
+와인드업 현상을 방지하기 위해 **안티 와인드업(Anti-Windup)** 기법을 이용합니다.
+그 중에서 대표적인 **역 계산(Back Calculation)**에 대해 설명하겠습니다.
+문제의 원인은 오차의 과한 누적으로, 적분기를 조금 수정해야 합니다.
+오차가 기존보다 적게 누적되도록 하려면 적분기의 입력을 줄일 필요가 있습니다.
+이 오차는 제한기로부터 영향을 받으므로, 제한기의 입력과 출력 정보를 이용하여 다음과 같이 설계할 수 있습니다.
+
+$$
+<figure style="text-align: center;">
+  <img src="./PEFigure/역계산.svg" alt="역계산" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 역 계산을 통한 안티 와인드업)
+  </figcaption>
+</figure>
+$$
+
+제한기의 입력과 출력의 차이를 스케일링하여 적분기의 입력에서 빼줍니다.
+
+### 전류 제어기 설계
 
 ---
 
