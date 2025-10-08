@@ -306,7 +306,68 @@ $$
   </figcaption>
 </figure>
 
+비례적분 제어기의 전달 함수가 다음과 같다고 해봅시다.
 
+$$
+G_{PI}(s)=K_{pc}+\frac{K_{ic}}{s}
+$$
+
+전기자 전류는 다음과 같습니다.
+
+$$
+\begin{align*}
+&I_a(s)=\left(\left(I_a^*(s)-I_a(s)\right)\left(K_{pc}+\frac{K_{ic}}{s}\right)-E_a(s)\right)\frac{1}{R_a+sL_a}\\
+&\rightarrow I_a(s)=\frac{sK_{pc}+K_{ic}}{s^2L_a+s\left(R_a+K_{pc}\right)+K_{ic}}I_a^*(s)-\frac{s}{s^2L_a+s\left(R_a+K_{pc}\right)+K_{ic}}E_a(s)
+\end{align*}
+$$
+
+전동기 제어 시스템에서 역기전력은 전기자 전압 및 전류에 영향을 미치는 외란으로 취급됩니다.
+따라서 피드포워드 제어를 통해 보상합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/역기전력외란.svg" alt="역기전력외란" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 역기전력이 보상된 전류 제어기)
+  </figcaption>
+</figure>
+
+이때 이 시스템의 전달 함수는 다음과 같습니다.
+
+$$
+\frac{I_a(s)}{I_a^*(s)}=\frac{sK_{pc}+K_{ic}}{s^2L_a+s\left(R_a+K_{pc}\right)+K_{ic}}
+$$
+
+### 비례적분 제어기 설계
+
+이제 이 시스템은 비례적분 제어기의 이득에 따라 성능이 결정됩니다.
+시스템의 루프 이득은 다음과 같습니다.
+
+$$
+\begin{align*}
+G_L(s)&=\left(K_{pc}+\frac{K_{ic}}{s}\right)\frac{1}{sL_a+R_a}\\
+&=\frac{K_{pc}}{sL_a}\frac{s+K_{ic}/K_{pc}}{s+R_a/L_a}
+\end{align*}
+$$
+
+루프 이득의 극점은 전동기의 파라미터 $$R_a,L_a$$로 결정되고, 영점은 비례적분 제어기의 이득으로 결정됩니다.
+비례적분 제어기의 이득을 다음과 같이 설정해봅시다.
+
+$$
+\frac{K_{ic}}{K_{pc}}=\frac{R_a}{L_a}
+$$
+
+이렇게 설정하면 극점-영점 상쇄가 일어나서 전달 함수가 다음과 같이 간단해집니다.
+
+$$
+G_L(s)=\frac{K_{pc}}{sL_a}
+$$
+
+이때 폐루프 전달 함수는 다음과 같습니다.
+
+$$
+G_c(s)&=\frac{\frac{K_{pc}}{sL_a}}{1+\frac{K_{pc}}{sL_a}}\\
+&=\frac{\frac{K_{pc}}{L_a}}{s+\frac{K_{pc}}{L_a}}
+$$
 
 ---
 
