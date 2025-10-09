@@ -559,7 +559,29 @@ $$
 
 ### 토크와 일
 
+토크에 의한 일은 다음과 같이 쓸 수 있습니다.
 
+$$
+W=\int_{\mathbf{x}_i}^{\mathbf{x}_f}\boldsymbol{\tau}\cdot d\boldsymbol{\theta}
+$$
+
+따라서 미소 일은 다음과 같이 쓸 수 있습니다.
+
+$$
+dW=\boldsymbol{\tau}\cdot d\boldsymbol{\theta}
+$$
+
+전동기에서는 각변위와 토크가 수직이므로 다음과 같이 쓸 수 있습니다.
+
+$$
+dW=\tau d\theta
+$$
+
+이때 토크는 다음과 같이 표현할 수 있습니다.
+
+$$
+\tau=\frac{dW}{d\theta}
+$$
 
 ---
 
