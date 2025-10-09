@@ -263,166 +263,6 @@ $$
 
 ---
 
-## 전동기의 동작 원리
-
-### 병진 이동자
-
-전동기는 기본적으로 다음과 같은 형태입니다.
-
-<figure style="text-align: center;">
-  <img src="./PEFigure/모터.png" alt="모터" width="100%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전동기의 구조)
-  </figcaption>
-</figure>
-
-**고정자(Stator)**는 전동기 내에 고정된 부분으로, 전기 에너지를 자기 에너지로 전환하는 역할을 수행합니다.
-**이동자(Mover)**는 전동기 내에서 움직이는 부분으로, 자기 에너지를 역학적 에너지로 전환하는 역할을 수행합니다.
-
-총 에너지 보존 식은 다음과 같이 쓸 수 있습니다.
-
-$$
-W_e=W_m+W_{mec}
-$$
-
-$$W_e$$는 공급된 전기 에너지, $$W_m$$은 저장된 자기 에너지, 그리고 $$W_{mec}$$는 출력된 역학적 에너지입니다.
-좌표계를 다음과 같이 설정합시다.
-
-<figure style="text-align: center;">
-  <img src="./PEFigure/모터좌표.png" alt="모터좌표" width="100%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 전동기와 좌표계)
-  </figcaption>
-</figure>
-
-고정자에 공급되는 전기 에너지는 다음과 같습니다.
-
-$$
-W_e=\int \mathcal{E}i dt
-$$
-
-패러데이 법칙을 이용하면 다음과 같이 쓸 수 있습니다.
-
-$$
-\begin{align*}
-	&\mathcal{E}=\frac{d\Lambda}{dt}\\
-	&\rightarrow W_e=\int \frac{d\Lambda}{dt}idt=\int id\Lambda
-\end{align*}
-$$
-
-이제 이동자에 가해지는 힘을 $$F_{mec}$$라고 해봅시다.
-
-<figure style="text-align: center;">
-  <img src="./PEFigure/모터힘.png" alt="모터힘" width="100%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 이동자가 받는 힘)
-  </figcaption>
-</figure>
-
-힘 $$F_{mec}$$가 이동자에 하는 일이 바로 출력된 역학적 에너지입니다.
-다음과 같이 쓸 수 있습니다.
-
-$$
-W_{mec}=\int F_{mec}dx
-$$
-
-저장된 자기 에너지는 다음과 같이 쓸 수 있습니다.
-
-$$
-\begin{align*}
-	W_m&=W_e-W_{mec}\\
-	&=\int id\Lambda-\int F_{mec}dx
-\end{align*}
-$$
-
-적당한 수학적 가정 하에 미소 자기 에너지는 다음과 같이 쓸 수 있습니다.
-
-$$
-dW_m=id\Lambda-F_{mec}dx
-$$
-
-이 식은 자기 에너지의 전미분입니다.
-전미분은 다음과 같이 쓸 수 있습니다.
-
-$$
-dW_m=\frac{\partial W_m}{\partial\Lambda}d\Lambda+\frac{\partial W_m}{\partial x}dx
-$$
-
-각 항을 비교하면 다음과 같습니다.
-
-$$
-\begin{cases}
-		&\displaystyle\frac{\partial W_m}{\partial\Lambda}=i\\
-  &\displaystyle\frac{\partial W_m}{\partial x}=-F_{mec}
-	\end{cases}
-$$
-
-따라서 이동자에 가해지는 힘은 다음과 같습니다.
-
-$$
-F_{mec}=-\frac{\partial W_m}{\partial x}
-$$
-
-저장된 자기 에너지를 줄이도록 힘이 가해지는 것을 알 수 있습니다.
-
-선형 매질이라는 가정 하에 자기 에너지 식을 다시 살펴봅시다.
-
-$$
-W_m=\frac{\Lambda^2}{2L(x)}
-$$
-
-기자력에 의해 공급되는 자속은 일정합니다.
-$$x$$에 따라 인덕턴스가 달라지므로 위와 같이 표기했습니다.
-이 식을 이용해서 힘을 구해봅시다.
-
-$$
-\begin{align*}
-		F_{mec}&=-\frac{\partial W_m}{\partial x}\\
-		&=-\frac{\partial }{\partial x}\left(\frac{\Lambda^2}{2L(x)}\right)\\
-		&=\frac{\Lambda^2}{2L(x)^2}\frac{dL(x)}{dx}\\
-		&=\frac{1}{2}i^2\frac{dL(x)}{dx}
-\end{align*}
-$$
-
-인덕턴스가 증가하도록 힘이 가해지는 것을 알 수 있습니다.
-즉, 고정자 쪽으로 이동하도록 이동자에 힘이 가해집니다.
-
-### 회전자
-
-다음으로 이동자 대신 **회전자(Rotor)**로 동력이 전달되는 전동기를 살펴봅시다.
-회전자 또한 자기 에너지를 역학적 에너지로 변환하는 부분으로, 병진 이동자와 달리 회전 운동을 합니다.
-
-<figure style="text-align: center;">
-  <img src="./PEFigure/모터회전.png" alt="모터회전" width="100%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 회전자로 이루어진 전동기의 구조)
-  </figcaption>
-</figure>
-
-
-
----
-
-## 전동기의 구조
-
-앞서 설명한 구조는 동작 원리를 설명하기 위한 것이었습니다.
-실제로 쓰이는 전동기는 다음과 같은 구조입니다.
-
-<figure style="text-align: center;">
-  <img src="./PEFigure/전동기구조실제.png" alt="전동기구조실제" width="100%"/>
-  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 실제 전동기의 구조)
-  </figcaption>
-</figure>
-
-두 그림 모두 고정자는 전자석입니다.
-회전자의 경우 왼쪽 그림에서는 자석이고, 오른쪽 그림에서는 자성체입니다.
-토크는 고정자와 회전자의 상호작용을 통해 생성됩니다.
-회전자가 자석인 경우, 인력이 발생합니다.
-회전자가 자성체인 경우, 자기 에너지를 감소시키는 힘이 발생합니다.
-
----
-
 ## 회전 운동
 
 주로 회전 운동을 하는 시스템에 대해 다룰 예정이므로, 회전 운동에 대해 설명하겠습니다.
@@ -715,6 +555,164 @@ $$
 ### 토크와 일
 
 
+
+---
+
+## 전동기의 동작 원리
+
+### 병진 이동자
+
+전동기는 기본적으로 다음과 같은 형태입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터.png" alt="모터" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전동기의 구조)
+  </figcaption>
+</figure>
+
+**고정자(Stator)**는 전동기 내에 고정된 부분으로, 전기 에너지를 자기 에너지로 전환하는 역할을 수행합니다.
+**이동자(Mover)**는 전동기 내에서 움직이는 부분으로, 자기 에너지를 역학적 에너지로 전환하는 역할을 수행합니다.
+
+총 에너지 보존 식은 다음과 같이 쓸 수 있습니다.
+
+$$
+W_e=W_m+W_{mec}
+$$
+
+$$W_e$$는 공급된 전기 에너지, $$W_m$$은 저장된 자기 에너지, 그리고 $$W_{mec}$$는 출력된 역학적 에너지입니다.
+좌표계를 다음과 같이 설정합시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터좌표.png" alt="모터좌표" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전동기와 좌표계)
+  </figcaption>
+</figure>
+
+고정자에 공급되는 전기 에너지는 다음과 같습니다.
+
+$$
+W_e=\int \mathcal{E}i dt
+$$
+
+패러데이 법칙을 이용하면 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{align*}
+	&\mathcal{E}=\frac{d\Lambda}{dt}\\
+	&\rightarrow W_e=\int \frac{d\Lambda}{dt}idt=\int id\Lambda
+\end{align*}
+$$
+
+이제 이동자에 가해지는 힘을 $$F_{mec}$$라고 해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터힘.png" alt="모터힘" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 이동자가 받는 힘)
+  </figcaption>
+</figure>
+
+힘 $$F_{mec}$$가 이동자에 하는 일이 바로 출력된 역학적 에너지입니다.
+다음과 같이 쓸 수 있습니다.
+
+$$
+W_{mec}=\int F_{mec}dx
+$$
+
+저장된 자기 에너지는 다음과 같이 쓸 수 있습니다.
+
+$$
+\begin{align*}
+	W_m&=W_e-W_{mec}\\
+	&=\int id\Lambda-\int F_{mec}dx
+\end{align*}
+$$
+
+적당한 수학적 가정 하에 미소 자기 에너지는 다음과 같이 쓸 수 있습니다.
+
+$$
+dW_m=id\Lambda-F_{mec}dx
+$$
+
+이 식은 자기 에너지의 전미분입니다.
+전미분은 다음과 같이 쓸 수 있습니다.
+
+$$
+dW_m=\frac{\partial W_m}{\partial\Lambda}d\Lambda+\frac{\partial W_m}{\partial x}dx
+$$
+
+각 항을 비교하면 다음과 같습니다.
+
+$$
+\begin{cases}
+		&\displaystyle\frac{\partial W_m}{\partial\Lambda}=i\\
+  &\displaystyle\frac{\partial W_m}{\partial x}=-F_{mec}
+	\end{cases}
+$$
+
+따라서 이동자에 가해지는 힘은 다음과 같습니다.
+
+$$
+F_{mec}=-\frac{\partial W_m}{\partial x}
+$$
+
+저장된 자기 에너지를 줄이도록 힘이 가해지는 것을 알 수 있습니다.
+
+선형 매질이라는 가정 하에 자기 에너지 식을 다시 살펴봅시다.
+
+$$
+W_m=\frac{\Lambda^2}{2L(x)}
+$$
+
+기자력에 의해 공급되는 자속은 일정합니다.
+$$x$$에 따라 인덕턴스가 달라지므로 위와 같이 표기했습니다.
+이 식을 이용해서 힘을 구해봅시다.
+
+$$
+\begin{align*}
+		F_{mec}&=-\frac{\partial W_m}{\partial x}\\
+		&=-\frac{\partial }{\partial x}\left(\frac{\Lambda^2}{2L(x)}\right)\\
+		&=\frac{\Lambda^2}{2L(x)^2}\frac{dL(x)}{dx}\\
+		&=\frac{1}{2}i^2\frac{dL(x)}{dx}
+\end{align*}
+$$
+
+인덕턴스가 증가하도록 힘이 가해지는 것을 알 수 있습니다.
+즉, 고정자 쪽으로 이동하도록 이동자에 힘이 가해집니다.
+
+### 회전자
+
+다음으로 이동자 대신 **회전자(Rotor)**로 동력이 전달되는 전동기를 살펴봅시다.
+회전자 또한 자기 에너지를 역학적 에너지로 변환하는 부분으로, 병진 이동자와 달리 회전 운동을 합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/모터회전.png" alt="모터회전" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 회전자로 이루어진 전동기의 구조)
+  </figcaption>
+</figure>
+
+---
+
+## 전동기의 구조
+
+앞서 설명한 구조는 동작 원리를 설명하기 위한 것이었습니다.
+실제로 쓰이는 전동기는 다음과 같은 구조입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기구조실제.png" alt="전동기구조실제" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 실제 전동기의 구조)
+  </figcaption>
+</figure>
+
+두 그림 모두 고정자는 전자석입니다.
+회전자의 경우 왼쪽 그림에서는 자석이고, 오른쪽 그림에서는 자성체입니다.
+토크는 고정자와 회전자의 상호작용을 통해 생성됩니다.
+회전자가 자석인 경우, 인력이 발생합니다.
+회전자가 자성체인 경우, 자기 에너지를 감소시키는 힘이 발생합니다.
 
 ---
 
