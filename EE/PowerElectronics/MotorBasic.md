@@ -394,12 +394,17 @@ $$
 
 $$
 \begin{align*}
-		\boldsymbol{\tau}&=\mathbf{r}\times\mathbf{F}\\
-		&=\mathbf{r}\times\dot{\mathbf{p}}\\
-		&=\frac{d}{dt}\left(\mathbf{r}\times\mathbf{p}\right)\ \ \ \text{since}\ \frac{d\mathbf{r}}{dt}=\mathbf{0}\ \text{(강체)}\\
-		&=\dot{\mathbf{L}}
+	\boldsymbol{\tau}&=\mathbf{r}\times\mathbf{F}\\
+	&=\mathbf{r}\times\dot{\mathbf{p}}\\
+	&=\dot{\mathbf{r}}\times\mathbf{p}+\mathbf{r}\times\dot{\mathbf{p}}\\
+	&=\frac{d}{dt}\left(\mathbf{r}\times\mathbf{p}\right)\\
+	&=\dot{\mathbf{L}}
 \end{align*}
 $$
+
+$$\dot{\mathbf{r}}\times\mathbf{p}$$는 방향이 같은 두 벡터의 외적이므로 $$\mathbf{0}$$입니다.
+토크가 각운동량의 시간 미분임을 알 수 있습니다.
+이는 힘이 운동량의 시간 미분인 점과 유사합니다.
 
 회전자는 토크를 받아 회전합니다.
 또한 부하의 속도는 생성된 토크에 따라 달라집니다.
