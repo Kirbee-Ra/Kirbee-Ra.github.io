@@ -106,9 +106,9 @@ $$
 먼저 **비례 제어(Proportional(P) Control)**입니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/비례제어.svg" alt="비례제어" width="100%"/>
+  <img src="./PEFigure/P제어.svg" alt="P제어" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 비례 제어 시스템)
+    (그림. P 제어 시스템)
   </figcaption>
 </figure>
 
@@ -161,9 +161,9 @@ $$
 다음으로 **적분 제어(Integral(I) Control)**입니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/적분제어.svg" alt="적분제어" width="100%"/>
+  <img src="./PEFigure/I제어.svg" alt="I제어" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 적분 제어 시스템)
+    (그림. I 제어 시스템)
   </figcaption>
 </figure>
 
@@ -209,9 +209,9 @@ P 제어는 정상 상태 오차를 $$0$$으로 만들 수 없고, I 제어는 �
 정상 상태 오차를 $$0$$으로 만들면서, 응답 속도도 개선이 된 제어 기법이 바로 **비례적분 제어(Proportional-Integral(PI) Control)**입니다.
 
 <figure style="text-align: center;">
-  <img src="./PEFigure/비례적분제어.svg" alt="비례적분제어" width="100%"/>
+  <img src="./PEFigure/PI제어.svg" alt="PI제어" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. 비례적분 제어 시스템)
+    (그림. PI 제어 시스템)
   </figcaption>
 </figure>
 
@@ -524,7 +524,73 @@ $$
 
 ### 속도 제어기의 오버슛
 
+위와 같은 과정을 거쳐 설계된 제어기의 응답을 살펴보면 다음과 같이 오버슛이 발생합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/속도제어오버슛.svg" alt="속도제어기오버슛" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 속도 제어기 응답의 오버슛)
+  </figcaption>
+</figure>
+
+PI 제어기를 근사하지 않은 폐루프 전달 함수를 살펴봅시다.
+
+$$
+\begin{align*}
+	G_{CL}(s)&=\frac{G_L(s)}{1+G_L(s)}=\frac{\left(K_{ps}+\displaystyle\frac{K_{is}}{s}\right)\displaystyle\frac{K_T}{sJ}}{1+\left(K_{ps}+\displaystyle\frac{K_{is}}{s}\right)\displaystyle\frac{K_T}{sJ}}\\
+	&=\frac{\displaystyle\frac{K_T}{J}\left(K_{ps}s+K_{is}\right)}{s^2+\displaystyle\frac{K_TK_{ps}}{J}s+\displaystyle\frac{K_TK_{is}}{J}}
+\end{align*}
+$$
+
+여기서 감쇄비는 다음과 같습니다.
+
+$$
+\zeta=\frac{1}{2}\sqrt{\frac{K_TK_{ps}}{J}\frac{K_{ps}}{K_{is}}}=\frac{1}{2}\sqrt{\frac{\omega_{cs}}{\omega_{PI}}}
+$$
+
+위와 같이 설계를 할 경우, 감쇄비가 보통 $$1$$보다 큽니다.
+즉, 과감쇄 형태인데 오버슛이 발생했다는 것은 원인이 극점은 아니라는 의미입니다.
+따라서 영점을 살펴볼 필요가 있습니다.
+다음과 같이 두 항으로 나눠서 살펴봅시다.
+
+$$
+G_{CL}(s)=\frac{\displaystyle\frac{K_T}{J}K_{is}}{s^2+\displaystyle\frac{K_TK_{ps}}{J}s+\displaystyle\frac{K_TK_{is}}{J}}+\frac{\displaystyle\frac{K_T}{J}K_{ps}s}{s^2+\displaystyle\frac{K_TK_{ps}}{J}s+\displaystyle\frac{K_TK_{is}}{J}}
+$$
+
+계단 함수 입력에 대한 각 항의 응답은 다음과 같습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/속도제어응답.svg" alt="속도제어응답" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 속도 제어기 응답 특성)
+  </figcaption>
+</figure>
+
+영점이 원인임을 확인했습니다.
+이를 완화해줄 필요가 있습니다.
+
 ### 적분비례(IP) 제어
+
+오버슛을 완화하기 위해 도입된 제어 기법이 있습니다.
+바로 **적분비례(Integral-Proportional(IP)) 제어**입니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/IP제어.svg" alt="IP제어" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. IP 제어 시스템)
+  </figcaption>
+</figure>
+
+이 시스템의 전달 함수는 다음과 같습니다.
+
+$$
+\begin{align*}
+	&\omega_m=\left(\frac{K_{is}}{s}\left(\omega_m^*-\omega_m\right)-K_{ps}\omega_m\right)\frac{K_T}{sJ}\\
+	&\rightarrow\frac{\omega_m}{\omega_m^*}=\frac{\displaystyle\frac{K_TK_{is}}{J}}{s^2+\displaystyle\frac{K_TK_{ps}}{J}s+\displaystyle\frac{K_TK_{is}}{J}}
+\end{align*}
+$$
+
+시스템의 영점이 사라졌고, 오버슛 또한 완회되었습니다.
 
 ---
 
