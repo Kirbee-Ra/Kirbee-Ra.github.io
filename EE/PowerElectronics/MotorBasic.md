@@ -571,7 +571,7 @@ $$
 dW=\boldsymbol{\tau}\cdot d\boldsymbol{\theta}
 $$
 
-전동기에서는 각변위와 토크가 수직이므로 다음과 같이 쓸 수 있습니다.
+전동기에서는 각변위와 토크가 평행므로 다음과 같이 쓸 수 있습니다.
 
 $$
 dW=\tau d\theta
@@ -915,3 +915,168 @@ $$
 $$
 \tau_M'=I_L\dot{\omega}_L+b_L\omega_L
 $$
+
+---
+
+## 전동기의 동작 모드
+
+전동기 토크와 각속도의 방향에 따라 전력의 흐름이 다릅니다.
+전동기 토크와 각속도의 방향이 동일하다면, 전력은 다음과 같이 양수입니다.
+
+$$
+P=\boldsymbol{\tau}_M\cdot\boldsymbol{\omega}_M=\tau_M\omega_M
+$$
+
+이때는 전력이 전동기에서 부하로 전달되는 전동기 모드로 동작합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기모드.svg" alt="전동기모드" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전동기의 전동기 모드 동작)
+  </figcaption>
+</figure>
+
+전동기 토크와 각속도의 방향이 반대라면, 전력은 다음과 같이 음수입니다.
+
+$$
+P=\boldsymbol{\tau}_M\cdot\boldsymbol{\omega}_M=-\tau_M\omega_M
+$$
+
+이때는 전력이 부하에서 전동기로 전달되는 발전기 모드로 동작합니다.
+
+---
+
+## 제동
+
+전동기를 구동하다가 속도를 줄여야 하는 때가 있습니다.
+제동 방법은 대표적으로 두 가지가 있습니다.
+
+### 회생 제동
+
+다음과 같이 
+
+**회생 제동(Regenerative Braking)**은 다음과
+
+---
+
+## 4-상한 동작 모드$\boldsymbol{\tau}_M>\boldsymbol{\tau}_L$$이면 알짜 토크가 양수이므로 각속도가 증가합니다.
+$$\boldsymbol{\tau}_M<\boldsymbol{\tau}_L$$이면 알짜 토크가 음수이므로 각속도가 감소합니다.
+
+### 부하 시스템의 운동 방정식
+
+총 관성 모멘트 $$I=I_M+I_L$$인 물체가 알짜 토크 $$\boldsymbol{\tau}=\boldsymbol{\tau}_M-\boldsymbol{\tau}_L$$을 받아 각가속도 $$\boldsymbol{\alpha}=\dot{\boldsymbol{\omega}}$$로 운동합니다.
+이는 다음과 같이 표현할 수 있습니다.
+
+$$
+\boldsymbol{\tau}=I\boldsymbol{\alpha}
+$$
+
+1차원 운동이므로 다음과 같이 모두 스칼라로 나타낼 수 있습니다.
+
+$$
+\tau=I\alpha
+$$
+
+전동기 토크는 다음과 같이 나타낼 수 있습니다.
+
+$$
+\tau_M=I\alpha+\tau_L
+$$
+
+전동기에서는 각속도가 제어 대상입니다.
+따라서 각가속도보다는 각속도의 시간 미분으로 표기하겠습니다.
+
+$$
+\tau_M=I\dot{\omega}+\tau_L
+$$
+
+### 마찰을 고려한 운동 방정식
+
+다음과 같이 마찰력에 의한 토크가 작용한다고 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/마찰전동기시스템.png" alt="마찰전동기시스템" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 마찰을 고려한 전동기 시스템)
+  </figcaption>
+</figure>
+
+$$
+\tau_F=-b\omega
+$$
+
+이때 알짜 토크는 다음과 같습니다.
+
+$$
+\tau_{net}=\tau_M-\tau_L+\tau_F
+$$
+
+전동기 토크는 다음과 같이 나타낼 수 있습니다.
+
+$$
+\tau_M=I\dot{\omega}+b\omega+\tau_L
+$$
+
+### 기어/벨트 시스템
+
+그림과 같이 전동기와 부하가 기어 또는 벨트에 의해 결합된 상황을 생각해봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/기어벨트전동기시스템.png" alt="기어벨트전동기시스템" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 기어/벨트로 결합된 전동기 시스템)
+  </figcaption>
+</figure>
+
+먼저 부하에 대해 생각해봅시다.
+부하에 연결된 기어가 각속도 $$\omega_L$$로 회전하면 부하 또한 동일한 각속도로 회전합니다.
+부하에 작용하는 마찰력에 의한 토크가 $$\tau_F=-b_L\omega_L$$이면 부하에 작용하는 알짜 토크는 다음과 같습니다.
+
+$$
+\tau_M'=I_L\dot{\omega}_L+b_L\omega_L
+$$
+
+---
+
+## 전동기의 동작 모드
+
+전동기 토크와 각속도의 방향에 따라 전력의 흐름이 다릅니다.
+전동기 토크와 각속도의 방향이 동일하다면, 전력은 다음과 같이 양수입니다.
+
+$$
+P=\boldsymbol{\tau}_M\cdot\boldsymbol{\omega}_M=\tau_M\omega_M
+$$
+
+이때는 전력이 전동기에서 부하로 전달되는 전동기 모드로 동작합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기모드.svg" alt="전동기모드" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 전동기의 전동기 모드 동작)
+  </figcaption>
+</figure>
+
+전동기 토크와 각속도의 방향이 반대라면, 전력은 다음과 같이 음수입니다.
+
+$$
+P=\boldsymbol{\tau}_M\cdot\boldsymbol{\omega}_M=-\tau_M\omega_M
+$$
+
+이때는 전력이 부하에서 전동기로 전달되는 발전기 모드로 동작합니다.
+
+---
+
+## 제동
+
+전동기를 구동하다가 속도를 줄여야 하는 때가 있습니다.
+제동 방법은 대표적으로 두 가지가 있습니다.
+
+### 회생 제동
+
+다음과 같이 
+
+**회생 제동(Regenerative Braking)**은 다음과
+
+---
+
+## 4-상한 동작 모드
