@@ -429,6 +429,30 @@ PI 제어기를 지나 피드포워드 제어(역기전력 보상)가 된 전기
 
 제한기의 입력과 출력의 차이를 스케일링하여 적분기의 입력에서 빼줍니다.
 
+위 시스템에서 제한기를 거치기 전의 전압은 다음과 같습니다.
+
+$$
+v^*=\left(k_p+\frac{k_i}{s}\right)\left(i^*-i\right)-\frac{K_ak_i}{s}\left(v^*-v\right)
+$$
+
+실제로 전동기에 가해지는 전압은 다음과 같습니다.
+
+$$
+v=\left(R_a+sL_a\right)i+\mathcal{E}_a
+$$
+
+역기전력이 피드포워드 제어를 통해 보상됐다고 가정합시다.
+전류 제어기의 차단 주파수 $$\omega_{cc}=\displaystyle\frac{k_p}{L_a}=\displaystyle\frac{k_i}{R_a}$$를 이용하고 두 식의 차를 구하면 다음과 같이 정리됩니다.
+
+$$
+\begin{align*}
+	&v^*-v=\left(k_p+\frac{k_i}{s}\right)\left(i^*-i\right)-\frac{K_ak_i}{s}\left(v^*-v\right)-\left(R_a+sL_a\right)i\\
+	&\rightarrow i=\frac{\omega_{cc}}{s+\omega_{cc}}\left(i^*-\frac{s+K_ak_i}{sk_p+k_i}\left(v^*-v\right)\right)
+\end{align*}
+$$
+
+
+
 ### 전류 제어기 설계
 
 ---
