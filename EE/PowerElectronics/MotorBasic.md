@@ -958,9 +958,38 @@ $$
 
 ### 회생 제동
 
-다음과 같이 
+전동기는 양방향 전력 변환 장치를 통해 배터리나 계통과 연결되어 있습니다.
 
-**회생 제동(Regenerative Braking)**은 다음과
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기배터리.svg" alt="전동기배터리" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 배터리에 연결된 전동기)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기계통.svg" alt="전동기계통" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계통에 연결된 전동기)
+  </figcaption>
+</figure>
+
+**회생 제동(Regenerative Braking)**은 감속을 위해 각속도와 반대 방향의 토크를 작용시켜 전동기를 발전기처럼 동작시키는 제동 방법입니다.
+토크와 각속도의 방향이 반대이므로 발전기 모드로 동작하고, 이 전력은 배터리나 계통으로 회수됩니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기배터리회생.svg" alt="전동기배터리회생" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 배터리에 연결된 전동기의 회생 제동)
+  </figcaption>
+</figure>
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/전동기계통회생.svg" alt="전동기계통회생" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 계통에 연결된 전동기의 회생 제동)
+  </figcaption>
+</figure>
 
 ---
 
