@@ -991,6 +991,25 @@ $$
   </figcaption>
 </figure>
 
+에너지를 다시 전원으로 회수한다는 점에서 효율적인 제동 방법입니다.
+하지만 양방향 전력 변환 장치가 필요하여 비교적 비용이 많이 듭니다.
+
+### 발전 제동
+
+다음은 **발전 제동(Dynamic Braking)**입니다.
+발전 제동에 사용된 시스템은 다음과 같이 구성됩니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/발전제동.svg" alt="발전제동" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 발전 제동 시스템)
+  </figcaption>
+</figure>
+
+발전 제동 또한 전기 에너지가 역방향으로 흐르나, 제동 저항을 통해 모두 열로 소산합니다.
+따라서 비교적 효율이 떨어지지만 비용 측면에서는 유리합니다.
+또한 간단하게 구성할 수 있으므로 저전력 어플리케이션에 이용됩니다.
+
 ---
 
 ## 4-상한 동작 모드
