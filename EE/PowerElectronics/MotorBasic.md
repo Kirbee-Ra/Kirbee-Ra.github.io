@@ -961,7 +961,6 @@ $$
 다음과 같이 
 
 **회생 제동(Regenerative Braking)**은 다음과
-**회생 제동(Regenerative Braking)**은 다음과
 
 ---
 
