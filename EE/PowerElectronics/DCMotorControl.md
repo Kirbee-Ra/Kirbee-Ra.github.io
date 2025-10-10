@@ -633,6 +633,42 @@ $$
 
 시스템의 영점이 사라졌고, 오버슛 또한 완회되었습니다.
 
+기존의 PI 제어기를 유지하면서 IP 제어기와 같이 동작하도록 시스템을 구성할 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/IP제어등가.svg" alt="IP제어등가" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 등가 IP 제어 시스템)
+  </figcaption>
+</figure>
+
+위와 같이 구성하면 시스템의 전달 함수는 다음과 같습니다.
+
+$$
+\begin{align*}
+	&\omega_m=\left(\frac{K_{is}}{sK_{ps}+K_{is}}\omega_m^*-\omega_m\right)\left(K_{ps}+\frac{K_{is}}{s}\right)\frac{K_T}{sJ}\\
+	&\rightarrow\frac{\omega_m}{\omega_m^*}=\frac{\displaystyle\frac{K_TK_{is}}{J}}{s^2+\displaystyle\frac{K_TK_{ps}}{J}s+\displaystyle\frac{K_TK_{is}}{J}}
+\end{align*}
+$$
+
+IP 제어의 결과가 1차 저역 필터를 거친 지령 값과 출력의 오차를 PI 제어한 결과와 동등하다는 것을 알 수 있습니다.
+저역 필터의 1차 지연 효과로 인해 지령 값이 급격하게 변동하지 않아서 오버슛이 발생하지 않습니다.
+하지만 그만큼 응답 속도가 느려집니다.
+
+IP 제어에서의 응답 속도는 감쇄비에 의해 결정됩니다.
+가장 빠른 응답을 위해 임계 감쇄 조건인 $$\zeta=1$$로 두면 PI 제어의 영점은 다음과 같이 설계해야 함을 알 수 있습니다.
+
+$$
+\begin{align*}
+	&\zeta=\frac{1}{2}\sqrt{\frac{\omega_{cs}}{\omega_{PI}}}=1\\
+	&\omega_{PI}=\frac{\omega_{cs}}{4}
+\end{align*}
+$$
+
+### PI 제어와 IP 제어의 비교
+
+
+
 ---
 
 ## 위치 제어기
