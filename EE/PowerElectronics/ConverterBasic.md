@@ -4,27 +4,26 @@
 ---
 
 ## 목차
-- [DC-DC 전력 변환 장치](#dc-dc-전력-변환-장치)
+- [컨버터](#컨버터)
 - [파워 스테이지](#파워-스테이지)
-- [펄스 폭 변조](#펄스-폭-변조)
-- [DC-DC 변환의 가정](#dc-dc-변환의-가정)
 - [제어기](#제어기)
-- [컨버터의 동작](#컨버터의-동작)
+- [컨버터의 동작 모드](#컨버터의-동작-모드)
 
 ---
 
-## DC-DC 전력 변환 장치
+## 컨버터
 
-DC-DC 전력 변환 장치의 구조는 다음과 같습니다.
+다음 시스템을 살펴봅시다.
 
 <figure style="text-align: center;">
   <img src="./PEFigure/컨버터.png" alt="컨버터" width="100%"/>
   <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
-    (그림. DC-DC 전력 변환 장치의 구조)
+    (그림. 컨버터의 구조)
   </figcaption>
 </figure>
 
-입력을 받아서 전압 레벨을 변환한 뒤, 부하로 출력합니다.
+입력된 전압을 [스위칭 네트워크](./SwitchingCircuit)를 통해 변압합니다.
+그리고 저주파 필터를 거쳐 부하로 출력합니다.
 여기서 전압 레벨을 변환하는 부분을 **파워 스테이지(Power Stage)**라고 합니다.
 입력단에서 전압 변동 혹은 노이즈가 생길 수 있고, 부하가 순수한 저항성 부하가 아니거나 부하 변동이 생길 수 있습니다.
 이러한 외란이 시스템에 입력돼도 출력 전압을 일정하게 유지할 수 있도록 제어기가 필요합니다.
@@ -74,12 +73,6 @@ DC-DC 전력 변환 장치의 구조는 다음과 같습니다.
 
 ---
 
-## 펄스 폭 변조
-
-
-
----
-
 ## 제어기
 
 제어기를 통해 출력 전압을 제어해야 합니다.
@@ -90,3 +83,81 @@ DC-DC 전력 변환 장치의 구조는 다음과 같습니다.
 제어 변수가 많을수록 복잡도가 매우 커집니다.
 제어기에 제어 변수들이 입력되면 내부 알고리즘에 따라 지령 값에 가까워지는 방향으로 신호를 출력합니다.
 출력된 신호는 주로 듀티 비를 변화시키고, 주파수를 변화시키는 경우도 있습니다.
+
+---
+
+## 컨버터
+
+---
+
+## 컨버터의 동작 모드
+
+컨버터는 인덕터에 흐르는 전류에 따라 동작 모드가 나뉘게 됩니다.
+
+### 인덕터 전류
+
+컨버터에 있는 인덕터에는 보통 구간별로 일정한 전압이 걸립니다.
+임의의 구간 $$[t_0,t]$$에서 인덕턴스가 $$L$$인 인덕터에 흐르는 전류는 다음과 같습니다.
+
+$$
+i_L(t)=\int_{t_0}^{t}\frac{v_L}{L}dt'+i_L(t_0)
+$$
+
+전압이 일정하므로 다음과 같이 쓸 수 있습니다.
+
+$$
+i_L(t)=\frac{v_L\left(t-t_0\right)}{L}
+$$
+
+일차함수의 형태입니다.
+전압은 상황에 따라 다르므로 양수 또는 음수가 될 수 있습니다.
+또한 인덕터 전류는 연속적이므로 다음과 같이 나타낼 수 있습니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/인덕터전류임의.png" alt="인덕터전류임의" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 임의의 구간에 대한 인덕터 전류 파형)
+  </figcaption>
+</figure>
+
+컨버터에 있는 다이오드로 인해 역전류가 차단되므로, 수식은 점선으로 표시하고, 실제 전류는 실선으로 표시했습니다.
+스위칭 주파수가 일정하다면, 세 경우로 나눌 수 있습니다.
+
+### CCM 동작
+
+먼저 인덕터 전류가 항상 양수인 경우입니다.
+인덕터에 항상 전류가 흐르는 경우로, **CCM(Continouos Conduction Mode) 동작** 또는 **연속 전도 모드 동작**이라고 합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/CCM.png" alt="CCM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. CCM에서의 인덕터 전류 파형)
+  </figcaption>
+</figure>
+
+### DCM 동작
+
+다음으로 인덕터 전류가 $$0$$이 되는 구간이 있는 경우입니다.
+인덕터에 전류가 흐르지 않는 구간이 있는 경우로, **DCM(Discontinuous Conduction Mode)** 동작 또는 **불연속 전도 모드** 동작이라고 합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/DCM.png" alt="DCM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. DCM에서의 인덕터 전류 파형)
+  </figcaption>
+</figure>
+
+### BCM 동작
+
+다음으로 인덕터 전류가 $$0$$이 되는 순간이 있는 경우입니다.
+인덕터에 전류가 흐르지 않는 구간이 있는 경우로, **BCM(Borderline(or Boundary) Conduction Mode)** 동작 또는 **경계 전도 모드 **동작이라고 합니다.
+**CrCM(Critical Conduction Mode)** 동작이라고도 합니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/BCM.png" alt="BCM" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. BCM에서의 인덕터 전류 파형)
+  </figcaption>
+</figure>
+
+### 버스트 모드
