@@ -100,7 +100,7 @@
 컨버터의 효율을 개선하는 방법입니다.
 
 - [동기 정류](./SynchronousRectification.md)
-- [소프트 스위칭]
+- [소프트 스위칭](./SoftSwitching.md)
 
 ---
 
