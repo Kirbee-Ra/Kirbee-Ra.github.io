@@ -28,6 +28,10 @@
 
 ---
 
+# [논문 공부](./Papers/PaperReview.md)
+
+---
+
 # 용어 목록
 - [국문 용어](./terminology/KIndex.md)
 - [영문 용어](./terminology/EIndex.md)
