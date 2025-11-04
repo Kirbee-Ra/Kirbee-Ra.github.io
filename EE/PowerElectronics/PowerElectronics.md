@@ -24,6 +24,7 @@
 
 ## DC-DC 변환
 
+- [전압 레귤레이션](./VoltageRegulation.md)
 - [선형 레귤레이터](./LinearRegulator.md)
 - [컨버터](./Converter.md)
 
