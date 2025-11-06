@@ -1,18 +1,89 @@
-컨버터
+스위칭 레귤레이터(컨버터)
 =
 
 ---
 
 ## 목차
-- [컨버터](#converter)
-- [스위칭 전력 변환 회로](#스위칭-전력-변환-회로)
+- [스위칭을 통한 전력 변환](#스위칭을-통한-전력-변환)
+- [스위칭 파워-폴](#스위칭-파워-폴)
 - [제어기](#제어기)
 - [컨버터의 동작 모드](#컨버터의-동작-모드)
 
 ---
 
-<h2 id="converter">컨버터</h2>
+## 스위칭을 통한 전력 변환
 
+### DC-DC 전력 변환 원리
+
+선형 레귤레이터를 통해 전력 변환을 수행하면, 일반적인 상황에서 고효율을 달성할 수 없는 문제가 존재합니다.
+따라서 손실형 소자 없이 전력을 변환할 필요가 있습니다.
+다음과 같은 회로를 살펴봅시다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위칭기본.svg" alt="스위칭기본" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. SPDT 스위칭 회로)
+  </figcaption>
+</figure>
+
+위와 같이 회로를 구성하면, 스위치의 투의 위치에 따라 출력 전압이 달라집니다.
+스위칭을 반복하면 다음과 같은 전압이 출력됩니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위칭펄스.svg" alt="스위칭펄스" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 펄스 트레인형 출력 전압)
+  </figcaption>
+</figure>
+
+하지만 이런 전압은 출력단에 연결될 장치에 바로 공급하기에는 적합하지 않습니다.
+따라서 부하가 요구하는 전압으로 평활을 해줘야 합니다.
+펄스 트레인은 주기 함수이므로 다음과 같은 푸리에 급수로 나타낼 수 있습니다.
+
+$$
+v_x=
+$$
+
+이는 주파수 영역에서 다음과 같이 나타납니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/스위칭펄스푸리에.svg" alt="스위칭펄스푸리에" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 주파수 영역에서의 펄스 트레인)
+  </figcaption>
+</figure>
+
+고주파 성분이 많이 섞여 있는 것을 알 수 있습니다.
+전압 리플을 줄이려면 고주파 성분을 감쇠해야 합니다.
+이는 저역 필터를 통해 구현할 수 있습니다.
+무손실 소자인 인덕터와 커패시터를 이용하여 저역 필터를 구성하면 회로는 다음과 같이 구성됩니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅컨버터.svg" alt="벅컨버터" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 강압 회로)
+  </figcaption>
+</figure>
+
+또한 출력 전압이 다음과 같이 나타납니다.
+
+<figure style="text-align: center;">
+  <img src="./PEFigure/벅컨버터출력.svg" alt="벅컨버터출력" width="100%"/>
+  <figcaption style="text-align: center; margin-top: 8px; font-size: 0.9em; color: #555;">
+    (그림. 강압 회로의 출력 전압)
+  </figcaption>
+</figure>
+
+전압 리플이 줄어들고, 입력 전압에 비해 강압된 것을 알 수 있습니다.
+이런 식으로 직류를 직류로 변환할 수 있습니다.
+DC-DC 변환의 기본 원리입니다.
+
+### DC-DC 변환의 가정
+
+이런 변환을 수행하는 회로는 해석의 편의를 위해 몇 가지 가정을 합니다.
+1. 
+
+<!--
 다음 시스템을 살펴봅시다.
 
 <figure style="text-align: center;">
@@ -72,6 +143,8 @@
 스위칭 주기 대비 스위치가 켜져 있는 시간의 비를 **듀티 비(Duty Ratio)**라고 합니다.
 위 회로의 경우는 듀티 비가 클수록 전력이 전달되는 시간이 길어져서 전압 레벨이 높아집니다.
 이런 원리로 전력 변환이 이루어집니다.
+
+-->
 
 ---
 
