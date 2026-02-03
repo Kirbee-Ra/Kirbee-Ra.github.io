@@ -108,6 +108,7 @@ void InitEPwm1(void) {
 
 
 //ePWM2 함수
+
 void InitEPwm2(void) {
     EALLOW; // 보호된 레지스터 접근 허용
 
