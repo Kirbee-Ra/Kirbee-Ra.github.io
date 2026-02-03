@@ -1,0 +1,842 @@
+//###########################################################################
+//
+// 파일:   main.c
+//
+// 제목:  PWM1-12 테스트
+//
+// 설명:
+// 이 코드는 TMS320F28379의 ePWM1-12 모듈을 사용하여
+// 100kHz PWM 신호를 생성하고, 5µs 데드타임을 적용합니다.
+// 외부 연결: ePWM1-12A/B (GPIO0-23)
+//
+//###########################################################################
+
+#include "F28x_Project.h" // 디바이스 헤더 파일 및 예제 포함 파일. DSP28x_Project.h을 F28x_Project.h로 변경
+
+// 시스템 및 PWM 설정 상수
+#define SYSCLKOUT       200000000UL // 시스템 클럭 (Hz): 200 MHz로 변경
+#define PWM_FREQ        100000UL     // 목표 PWM 주파수 (Hz): 100 kHz
+#define DUTY_CYCLE      50U         // 초기 듀티 사이클 (%): 50% // 듀티 사이클 50 %
+#define DEAD_TIME       5e-7        // 데드타임 (초): 0.5 µs
+#define EPWMCLK_HZ   (SYSCLKOUT/2UL)         // 지금 측정 결과로 보면 100 MHz
+#define TBCLK_HZ     (EPWMCLK_HZ)            // HSPCLKDIV=1, CLKDIV=1 가정
+//#define DUTY_STEP       10U         // 듀티 사이클 변경 단위 (%): 10% // 변경 안 함
+//#define UPDATE_PERIOD   10000UL     // 듀티 업데이트 주기: 0.5초 (20 kHz * 0.5초) // 업데이트 안 함
+
+// ePWM1만 주파수가 다르므로 따로 설정
+#define PWM1_FREQ        50000UL
+#define TBPRD1_VALUE     ((Uint16)((Uint32)TBCLK_HZ / (PWM1_FREQ * 1UL * 1UL)) - 1UL)
+#define CMPA1_VALUE      ((Uint16)((((Uint32)(TBPRD1_VALUE) + 1UL) * (Uint32)(DUTY_CYCLE)) / 100UL))
+
+// 계산된 레지스터 값 (unsigned 캐스팅으로 경고 제거, 1UL * 1UL로 CLKDIV/HSPCLKDIV 명시)
+#define TBPRD_VALUE     ((Uint16)((Uint32)TBCLK_HZ / (PWM_FREQ * 1UL * 1UL)) - 1UL) // 3750 (20kHz, CLKDIV=1, HSPCLKDIV=1) // 1999 (100 kHz), up mode로 변경. 999로 변경.
+#define CMPA_VALUE      ((Uint16)((((Uint32)(TBPRD_VALUE) + 1UL) * (Uint32)(DUTY_CYCLE)) / 100UL)) // 초기 CMPA: 1875 (50%) // ((Uint16)(((Uint32)TBPRD_VALUE * DUTY_CYCLE) / 100U))를 변경함. 초기 CMPA: (1999+1)/50*100=1000. 초기 CMPA: 500.
+#define DEAD_TIME_TICKS 50U // 1µs @150MHz = 150 틱 (float 연산 피함) // 100으로 변경. 0.5us -> 50 ticks (TBCLK=100MHz)
+#define PHASE_TICKS     167U // PHASE_TICKS = (TBPRD + 1)*60/360
+
+// 듀티 사이클 제어를 위한 글로벌 변수 // 듀티 고정이므로 필요 없음.
+// volatile Uint16 current_duty = DUTY_CYCLE; // 현재 듀티 사이클 (%)
+// volatile Uint16 duty_direction = 1; // 듀티 변경 방향 (1: 증가, 0: 감소)
+// volatile Uint32 update_counter = 0; // 듀티 업데이트 주기 카운터
+
+// ePWM1 함수 ######################################################################################################################################################
+// DB, 주파수 변동, 상보 동작, 듀티 변동
+// 주파수 변동으로 인해 ePWM2를 마스터로 변경 필요
+
+void InitEPwm1(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM1A와 ePWM1B를 GPIO0, GPIO1에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO0 = 1; // GPIO0을 ePWM1A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO1 = 1; // GPIO1을 ePWM1B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm1Regs.TBPRD = TBPRD1_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm1Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm1Regs.TBCTR = 0; // 카운터 초기화
+    EPwm1Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm1Regs.TBCTL.bit.PHSEN = TB_DISABLE; // 위상 로드 비활성화.
+    // 여기부터
+    EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm1Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm1Regs.TBCTL.bit.SYNCOSEL = TB_CTR_ZERO; // 독립된 시간 체계 사용.
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm1Regs.CMPA.bit.CMPA = CMPA1_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm1Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm1Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm1Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm1Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm1Regs.DBCTL.bit.IN_MODE = DBA_ALL; // // DB 입력은 A만 사용.
+    EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm1Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm1Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm1Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm1Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm1Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM2 함수 ######################################################################################################################################################
+// ePWM1 주파수 변경으로 인해 ePWM2를 마스터로 변경
+
+void InitEPwm2(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM2A와 ePWM2B를 GPIO2, GPIO3에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO2 = 1; // GPIO2을 ePWM2A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 1; // GPIO3을 ePWM2B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm2Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm2Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm2Regs.TBCTR = 0; // 카운터 초기화
+    EPwm2Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm2Regs.TBCTL.bit.PHSEN = TB_DISABLE; // 위상 로드 비활성화. 마스터 파형이므로 위상(= 0) 안 씀.
+    // 여기부터
+    EPwm2Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm2Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm2Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm2Regs.TBCTL.bit.SYNCOSEL = TB_CTR_ZERO; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm2Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm2Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm2Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm2Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm2Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm2Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm2Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm2Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm2Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm2Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm2Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm2Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm2Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm2Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm2Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm2Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM3 함수 ######################################################################################################################################################
+
+void InitEPwm3(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM3A와 ePWM3B를 GPIO4, GPIO5에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO4 = 1; // GPIO4을 ePWM3A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 1; // GPIO5을 ePWM3B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm3Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm3Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm3Regs.TBCTR = 0; // 카운터 초기화
+    EPwm3Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm3Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm3Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm3Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm3Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm3Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm3Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm3Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm3Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm3Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm3Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm3Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm3Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm3Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm3Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm3Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm3Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm3Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm3Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm3Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm3Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm3Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM4 함수 ######################################################################################################################################################
+
+void InitEPwm4(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM4A와 ePWM4B를 GPIO6, GPIO7에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 1; // GPIO6을 ePWM4A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO7 = 1; // GPIO77을 ePWM4B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm4Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm4Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm4Regs.TBCTR = 0; // 카운터 초기화
+    EPwm4Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm4Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm4Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm4Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm4Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm4Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm4Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm4Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm4Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm4Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm4Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm4Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm4Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm4Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm4Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm4Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm4Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm4Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm4Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm4Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm4Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm4Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM5 함수 ######################################################################################################################################################
+
+void InitEPwm5(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM5A와 ePWM5B를 GPIO8, GPIO9에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO8 = 1; // GPIO8을 ePWM5A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO9 = 1; // GPIO9을 ePWM5B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm5Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm5Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm5Regs.TBCTR = 0; // 카운터 초기화
+    EPwm5Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm5Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm5Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm5Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm5Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm5Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm5Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm5Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm5Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm5Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm5Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm5Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm5Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm5Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm5Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm5Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm5Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm5Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm5Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm5Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm5Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm5Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM6 함수 ######################################################################################################################################################
+
+void InitEPwm6(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM6A와 ePWM6B를 GPIO10, GPIO11에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO10 = 1; // GPIO10을 ePWM6A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO11 = 1; // GPIO11을 ePWM6B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm6Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm6Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm6Regs.TBCTR = 0; // 카운터 초기화
+    EPwm6Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm6Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm6Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm6Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm6Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm6Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm6Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm6Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm6Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm6Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm6Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm6Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm6Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm6Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm6Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm6Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm6Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm6Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm6Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm6Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm6Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm6Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM7 함수 ######################################################################################################################################################
+// DB, 주파수 변동, 위상 천이, 상보 동작, 듀티 변동
+
+void InitEPwm7(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM7A와 ePWM7B를 GPIO12, GPIO13에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO12 = 1; // GPIO12을 ePWM7A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO13 = 1; // GPIO13을 ePWM7B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm7Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm7Regs.TBPHS.bit.TBPHS = PHASE_TICKS; // 위상 오프셋: 60. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm7Regs.TBCTR = 0; // 카운터 초기화
+    EPwm7Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm7Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm7Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm7Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm7Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm7Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm7Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm7Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm7Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm7Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm7Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm7Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm7Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm7Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm7Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm7Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm7Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm7Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm7Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm7Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm7Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm7Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM8 함수 ######################################################################################################################################################
+
+void InitEPwm8(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM8A와 ePWM8B를 GPIO14, GPIO15에 매핑
+    GpioCtrlRegs.GPAMUX1.bit.GPIO14 = 1; // GPIO14을 ePWM8A로 설정
+    GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 1; // GPIO15을 ePWM8B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm8Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm8Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm8Regs.TBCTR = 0; // 카운터 초기화
+    EPwm8Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm8Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화. 슬레이브 파형이므로 위상 씀.
+    // 여기부터
+    EPwm8Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm8Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm8Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm8Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm8Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm8Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm8Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm8Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm8Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm8Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm8Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm8Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm8Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm8Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm8Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm8Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm8Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm8Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm8Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm8Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM9 함수 ######################################################################################################################################################
+
+void InitEPwm9(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM9A와 ePWM9B를 GPIO16, GPIO17에 매핑
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO16 = 1; // GPIO16 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO16 = 1; // GPIO16을 ePWM9A로 설정
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO17 = 1; // GPIO17 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO17 = 1; // GPIO17을 ePWM9B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm9Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm9Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm9Regs.TBCTR = 0; // 카운터 초기화
+    EPwm9Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm9Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm9Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm9Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm9Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm9Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm9Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm9Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm9Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm9Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm9Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm9Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm9Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm9Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm9Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm9Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm9Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm9Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm9Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm9Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm9Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm9Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM10 함수 ######################################################################################################################################################
+
+void InitEPwm10(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM10A와 ePWM10B를 GPIO18, GPIO19에 매핑
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO18 = 1; // GPIO18 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO18 = 1; // GPIO18을 ePWM10A로 설정
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO19 = 1; // GPIO19 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 1; // GPIO19을 ePWM10B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm10Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm10Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm10Regs.TBCTR = 0; // 카운터 초기화
+    EPwm10Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm10Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm10Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm10Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm10Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm10Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm10Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm10Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm10Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm10Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm10Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm10Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm10Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm10Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm10Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm10Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm10Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm10Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm10Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm10Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm10Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm10Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM11 함수 ######################################################################################################################################################
+
+void InitEPwm11(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM11A와 ePWM11B를 GPIO20, GPIO21에 매핑
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO20 = 1; // GPIO20 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO20 = 1; // GPIO20을 ePWM11A로 설정
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO21 = 1; // GPIO21 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO21 = 1; // GPIO21을 ePWM11B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm11Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm11Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm11Regs.TBCTR = 0; // 카운터 초기화
+    EPwm11Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm11Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm11Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm11Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm11Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm11Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm11Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm11Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm11Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm11Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm11Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm11Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm11Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm11Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm11Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm11Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm11Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm11Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm11Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm11Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm11Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm11Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// ePWM12 함수 ######################################################################################################################################################
+
+void InitEPwm12(void) {
+    EALLOW; // 보호된 레지스터 접근 허용
+
+    // GPIO 설정: ePWM12A와 ePWM12B를 GPIO22, GPIO23에 매핑
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO22 = 1; // GPIO22 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO22 = 1; // GPIO22을 ePWM12A로 설정
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO23 = 1; // GPIO23 GMUX 설정
+    GpioCtrlRegs.GPAMUX2.bit.GPIO23 = 1; // GPIO23을 ePWM12B로 설정
+
+    // 타임 베이스 클럭 동기화 비활성화 (TI 예제 관행)
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0; // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+
+    // 타임 베이스 (TB) 설정
+    EPwm12Regs.TBPRD = TBPRD_VALUE; // 주기 설정 (100 kHz를 위한 999)
+    EPwm12Regs.TBPHS.bit.TBPHS = 0; // 위상 오프셋: 0. F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm12Regs.TBCTR = 0; // 카운터 초기화
+    EPwm12Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP; // 업 카운트 모드 (UPDOWN -> UP)
+    EPwm12Regs.TBCTL.bit.PHSEN = TB_ENABLE; // 위상 로드 활성화.
+    // 여기부터
+    EPwm12Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1; // 고속 클럭 분주: /1
+    EPwm12Regs.TBCTL.bit.CLKDIV = TB_DIV1; // 클럭 분주: /1
+    EPwm12Regs.TBCTL.bit.PRDLD = TB_SHADOW; // 주기 쉐도우 모드
+    EPwm12Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_IN; // TBCTR=0에서 동기화 출력 // 뭔지 모름
+    // 여기까지는 더 알아볼 것
+
+    // 카운터 비교 (CC) 설정
+    EPwm12Regs.CMPA.bit.CMPA = CMPA_VALUE; // 초기 CMPA: 50% 듀티. // F2837x에는 half 대신 bit를 사용하므로 변경
+    EPwm12Regs.CMPB.bit.CMPB = 0; // CMPB 초기화 (사용하지 않음, 0으로 설정). // .bit.CMPB를 추가함
+    EPwm12Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW; // CMPA 쉐도우 모드
+    EPwm12Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW; // CMPB 쉐도우 모드
+    EPwm12Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO; // CMPA: TBCTR=0일 때 로드
+    EPwm12Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO; // CMPB: TBCTR=0일 때 로드
+
+    // 액션 한정자 (AQ) 설정: 상보 PWM을 위한 구성
+    EPwm12Regs.AQCTLA.bit.ZRO = AQ_SET; // Up mode에서는 ZRO에서 set. CAU를 ZRO로 변경.
+    EPwm12Regs.AQCTLA.bit.CAU = AQ_CLEAR; // Up mode에서는 CAU에서 clear. CAD를 CAU로 변경.
+    // EPwm1Regs.AQCTLB.bit.CAU = AQ_CLEAR; // A만 만들고 B는 데드 타임 + 상보로 동작
+    // EPwm1Regs.AQCTLB.bit.CAD = AQ_SET; // A만 만들고 B는 데드 타임 + 상보로 동작
+
+    // 데드밴드 (DB) 설정: 상보 출력용
+    EPwm12Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE; // 전체 데드밴드 활성화
+    EPwm12Regs.DBCTL.bit.IN_MODE = DBA_ALL; // DB 입력은 A만 사용.
+    EPwm12Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; // 액티브 하이 상보 (ePWM1A 하이, ePWM1B 인버트)
+    EPwm12Regs.DBRED.bit.DBRED = DEAD_TIME_TICKS; // 상승 에지 지연: 0.5 µs (50 틱)
+    EPwm12Regs.DBFED.bit.DBFED = DEAD_TIME_TICKS; // 하강 에지 지연: 0.5 µs (50 틱)
+
+    // 인터럽트 설정 (TI 예제 기반, ET_1ST로 빠른 업데이트)
+    // 듀티 고정이므로 인터럽트 안씀
+    // EPwm12Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO; // TBCTR=0 이벤트 선택
+    // EPwm12Regs.ETSEL.bit.INTEN = 1; // 인터럽트 활성화
+    // EPwm12Regs.ETPS.bit.INTPRD = ET_1ST; // 첫 번째 이벤트에서 인터럽트 발생
+
+    EALLOW;
+    // CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1; // 동기화 활성화 // F2837x에는 SysCtrlRegs 대신 CpuSysRegs가 존재하므로 변경
+    EDIS;
+}
+
+// main
+
+void main(void)
+{
+    InitSysCtrl();   // 시스템/클럭 초기화 (프로젝트 템플릿에서 제공)
+    DINT;            // 전역 인터럽트 비활성 (인터럽트 안 쓰므로 유지)
+
+    // (선택) GPIO 기본 초기화 - 프로젝트에 따라 필요할 수 있음
+    InitGpio();
+
+    // ePWM 타임베이스 정지(동기 시작을 위해)
+    EALLOW;
+    CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0;
+    EDIS;
+
+    // ePWM1/ePWM2 설정 (여기서는 함수 내부에서 TBCLKSYNC를 건드리지 않는다는 전제)
+    InitEPwm1();
+    InitEPwm2();
+    InitEPwm3();
+    InitEPwm4();
+    InitEPwm5();
+    InitEPwm6();
+    InitEPwm7();
+    InitEPwm8();
+    InitEPwm9();
+    InitEPwm10();
+    InitEPwm11();
+    InitEPwm12();
+
+    // ePWM 타임베이스 동시 시작
+    EALLOW;
+    CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1;
+    EDIS;
+
+    while(1)
+    {
+        // 인터럽트 없이 파형만 계속 출력
+        // 필요하면 여기서 EPwm2Regs.TBPHS.bit.TBPHS 등을 천천히 갱신 가능
+    }
+}
+
+
+// 인터럽트 서비스 루틴: 듀티 사이클 동적 변경 // 사용 안 함
+/*
+__interrupt void epwm1_isr(void) {
+    update_counter++; // 주기 카운터 증가
+
+    // 0.5초마다 듀티 사이클 업데이트 (20 kHz * 0.5초 = 10000)
+    if (update_counter >= UPDATE_PERIOD) {
+        update_counter = 0; // 카운터 초기화
+
+        // 듀티 사이클 변경: 10% ~ 90% 범위
+        if (duty_direction) {
+            current_duty += DUTY_STEP; // 증가
+            if (current_duty >= 90) duty_direction = 0; // 90% 도달 시 감소 전환
+        } else {
+            current_duty -= DUTY_STEP; // 감소
+            if (current_duty <= 10) duty_direction = 1; // 10% 도달 시 증가 전환
+        }
+
+        // CMPA 값 업데이트 (unsigned 계산으로 오버플로 방지)
+        EPwm1Regs.CMPA.half.CMPA = (Uint16)(((Uint32)TBPRD_VALUE * (Uint32)current_duty) / 100U);
+    }
+
+    EPwm1Regs.ETCLR.bit.INT = 1; // 인터럽트 플래그 클리어
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP3; // 그룹 3 인터럽트 ACK
+}
+
+void main(void) {
+    InitSysCtrl(); // 시스템 클럭 초기화 (150 MHz)
+    DINT; // 전역 인터럽트 비활성화
+
+    InitPieCtrl(); // PIE 초기화
+    IER = 0x0000; // CPU 인터럽트 비활성화
+    IFR = 0x0000; // CPU 인터럽트 플래그 클리어
+    InitPieVectTable(); // PIE 벡터 테이블 초기화
+
+    EALLOW;
+    PieVectTable.EPWM1_INT = &epwm1_isr; // ePWM1 ISR 설정
+    EDIS;
+
+    InitEPwm1Gpio(); // GPIO 초기화 (TI 예제 참조)
+    InitEPwm1(); // ePWM1 초기화
+
+    // 인터럽트 활성화
+    PieCtrlRegs.PIEIER3.bit.INTx1 = 1; // PIE 그룹 3, INTx1 (ePWM1) 활성화
+    IER |= M_INT3; // 그룹 3 인터럽트 활성화
+    EINT; // 전역 인터럽트 활성화
+    ERTM; // 실시간 디버그 이벤트 활성화
+
+    while(1); // 무한 루프 (IDLE)
+}
+*/
