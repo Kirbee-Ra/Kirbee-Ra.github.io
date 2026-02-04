@@ -113,13 +113,13 @@ void InitSwitchXint1(void)
     GpioCtrlRegs.GPBPUD.bit.GPIO62  = 1;   // pull-up disable (0이 enable인 칩이므로 1이 disable)
 
     // 2) 입력 Qualification 설정 (아래 (2) 참고)
-    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 255; // 6-sample (유지), 필요시 255로 해보기.
+    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 2; // 6-sample (유지), 필요시 255로 해보기.
 
     // 3) XBAR 연결
     InputXbarRegs.INPUT1SELECT = 62; // SW_GPIO 매크로 대신 상수로 박아도 됨
 
     // 4) POLARITY: rising만 원하면 1
-    XintRegs.XINT1CR.bit.POLARITY = 0;  // rising(positive edge)
+    XintRegs.XINT1CR.bit.POLARITY = 0;  // 1: rising, 0: falling
 
     EDIS;
 
@@ -840,28 +840,15 @@ __interrupt void xint1ISR(void)
 {
     Uint16 tbphs9;
 
-    // 이미 디바운스 블록 중이면 무시
-    if(xint1Block)
-    {
-        PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-        return;
-    }
-
-    xint1Block = 1;
-
-    // (핵심) XINT1 잠깐 OFF: 바운스/글리치로 재진입 방지
-    XintRegs.XINT1CR.bit.ENABLE = 0;
-
-    // 위상 토글
     epwm9Phase45 ^= 1U;
     tbphs9 = (epwm9Phase45) ? TBPHS_DELAY_45 : 0U;
-    EPwm9Regs.TBPHS.bit.TBPHS = tbphs9;
 
-    // 동기 반영
+    EPwm9Regs.TBPHS.bit.TBPHS = tbphs9;
     EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
 
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
+
 
 // main
 void main(void)
