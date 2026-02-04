@@ -31,7 +31,7 @@
 #define TBCLK_HZ     (EPWMCLK_HZ)            // HSPCLKDIV=1, CLKDIV=1 가정
 
 // ePWM2만 주파수가 다르므로 따로 설정
-#define PWM2_FREQ        50000UL
+#define PWM2_FREQ       50000UL
 
 // ePWM5는 주파수 변동이므로 따로 설정
 #define EPWM5_DUTY_PCT  50U
@@ -96,52 +96,34 @@ volatile Uint16 epwm8PhaseToggle = 0U;  // 0:30deg, 1:120deg
 volatile Uint16 epwm9Phase45 = 0;   // 0:0deg, 1:45deg
 volatile Uint16 xint1Block = 0;
 
+// 전역 변수 추가
+volatile Uint32 xint1Count = 0;
+#define DEBOUNCE_DELAY 2000000UL // 시스템 클럭에 따라 조절 필요
+
 // ePWM9 외부 신호 함수
 void InitSwitchXint1(void)
 {
     EALLOW;
-
-    // 0) 먼저 XINT1 OFF
-    XintRegs.XINT1CR.bit.ENABLE = 0;
-
-    // 1) GPIO62 설정
+    GpioCtrlRegs.GPBGMUX2.bit.GPIO62 = 0;
     GpioCtrlRegs.GPBMUX2.bit.GPIO62 = 0;
-    GpioCtrlRegs.GPBDIR.bit.GPIO62  = 0;
+    GpioCtrlRegs.GPBDIR.bit.GPIO62  = 0;    // Input
 
-    // (권장) 내부 풀업은 일단 끄는 쪽이 안전합니다.
-    // 외부 풀업/풀다운이 이미 있으면 내부 풀업이 에지를 만들 때가 있습니다.
-    GpioCtrlRegs.GPBPUD.bit.GPIO62  = 1;   // pull-up disable (0이 enable인 칩이므로 1이 disable)
+    // 외부 저항이 있다면 1(Disable), 없다면 0(Enable)로 확실히 결정하세요.
+    GpioCtrlRegs.GPBPUD.bit.GPIO62  = 1;    // 0: Enable Internal Pull-up
 
-    // 2) 입력 Qualification 설정 (아래 (2) 참고)
-    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 2; // 6-sample (유지), 필요시 255로 해보기.
+    // Qualification 설정: 노이즈 필터링 강화
+    // 샘플링 주기를 결정하는 GPBCTRL 설정 (SYSCLK 기준 분주)
+    // 0xFF = 510 * SYSCLK cycle마다 샘플링
+    GpioCtrlRegs.GPBCTRL.bit.QUALPRD3 = 0xFF;
+    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 2;   // 6-sample window
 
-    // 3) XBAR 연결
-    InputXbarRegs.INPUT1SELECT = 62; // SW_GPIO 매크로 대신 상수로 박아도 됨
-
-    // 4) POLARITY: rising만 원하면 1
-    XintRegs.XINT1CR.bit.POLARITY = 0;  // 1: rising, 0: falling
-
+    InputXbarRegs.INPUT1SELECT = 62;
+    XintRegs.XINT1CR.bit.POLARITY = 0;      // 0: Falling edge (스위치 누를 때)
     EDIS;
 
-    // 5) 벡터 연결은 ENABLE 전에
+    // (기존 인터럽트 설정 코드 생략...)
     EALLOW;
-    PieVectTable.XINT1_INT = &xint1ISR;
-    EDIS;
-
-    // 6) (매우 중요) “남아있는 플래그”를 먼저 정리
-    //    - CPU IFR, PIE IFR 모두 정리하고 시작해야 가짜 1회 ISR이 안 들어옵니다.
-    IER &= ~M_INT1;                 // group1 잠깐 막아두고
-    PieCtrlRegs.PIEIER1.bit.INTx4 = 0;
-
-    IFR &= ~M_INT1;                 // CPU pending clear (직접 클리어)
-    PieCtrlRegs.PIEIFR1.bit.INTx4 = 0; // PIE pending clear
-
-    // 7) 이제 enable 순서
-    PieCtrlRegs.PIEIER1.bit.INTx4 = 1;  // XINT1 = Group1 INT4
-    IER |= M_INT1;
-
-    EALLOW;
-    XintRegs.XINT1CR.bit.ENABLE = 1;    // 마지막에 ON
+    XintRegs.XINT1CR.bit.ENABLE = 1;
     EDIS;
 }
 
@@ -835,19 +817,7 @@ __interrupt void cpuTimer0ISR(void)
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
 
-// 스위치 인터럽트
-__interrupt void xint1ISR(void)
-{
-    Uint16 tbphs9;
-
-    epwm9Phase45 ^= 1U;
-    tbphs9 = (epwm9Phase45) ? TBPHS_DELAY_45 : 0U;
-
-    EPwm9Regs.TBPHS.bit.TBPHS = tbphs9;
-    EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
-
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-}
+// 스위치 인터럽트 --> SW1이 키고 꺼짐에 따라
 
 
 // main
