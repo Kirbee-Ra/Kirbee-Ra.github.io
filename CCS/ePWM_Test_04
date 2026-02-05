@@ -31,7 +31,7 @@
 #define TBCLK_HZ     (EPWMCLK_HZ)            // HSPCLKDIV=1, CLKDIV=1 가정
 
 // ePWM2만 주파수가 다르므로 따로 설정
-#define PWM2_FREQ       50000UL
+#define PWM2_FREQ        50000UL
 
 // ePWM5는 주파수 변동이므로 따로 설정
 #define EPWM5_DUTY_PCT  50U
@@ -70,15 +70,15 @@
 #define TBPHS_DELAY_120  ((Uint16)((TBPRD_VALUE + 1U) - PHASE_TICKS_120))
 
 // ePWM9는 외부 신호에 따른 위상 변동이므로 따로 설정
-#define SW_GPIO              62  // GPIO62: SW1
-#define EPWM9_PHASE_TICKS    ((Uint16)((((Uint32)TBPRD_VALUE + 1UL) * 450UL + 180UL) / 360UL))  // 45도
-#define EPWM9_PHASE_DELAY    ((Uint16)((TBPRD_VALUE + 1U) - EPWM9_PHASE_TICKS))                 // 지연
+#define SW_GPIO          62  // GPIO62: SW1
+#define PHASE_TICKS_45   ((Uint16)(((Uint32)(TBPRD_VALUE + 1UL) * 45UL) / 360UL))  // 125
+#define TBPHS_DELAY_45   ((Uint16)((TBPRD_VALUE + 1U) - PHASE_TICKS_45))           // 875
 
 // ISR 프로토타입(선언)
 __interrupt void cpuTimer0ISR(void);
 
 // ePWM9 ISR
-__interrupt void EPWM9SW1Int(void);
+__interrupt void xint1ISR(void);
 
 // 토글용 상태 변수: ePWM2, 7 듀티 0.1 <-> 0.5
 volatile Uint16 epwmDutyToggle = 0U;
@@ -93,31 +93,56 @@ volatile Uint16 epwm6DeadToggle = 0U;
 volatile Uint16 epwm8PhaseToggle = 0U;  // 0:30deg, 1:120deg
 
 // 상태 변수: ePWM9용 위상 변동
-volatile Uint16 epwm9PhaseToggle = 0U;  // 0:30deg, 1:45deg
+volatile Uint16 epwm9Phase45 = 0;   // 0:0deg, 1:45deg
+volatile Uint16 xint1Block = 0;
 
 // ePWM9 외부 신호 함수
-void EPWM9SW1(void) {
-    EALLOW; // 보호된 레지스터 접근 허용
+void InitSwitchXint1(void)
+{
+    EALLOW;
 
-    // GPIO 설정: SW1을 GPIO62에 연결한 상태
-    GpioCtrlRegs.GPBGMUX2.bit.GPIO62 = 0; // 0으로 만들어서 오직 input으로 설정
-    GpioCtrlRegs.GPBMUX2.bit.GPIO62 = 0; // 0으로 만들어서 오직 input으로 설정
-    GpioCtrlRegs.GPBDIR.bit.GPIO62  = 0;    // 외부 신호를 받기 위해 input으로 설정
+    // 0) 먼저 XINT1 OFF
+    XintRegs.XINT1CR.bit.ENABLE = 0;
 
-    // 2) GPIO62를 XINT1 입력으로 라우팅
-    InputXbarRegs.INPUT1SELECT = SW_GPIO;
+    // 1) GPIO62 설정
+    GpioCtrlRegs.GPBMUX2.bit.GPIO62 = 0;
+    GpioCtrlRegs.GPBDIR.bit.GPIO62  = 0;
 
-    // 3) XINT1 설정: 한쪽 에지만(권장: falling)
-    XintRegs.XINT1CR.bit.POLARITY = 0;    // 0: falling edge
-    XintRegs.XINT1CR.bit.ENABLE   = 1;
+    // (권장) 내부 풀업은 일단 끄는 쪽이 안전합니다.
+    // 외부 풀업/풀다운이 이미 있으면 내부 풀업이 에지를 만들 때가 있습니다.
+    GpioCtrlRegs.GPBPUD.bit.GPIO62  = 1;   // pull-up disable (0이 enable인 칩이므로 1이 disable)
 
-    // 4) PIE 벡터 연결
-    PieVectTable.XINT1_INT = &EPWM9SW1Int;
+    // 2) 입력 Qualification 설정 (아래 (2) 참고)
+    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 2; // 6-sample (유지), 필요시 255로 해보기.
+
+    // 3) XBAR 연결
+    InputXbarRegs.INPUT1SELECT = 62; // SW_GPIO 매크로 대신 상수로 박아도 됨
+
+    // 4) POLARITY: rising만 원하면 1
+    XintRegs.XINT1CR.bit.POLARITY = 0;  // 1: rising, 0: falling
+
     EDIS;
 
-    // 5) PIE/CPU enable (XINT1 = Group1 INT4)
-    PieCtrlRegs.PIEIER1.bit.INTx4 = 1;
+    // 5) 벡터 연결은 ENABLE 전에
+    EALLOW;
+    PieVectTable.XINT1_INT = &xint1ISR;
+    EDIS;
+
+    // 6) (매우 중요) “남아있는 플래그”를 먼저 정리
+    //    - CPU IFR, PIE IFR 모두 정리하고 시작해야 가짜 1회 ISR이 안 들어옵니다.
+    IER &= ~M_INT1;                 // group1 잠깐 막아두고
+    PieCtrlRegs.PIEIER1.bit.INTx4 = 0;
+
+    IFR &= ~M_INT1;                 // CPU pending clear (직접 클리어)
+    PieCtrlRegs.PIEIFR1.bit.INTx4 = 0; // PIE pending clear
+
+    // 7) 이제 enable 순서
+    PieCtrlRegs.PIEIER1.bit.INTx4 = 1;  // XINT1 = Group1 INT4
     IER |= M_INT1;
+
+    EALLOW;
+    XintRegs.XINT1CR.bit.ENABLE = 1;    // 마지막에 ON
+    EDIS;
 }
 
 // ePWM1 함수 ######################################################################################################################################################
@@ -810,50 +835,20 @@ __interrupt void cpuTimer0ISR(void)
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
 
-// 스위치 인터럽트 --> SW1이 키고 꺼짐에 따라 불러오게 짜기
-__interrupt void EPWM9SW1Int(void)
-{
-    Uint16 tbphs9;
-
-    // SW on이면 위상 지연
-    epwm9PhaseToggle ^= 1U;
-    tbphs9 = (epwm9PhaseToggle) ? EPWM9_PHASE_DELAY : 0U;
-
-    // ePWM9 함수에 위상 반영
-    EPwm9Regs.TBPHS.bit.TBPHS = tbphs9;
-
-    // 마스터 파형에 시간 동기화
-    EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
-
-    // 인터럽트 처리 완료
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-
-}
-
-/*
 // 스위치 인터럽트
 __interrupt void xint1ISR(void)
 {
     Uint16 tbphs9;
 
-    // 스위치 입력에 따라 0 <-> 45deg 토글
     epwm9Phase45 ^= 1U;
     tbphs9 = (epwm9Phase45) ? TBPHS_DELAY_45 : 0U;
 
-    // TBPHS 반영
     EPwm9Regs.TBPHS.bit.TBPHS = tbphs9;
-
-    // 바로 다음 주기부터 확실히 반영시키고 싶으면 SWFSYNC 한 번
     EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
 
-    // XINT1 플래그 클리어(중요)
-    XintRegs.XINT1CR.bit.ENABLE = 0;  // (선택) 글리치 방지용 잠깐 disable
-    XintRegs.XINT1CR.bit.ENABLE = 1;
-
-    // PIE ACK (Group1)
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
- */
+
 
 // main
 void main(void)
@@ -906,7 +901,7 @@ void main(void)
     // 2) InputXbar INPUT1SELECT = 62
     // 3) XINT1 enable + PIE(Group1 INT4) enable + IER(M_INT1)
     // 4) PieVectTable.XINT1_INT = &xint1ISR
-    EPWM9SW1Int();
+    InitSwitchXint1();
 
     // ---- CPU Timer0 init: 1s interrupt ----
     InitCpuTimers();
