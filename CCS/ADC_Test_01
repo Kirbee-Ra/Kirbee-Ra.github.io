@@ -2,14 +2,7 @@
 //
 // 파일:   ADC_Test.c
 //
-// 제목:  ADC 100 V 센싱 테스트 (ADCINC2)
-//
-// 설명:
-// TMS320F28379의 ADC 모듈 사용
-// 외부 전원 100 VDC를 전압 센서에 연결하여 100 VDC를 센싱 확인
-//
-// 기존: ADCA / ADCINA0
-// 변경: ADCC / ADCINC2
+// 제목:  ADC 100 V 센싱 테스트 (ADCINC2, V_ADC 전역변수)
 //
 //###########################################################################
 
@@ -18,11 +11,12 @@
 interrupt void adc_isr(void);
 interrupt void cputimer0_isr(void);
 
-// ===== 입력 전압 =====
-volatile Uint16 adcRaw = 0;    // ADCRESULT0 raw code (0~4095)
-volatile float  V_BUS  = 100;  // 입력 DC 전압 (계산 결과로 갱신됨)
+// ===== ADC 결과/전압 =====
+volatile Uint16 adcRaw = 0;        // ADCRESULT0 raw code (0~4095)
+volatile float  V_ADC  = 0.0f;     // (추가) ADC 핀 전압 (전역변수: CCS Watch 가능)
+volatile float  V_BUS  = 0.0f;     // 분압 복원된 실제 DC 전압 추정치
 
-// ===== DSP 회로 =====
+// ===== DSP 회로/스케일 =====
 #define SYSCLK_HZ     200000000UL
 
 #define ADC_BITS      12
@@ -31,7 +25,7 @@ volatile float  V_BUS  = 100;  // 입력 DC 전압 (계산 결과로 갱신됨)
 
 #define GAIN_NUM      4417
 #define GAIN_DEN      25
-#define GAIN  ((float)GAIN_NUM/(float)GAIN_DEN)     // V_BUS = GAIN * V_ADC
+#define GAIN          ((float)GAIN_NUM/(float)GAIN_DEN)  // V_BUS = GAIN * V_ADC
 
 // 샘플링 주파수
 #define FS_SAMPLE_HZ  1000U
@@ -42,7 +36,6 @@ static void InitAdcC(void)
     CpuSysRegs.PCLKCR13.bit.ADC_C = 1;
     AdccRegs.ADCCTL1.bit.ADCPWDNZ = 1;
 
-    // PRESCALE 값 의미는 TRM 기준으로 확인 권장
     AdccRegs.ADCCTL2.bit.PRESCALE = 0;
 
     AdcSetMode(ADC_ADCC, ADC_RESOLUTION_12BIT, ADC_SIGNALMODE_SINGLE);
@@ -82,7 +75,8 @@ static void InitCpuTimer0_Fs(Uint32 fs_hz)
     CpuTimer0Regs.TPRH.all    = 0;
     CpuTimer0Regs.TCR.bit.TRB = 1;
 
-    CpuTimer0Regs.TCR.bit.TIE = 1;     // Timer ISR 필요없으면 0으로 두셔도 됨(트리거는 발생)
+    // Timer ISR 없어도 SOC 트리거는 발생하지만, 디버깅용으로 켜둠
+    CpuTimer0Regs.TCR.bit.TIE = 1;
     CpuTimer0Regs.TCR.bit.TSS = 0;
     EDIS;
 }
@@ -100,11 +94,11 @@ void main(void)
     InitPieVectTable();
 
     EALLOW;
-    PieVectTable.ADCC1_INT  = &adc_isr;       // (변경) ADCA1_INT -> ADCC1_INT
+    PieVectTable.ADCC1_INT  = &adc_isr;
     PieVectTable.TIMER0_INT = &cputimer0_isr;
 
-    PieCtrlRegs.PIEIER1.bit.INTx3 = 1;        // (변경) ADCC1_INT는 Group1 INTx3
-    PieCtrlRegs.PIEIER1.bit.INTx7 = 1;        // TIMER0_INT
+    PieCtrlRegs.PIEIER1.bit.INTx3 = 1; // ADCC1_INT
+    PieCtrlRegs.PIEIER1.bit.INTx7 = 1; // TIMER0_INT
     IER |= M_INT1;
     EDIS;
 
@@ -117,23 +111,21 @@ void main(void)
 
     for(;;)
     {
-        // V_BUS 사용 (보호/표시/로깅 등)
+        // CCS Watch에서 V_ADC, V_BUS, adcRaw 확인 가능
+        // 필요하면 보호 로직 추가:
         // if (V_BUS > 400.0f) { ... }
     }
 }
 
 interrupt void adc_isr(void)
 {
-    adcRaw = AdccResultRegs.ADCRESULT0;    // (변경) AdcaResultRegs -> AdccResultRegs
+    adcRaw = AdccResultRegs.ADCRESULT0;
 
-    // ADC raw -> ADC 핀 전압
-    {
-        float V_ADC = ((float)adcRaw) * (VREF_V / (float)(ADC_FS - 1U));
-        // 분압 복원 -> 실제 DC 전압 추정
-        V_BUS = V_ADC * GAIN;
-    }
+    // 전역변수로 계산 결과 저장 (CCS Watch 가능)
+    V_ADC = ((float)adcRaw) * (VREF_V / (float)(ADC_FS - 1U));
+    V_BUS = V_ADC * GAIN;
 
-    AdccRegs.ADCINTFLGCLR.bit.ADCINT1 = 1; // (변경) AdcaRegs -> AdccRegs
+    AdccRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
 
