@@ -2,11 +2,14 @@
 //
 // 파일:   ADC_Test.c
 //
-// 제목:  ADC 100 V 센싱 테스트
+// 제목:  ADC 100 V 센싱 테스트 (ADCINC2)
 //
 // 설명:
-// 이 코드는 TMS320F28379의 ADC 모듈을 사용합니다.
-// 외부 전원 100 VDC를 전압 센서에 연결하여 100 VDC를 센싱할 수 있는지 확인합니다.
+// TMS320F28379의 ADC 모듈 사용
+// 외부 전원 100 VDC를 전압 센서에 연결하여 100 VDC를 센싱 확인
+//
+// 기존: ADCA / ADCINA0
+// 변경: ADCC / ADCINC2
 //
 //###########################################################################
 
@@ -17,7 +20,7 @@ interrupt void cputimer0_isr(void);
 
 // ===== 입력 전압 =====
 volatile Uint16 adcRaw = 0;    // ADCRESULT0 raw code (0~4095)
-volatile float  V_BUS  = 100; // 입력 DC 전압
+volatile float  V_BUS  = 100;  // 입력 DC 전압 (계산 결과로 갱신됨)
 
 // ===== DSP 회로 =====
 #define SYSCLK_HZ     200000000UL
@@ -33,25 +36,25 @@ volatile float  V_BUS  = 100; // 입력 DC 전압
 // 샘플링 주파수
 #define FS_SAMPLE_HZ  1000U
 
-static void InitAdcA(void)
+static void InitAdcC(void)
 {
     EALLOW;
-    CpuSysRegs.PCLKCR13.bit.ADC_A = 1;
-    AdcaRegs.ADCCTL1.bit.ADCPWDNZ = 1;
+    CpuSysRegs.PCLKCR13.bit.ADC_C = 1;
+    AdccRegs.ADCCTL1.bit.ADCPWDNZ = 1;
 
     // PRESCALE 값 의미는 TRM 기준으로 확인 권장
-    AdcaRegs.ADCCTL2.bit.PRESCALE = 0;
+    AdccRegs.ADCCTL2.bit.PRESCALE = 0;
 
-    AdcSetMode(ADC_ADCA, ADC_RESOLUTION_12BIT, ADC_SIGNALMODE_SINGLE);
+    AdcSetMode(ADC_ADCC, ADC_RESOLUTION_12BIT, ADC_SIGNALMODE_SINGLE);
 
     // EOC0 -> ADCINT1
-    AdcaRegs.ADCINTSEL1N2.bit.INT1SEL = 0;
-    AdcaRegs.ADCINTSEL1N2.bit.INT1E   = 1;
+    AdccRegs.ADCINTSEL1N2.bit.INT1SEL = 0;
+    AdccRegs.ADCINTSEL1N2.bit.INT1E   = 1;
 
-    // 필터/데시메이션 없는 경우, CONT=0 권장(오버런 관리 쉬움)
-    AdcaRegs.ADCINTSEL1N2.bit.INT1CONT = 0;
+    // CONT=0 권장(오버런 관리 쉬움)
+    AdccRegs.ADCINTSEL1N2.bit.INT1CONT = 0;
 
-    AdcaRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;
+    AdccRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;
     EDIS;
 
     DELAY_US(1000);
@@ -60,9 +63,9 @@ static void InitAdcA(void)
 static void InitAdcSoc0_Timer0(void)
 {
     EALLOW;
-    AdcaRegs.ADCSOC0CTL.bit.CHSEL   = 0;    // ADCINA0
-    AdcaRegs.ADCSOC0CTL.bit.ACQPS   = 14;   // 입력 임피던스 높으면 더 키우기
-    AdcaRegs.ADCSOC0CTL.bit.TRIGSEL = 1;    // CPU Timer0 트리거
+    AdccRegs.ADCSOC0CTL.bit.CHSEL   = 2;    // ADCINC2
+    AdccRegs.ADCSOC0CTL.bit.ACQPS   = 14;   // 입력 임피던스 높으면 더 키우기
+    AdccRegs.ADCSOC0CTL.bit.TRIGSEL = 1;    // CPU Timer0 트리거
     EDIS;
 }
 
@@ -97,15 +100,15 @@ void main(void)
     InitPieVectTable();
 
     EALLOW;
-    PieVectTable.ADCA1_INT  = &adc_isr;
+    PieVectTable.ADCC1_INT  = &adc_isr;       // (변경) ADCA1_INT -> ADCC1_INT
     PieVectTable.TIMER0_INT = &cputimer0_isr;
 
-    PieCtrlRegs.PIEIER1.bit.INTx1 = 1; // ADCA1_INT
-    PieCtrlRegs.PIEIER1.bit.INTx7 = 1; // TIMER0_INT
+    PieCtrlRegs.PIEIER1.bit.INTx3 = 1;        // (변경) ADCC1_INT는 Group1 INTx3
+    PieCtrlRegs.PIEIER1.bit.INTx7 = 1;        // TIMER0_INT
     IER |= M_INT1;
     EDIS;
 
-    InitAdcA();
+    InitAdcC();
     InitAdcSoc0_Timer0();
     InitCpuTimer0_Fs(FS_SAMPLE_HZ);
 
@@ -114,15 +117,14 @@ void main(void)
 
     for(;;)
     {
-        // V_BUS를 그대로 사용(보호/표시/로깅 등)
-        // 필요하면 임계값 비교:
+        // V_BUS 사용 (보호/표시/로깅 등)
         // if (V_BUS > 400.0f) { ... }
     }
 }
 
 interrupt void adc_isr(void)
 {
-    adcRaw = AdcaResultRegs.ADCRESULT0;
+    adcRaw = AdccResultRegs.ADCRESULT0;    // (변경) AdcaResultRegs -> AdccResultRegs
 
     // ADC raw -> ADC 핀 전압
     {
@@ -131,7 +133,7 @@ interrupt void adc_isr(void)
         V_BUS = V_ADC * GAIN;
     }
 
-    AdcaRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;
+    AdccRegs.ADCINTFLGCLR.bit.ADCINT1 = 1; // (변경) AdcaRegs -> AdccRegs
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
 
