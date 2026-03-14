@@ -1,405 +1,271 @@
-//#############################################################################
+//###########################################################################
 //
-// File:   PSFB_PWM.c
+// 파일:   PSFB_PWM.c
 //
-// Title:  PSFB ePWM code with GPIO62 enable/disable and TBPHS soft-start
+// 제목:  PSFB Soft Start 구현 코드
 //
-// Device: TMS320F28379D
+// 설명:
+// 이 코드는 TMS320F28379의 ePWM1-2 모듈을 사용하여
+// 100kHz PWM 신호를 생성하고, 100 ns 데드타임을 적용합니다.
 //
-// Description:
-//   - EPWM1A(GPIO0) -> Switch 1
-//   - EPWM1B(GPIO1) -> Switch 2
-//   - EPWM2A(GPIO2) -> Switch 3
-//   - EPWM2B(GPIO3) -> Switch 4
+// Q1: ePWM1A  (leading upper)
+// Q2: ePWM1B  (leading lower)
+// Q3: ePWM2A  (lagging upper)
+// Q4: ePWM2B  (lagging lower)
+// GPIO62: 외부 스위치 입력
 //
-//   - 1-2 complementary
-//   - 3-4 complementary
-//   - Power transfer when 1-4 and 2-3 overlap
+// 초기 상태:
+// - leading leg: 기준 위상
+// - lagging leg: 180도 지연
 //
-//   - Both legs switch at 100 kHz
-//   - 50% duty
-//   - Dead time = 100 ns
+// 동작:
+// - GPIO62 ON  -> ePWM2 interrupt 시작
+// - 10 ms마다 lagging leg 위상을 0.1 us(=10 tick)씩 앞당김
+// - 총 320 ms 동안 32번 업데이트 -> 총 3.2 us 앞당김
+// - 이후 위상 유지
+// - GPIO62 OFF -> interrupt 종료
 //
-//   - PWM starts only when GPIO62 switch is ON
-//   - PWM outputs are blocked when GPIO62 switch is OFF
-//
-//   - Soft start by changing EPWM2 TBPHS only
-//   - Soft-start target time = 320 ms
-//   - Final diagonal overlap target = 3.2 us
-//
-//#############################################################################
+//###########################################################################
 
 #include "F28x_Project.h"
 
-//=============================================================================
-// User parameters
-//=============================================================================
-#define SYSCLK_HZ               200000000UL
-#define TBCLK_HZ                200000000UL
+// ===== ISR 선언 =====
+interrupt void epwm2_isr(void);
 
-#define PWM_FREQ_HZ             100000UL       // 100 kHz
-#define SOFTSTART_TIME_MS       320UL
-#define DEADTIME_NS             100UL
+// ===== 함수 선언 =====
+void InitEPwm1(void);
+void InitEPwm2(void);
+void InitEPwm2Interrupt(void);
 
-#define SWITCH_GPIO             62U
+// ===== 시스템 및 PWM 설정 =====
+#define SYSCLKOUT           200000000UL
+#define PWM_FREQ            100000UL
+#define DUTY_CYCLE          50U
+#define EPWMCLK_HZ          (SYSCLKOUT/2UL)      // 100 MHz
+#define TBCLK_HZ            (EPWMCLK_HZ)         // 100 MHz
 
-// Up-down mode: fpwm = TBCLK / (2 * TBPRD)
-#define TBPRD_VAL               (TBCLK_HZ / (2UL * PWM_FREQ_HZ))   // 1000
+#define TBPRD_VALUE         ((Uint16)((Uint32)TBCLK_HZ / PWM_FREQ) - 1U)    // 999
+#define CMPA_VALUE          ((Uint16)((((Uint32)TBPRD_VALUE + 1UL) * DUTY_CYCLE) / 100UL)) // 500
+#define DEAD_TIME_TICKS     10U                  // 100 ns @ 100 MHz
 
-// Dead time count: 100 ns @ 200 MHz = 20 counts
-#define DB_COUNT                ((Uint16)((((unsigned long long)DEADTIME_NS) * (unsigned long long)TBCLK_HZ) / 1000000000ULL))
+// ===== Soft-start 설정 =====
+#define PHASE_INIT_TICKS    500U                 // 180도 지연 (5 us)
+#define PHASE_STEP_TICKS    10U                  // 0.1 us = 10 tick
+#define PHASE_FINAL_TICKS   180U                 // 500 - 320 = 180
+#define UPDATE_PERIOD_COUNT 1000U                // 100 kHz PWM -> 1000주기 = 10 ms
 
-// Target overlap = 3.2 us
-// Max overlap = 5.0 us (for 50% duty at 100 kHz)
-// Required phase delay from max-overlap point = 5.0 - 3.2 = 1.8 us
-// 1.8 us / 5 ns = 360 counts
-#define FINAL_TBPHS_COUNT       360U
+// ===== 전역 변수 =====
+volatile Uint16 g_phaseTicks      = PHASE_INIT_TICKS;
+volatile Uint16 g_periodCount     = 0U;
+volatile Uint16 g_softStartActive = 0U;
+volatile Uint16 g_swNow           = 0U;
+volatile Uint16 g_swPrev          = 0U;
 
-//=============================================================================
-// Global variables for CCS watch / Expressions
-//=============================================================================
-volatile Uint16 g_pwmEnabled    = 0U;
-volatile Uint16 g_softStartDone = 0U;
-volatile Uint32 g_softStartMs   = 0U;
 
-volatile Uint16 g_tbphsCmd      = 0U;     // commanded TBPHS count
-volatile float  g_overlap_us    = 0.0f;   // estimated overlap [us]
+// ePWM1 #####################################################################
+// leading leg: Q1/Q2
 
-//=============================================================================
-// Function prototypes
-//=============================================================================
-interrupt void cpu_timer0_isr(void);
-
-static void InitGPIO_PSFB(void);
-static void InitEPwm1_Master(void);
-static void InitEPwm2_Slave(void);
-static void InitCpuTimer0_1ms(void);
-
-static inline Uint16 ReadStartSwitch(void);
-
-static void ForceAllPwmOff(void);
-static void ReleaseAllPwmOff(void);
-
-static void SetEPwm2Phase(Uint16 phaseCount);
-static void AlignInitial180Deg(void);
-static void StartPwmSequence(void);
-static void StopPwmSequence(void);
-static float CalcOverlapUs(Uint16 tbphsCount);
-
-//=============================================================================
-// main
-//=============================================================================
-void main(void)
+void InitEPwm1(void)
 {
-    InitSysCtrl();
+    EALLOW;
 
+    // GPIO0 = ePWM1A, GPIO1 = ePWM1B
+    GpioCtrlRegs.GPAMUX1.bit.GPIO0 = 1;
+    GpioCtrlRegs.GPAMUX1.bit.GPIO1 = 1;
+
+    EDIS;
+
+    EPwm1Regs.TBPRD = TBPRD_VALUE;
+    EPwm1Regs.TBPHS.bit.TBPHS = 0;
+    EPwm1Regs.TBCTR = 0;
+
+    EPwm1Regs.TBCTL.bit.CTRMODE   = TB_COUNT_UP;
+    EPwm1Regs.TBCTL.bit.PHSEN     = TB_DISABLE;      // master
+    EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
+    EPwm1Regs.TBCTL.bit.CLKDIV    = TB_DIV1;
+    EPwm1Regs.TBCTL.bit.PRDLD     = TB_SHADOW;
+    EPwm1Regs.TBCTL.bit.SYNCOSEL  = TB_CTR_ZERO;     // sync out @ CTR=0
+
+    EPwm1Regs.CMPA.bit.CMPA = CMPA_VALUE;
+    EPwm1Regs.CMPB.bit.CMPB = 0;
+    EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
+    EPwm1Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW;
+    EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
+    EPwm1Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO;
+
+    EPwm1Regs.AQCTLA.bit.ZRO = AQ_SET;
+    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;
+
+    EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
+    EPwm1Regs.DBCTL.bit.IN_MODE  = DBA_ALL;
+    EPwm1Regs.DBCTL.bit.POLSEL   = DB_ACTV_HIC;
+    EPwm1Regs.DBRED.bit.DBRED    = DEAD_TIME_TICKS;
+    EPwm1Regs.DBFED.bit.DBFED    = DEAD_TIME_TICKS;
+}
+
+
+// ePWM2 #####################################################################
+// lagging leg: Q3/Q4
+
+void InitEPwm2(void)
+{
+    EALLOW;
+
+    // GPIO2 = ePWM2A, GPIO3 = ePWM2B
+    GpioCtrlRegs.GPAMUX1.bit.GPIO2 = 1;
+    GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 1;
+
+    EDIS;
+
+    EPwm2Regs.TBPRD = TBPRD_VALUE;
+    EPwm2Regs.TBPHS.bit.TBPHS = PHASE_INIT_TICKS;    // 초기 180도 지연
+    EPwm2Regs.TBCTR = 0;
+
+    EPwm2Regs.TBCTL.bit.CTRMODE   = TB_COUNT_UP;
+    EPwm2Regs.TBCTL.bit.PHSEN     = TB_ENABLE;       // slave
+    EPwm2Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
+    EPwm2Regs.TBCTL.bit.CLKDIV    = TB_DIV1;
+    EPwm2Regs.TBCTL.bit.PRDLD     = TB_SHADOW;
+    EPwm2Regs.TBCTL.bit.SYNCOSEL  = TB_SYNC_IN;      // sync 받음
+
+    EPwm2Regs.CMPA.bit.CMPA = CMPA_VALUE;
+    EPwm2Regs.CMPB.bit.CMPB = 0;
+    EPwm2Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
+    EPwm2Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW;
+    EPwm2Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
+    EPwm2Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO;
+
+    EPwm2Regs.AQCTLA.bit.ZRO = AQ_SET;
+    EPwm2Regs.AQCTLA.bit.CAU = AQ_CLEAR;
+
+    EPwm2Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
+    EPwm2Regs.DBCTL.bit.IN_MODE  = DBA_ALL;
+    EPwm2Regs.DBCTL.bit.POLSEL   = DB_ACTV_HIC;
+    EPwm2Regs.DBRED.bit.DBRED    = DEAD_TIME_TICKS;
+    EPwm2Regs.DBFED.bit.DBFED    = DEAD_TIME_TICKS;
+
+    // ePWM2 interrupt 설정
+    EPwm2Regs.ETSEL.bit.INTSEL = ET_CTR_ZERO;
+    EPwm2Regs.ETSEL.bit.INTEN  = 0;          // 초기엔 OFF
+    EPwm2Regs.ETPS.bit.INTPRD  = ET_1ST;
+    EPwm2Regs.ETCLR.bit.INT    = 1;
+}
+
+
+// Interrupt 설정 #############################################################
+
+void InitEPwm2Interrupt(void)
+{
     DINT;
     InitPieCtrl();
+
     IER = 0x0000;
     IFR = 0x0000;
+
     InitPieVectTable();
 
     EALLOW;
-    PieVectTable.TIMER0_INT = &cpu_timer0_isr;
+    PieVectTable.EPWM2_INT = &epwm2_isr;
     EDIS;
 
-    InitGPIO_PSFB();
+    PieCtrlRegs.PIEIER3.bit.INTx2 = 1;   // EPWM2_INT
+    IER |= M_INT3;
 
-    // Stop TBCLK during ePWM configuration
+    EINT;
+    ERTM;
+}
+
+
+// main ######################################################################
+
+void main(void)
+{
+    InitSysCtrl();
+    InitGpio();
+
+    // GPIO62 입력 설정
+    EALLOW;
+    GpioCtrlRegs.GPBMUX2.bit.GPIO62 = 0;
+    GpioCtrlRegs.GPBDIR.bit.GPIO62  = 0;
+    EDIS;
+
+    // ePWM time-base clock stop
     EALLOW;
     CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0;
     EDIS;
 
-    InitEPwm1_Master();
-    InitEPwm2_Slave();
+    InitEPwm1();
+    InitEPwm2();
+    InitEPwm2Interrupt();
 
-    // Initially force all PWM outputs off
-    ForceAllPwmOff();
-
-    // Start TBCLK after configuration
+    // ePWM time-base clock run
     EALLOW;
     CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1;
     EDIS;
 
-    InitCpuTimer0_1ms();
-
-    IER |= M_INT1;
-    PieCtrlRegs.PIEIER1.bit.INTx7 = 1;   // CPU Timer0 interrupt
-    EINT;
-    ERTM;
+    // 초기 sync 한 번
+    EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
 
     while(1)
     {
-        asm(" NOP");
+        g_swNow = GpioDataRegs.GPBDAT.bit.GPIO62;
+
+        // GPIO62 ON: interrupt 시작
+        if ((g_swPrev == 0U) && (g_swNow == 1U))
+        {
+            g_softStartActive = 1U;
+            g_periodCount     = 0U;
+            g_phaseTicks      = PHASE_INIT_TICKS;
+
+            EPwm2Regs.TBPHS.bit.TBPHS = g_phaseTicks;
+            EPwm2Regs.ETCLR.bit.INT   = 1;
+            EPwm2Regs.ETSEL.bit.INTEN = 1;
+
+            EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
+        }
+
+        // GPIO62 OFF: interrupt 종료
+        if ((g_swPrev == 1U) && (g_swNow == 0U))
+        {
+            g_softStartActive = 0U;
+            g_periodCount     = 0U;
+
+            EPwm2Regs.ETSEL.bit.INTEN = 0;
+            EPwm2Regs.ETCLR.bit.INT   = 1;
+        }
+
+        g_swPrev = g_swNow;
     }
 }
 
-//=============================================================================
-// GPIO initialization
-//=============================================================================
-static void InitGPIO_PSFB(void)
+
+// ISR #######################################################################
+// 10 ms마다 lagging leg phase를 0.1 us씩 앞당김
+
+interrupt void epwm2_isr(void)
 {
-    EALLOW;
-
-    // ePWM outputs
-    GPIO_SetupPinMux(0, GPIO_MUX_CPU1, 1);   // GPIO0 -> EPWM1A
-    GPIO_SetupPinOptions(0, GPIO_OUTPUT, GPIO_PUSHPULL);
-
-    GPIO_SetupPinMux(1, GPIO_MUX_CPU1, 1);   // GPIO1 -> EPWM1B
-    GPIO_SetupPinOptions(1, GPIO_OUTPUT, GPIO_PUSHPULL);
-
-    GPIO_SetupPinMux(2, GPIO_MUX_CPU1, 1);   // GPIO2 -> EPWM2A
-    GPIO_SetupPinOptions(2, GPIO_OUTPUT, GPIO_PUSHPULL);
-
-    GPIO_SetupPinMux(3, GPIO_MUX_CPU1, 1);   // GPIO3 -> EPWM2B
-    GPIO_SetupPinOptions(3, GPIO_OUTPUT, GPIO_PUSHPULL);
-
-    // GPIO62 switch input
-    GPIO_SetupPinMux(SWITCH_GPIO, GPIO_MUX_CPU1, 0);
-    GPIO_SetupPinOptions(SWITCH_GPIO, GPIO_INPUT, GPIO_PULLUP);
-
-    // Qualification for GPIO62 (GPIO48~63 belong to GPBQSEL2)
-    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 2;    // 6-sample qualification
-    GpioCtrlRegs.GPBCTRL.bit.QUALPRD3 = 255;
-
-    EDIS;
-}
-
-// Active-low switch assumption
-// Pressed(ON) = 0
-static inline Uint16 ReadStartSwitch(void)
-{
-    return (GpioDataRegs.GPBDAT.bit.GPIO62 == 0U) ? 1U : 0U;
-}
-
-//=============================================================================
-// EPWM1: Master leg (Switch 1 / 2)
-//=============================================================================
-static void InitEPwm1_Master(void)
-{
-    // Time-base
-    EPwm1Regs.TBCTL.bit.CTRMODE   = TB_COUNT_UPDOWN;
-    EPwm1Regs.TBCTL.bit.PHSEN     = TB_DISABLE;
-    EPwm1Regs.TBCTL.bit.PRDLD     = TB_SHADOW;
-    EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
-    EPwm1Regs.TBCTL.bit.CLKDIV    = TB_DIV1;
-    EPwm1Regs.TBCTL.bit.SYNCOSEL  = TB_CTR_ZERO;   // master sync at CTR=0
-
-    EPwm1Regs.TBPRD = TBPRD_VAL;
-    EPwm1Regs.TBCTR = 0;
-
-    // Compare
-    EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
-    EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
-    EPwm1Regs.CMPA.bit.CMPA = TBPRD_VAL / 2U;      // 50% duty
-
-    // AQ for EPWM1A
-    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;
-    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;
-    EPwm1Regs.AQCTLB.all = 0;
-
-    // Dead-band: complementary pair from A
-    EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
-    EPwm1Regs.DBCTL.bit.POLSEL   = DB_ACTV_HIC;
-    EPwm1Regs.DBCTL.bit.IN_MODE  = DBA_ALL;
-    EPwm1Regs.DBRED.bit.DBRED    = DB_COUNT;
-    EPwm1Regs.DBFED.bit.DBFED    = DB_COUNT;
-
-    // Trip-zone: force both low when tripped
-    EPwm1Regs.TZCTL.bit.TZA = TZ_FORCE_LO;
-    EPwm1Regs.TZCTL.bit.TZB = TZ_FORCE_LO;
-}
-
-//=============================================================================
-// EPWM2: Slave leg (Switch 3 / 4)
-//=============================================================================
-static void InitEPwm2_Slave(void)
-{
-    // Time-base
-    EPwm2Regs.TBCTL.bit.CTRMODE   = TB_COUNT_UPDOWN;
-    EPwm2Regs.TBCTL.bit.PHSEN     = TB_ENABLE;      // slave
-    EPwm2Regs.TBCTL.bit.PHSDIR    = TB_UP;
-    EPwm2Regs.TBCTL.bit.PRDLD     = TB_SHADOW;
-    EPwm2Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
-    EPwm2Regs.TBCTL.bit.CLKDIV    = TB_DIV1;
-    EPwm2Regs.TBCTL.bit.SYNCOSEL  = TB_SYNC_IN;     // sync from EPWM1
-
-    EPwm2Regs.TBPRD = TBPRD_VAL;
-    EPwm2Regs.TBCTR = 0;
-    EPwm2Regs.TBPHS.bit.TBPHS = 0;
-
-    // Compare
-    EPwm2Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
-    EPwm2Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
-    EPwm2Regs.CMPA.bit.CMPA = TBPRD_VAL / 2U;      // 50% duty
-
-    // AQ for EPWM2A
-    EPwm2Regs.AQCTLA.bit.CAU = AQ_CLEAR;
-    EPwm2Regs.AQCTLA.bit.CAD = AQ_SET;
-    EPwm2Regs.AQCTLB.all = 0;
-
-    // Dead-band: complementary pair from A
-    EPwm2Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
-    EPwm2Regs.DBCTL.bit.POLSEL   = DB_ACTV_HIC;
-    EPwm2Regs.DBCTL.bit.IN_MODE  = DBA_ALL;
-    EPwm2Regs.DBRED.bit.DBRED    = DB_COUNT;
-    EPwm2Regs.DBFED.bit.DBFED    = DB_COUNT;
-
-    // Trip-zone: force both low when tripped
-    EPwm2Regs.TZCTL.bit.TZA = TZ_FORCE_LO;
-    EPwm2Regs.TZCTL.bit.TZB = TZ_FORCE_LO;
-}
-
-//=============================================================================
-// CPU Timer0 -> 1 ms tick
-//=============================================================================
-static void InitCpuTimer0_1ms(void)
-{
-    InitCpuTimers();
-    ConfigCpuTimer(&CpuTimer0, 200, 1000.0);   // 200 MHz, 1000 us
-    CpuTimer0Regs.TCR.all = 0x4001;
-}
-
-//=============================================================================
-// PWM force off / release
-//=============================================================================
-static void ForceAllPwmOff(void)
-{
-    EPwm1Regs.TZFRC.bit.OST = 1;
-    EPwm2Regs.TZFRC.bit.OST = 1;
-}
-
-static void ReleaseAllPwmOff(void)
-{
-    EPwm1Regs.TZCLR.bit.OST = 1;
-    EPwm1Regs.TZCLR.bit.INT = 1;
-
-    EPwm2Regs.TZCLR.bit.OST = 1;
-    EPwm2Regs.TZCLR.bit.INT = 1;
-}
-
-//=============================================================================
-// Overlap estimation
-//
-// 50% duty at 100 kHz -> one switch on-time is about 5 us
-// overlap = 5 us - phase delay time
-// phase delay time = TBPHS / TBCLK
-//=============================================================================
-static float CalcOverlapUs(Uint16 tbphsCount)
-{
-    float delay_us = ((float)tbphsCount) * (1.0e6f / (float)TBCLK_HZ);
-    float ov = 5.0f - delay_us;
-
-    if(ov < 0.0f) ov = 0.0f;
-    return ov;
-}
-
-//=============================================================================
-// Update EPWM2 phase
-// TBPHS is loaded into TBCTR on sync
-//=============================================================================
-static void SetEPwm2Phase(Uint16 phaseCount)
-{
-    EPwm2Regs.TBPHS.bit.TBPHS = phaseCount;
-
-    // Force sync so new phase command is applied
-    EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
-
-    g_tbphsCmd   = phaseCount;
-    g_overlap_us = CalcOverlapUs(phaseCount);
-}
-
-//=============================================================================
-// Start from maximum diagonal overlap condition
-//=============================================================================
-static void AlignInitial180Deg(void)
-{
-    EALLOW;
-
-    EPwm1Regs.TBCTL.bit.CTRMODE = TB_FREEZE;
-    EPwm2Regs.TBCTL.bit.CTRMODE = TB_FREEZE;
-
-    EPwm1Regs.TBCTR = 0;
-    EPwm2Regs.TBCTR = EPwm2Regs.TBPRD;   // half-cycle offset start
-
-    EPwm1Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN;
-    EPwm2Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN;
-
-    EDIS;
-}
-
-//=============================================================================
-// Start / Stop sequence
-//=============================================================================
-static void StartPwmSequence(void)
-{
-    g_pwmEnabled    = 1U;
-    g_softStartDone = 0U;
-    g_softStartMs   = 0U;
-
-    // Initial condition: maximum overlap
-    AlignInitial180Deg();
-
-    // Start from zero additional phase delay
-    SetEPwm2Phase(0U);
-
-    // Enable outputs
-    ReleaseAllPwmOff();
-}
-
-static void StopPwmSequence(void)
-{
-    g_pwmEnabled    = 0U;
-    g_softStartDone = 0U;
-    g_softStartMs   = 0U;
-
-    SetEPwm2Phase(0U);
-    ForceAllPwmOff();
-}
-
-//=============================================================================
-// CPU Timer0 ISR
-//=============================================================================
-interrupt void cpu_timer0_isr(void)
-{
-    Uint16 swOn = ReadStartSwitch();
-
-    if(swOn)
+    if (g_softStartActive == 1U)
     {
-        if(g_pwmEnabled == 0U)
+        g_periodCount++;
+
+        if (g_periodCount >= UPDATE_PERIOD_COUNT)   // 10 ms
         {
-            StartPwmSequence();
-        }
-        else
-        {
-            if(g_softStartDone == 0U)
+            g_periodCount = 0U;
+
+            if (g_phaseTicks > PHASE_FINAL_TICKS)
             {
-                Uint32 nextMs;
-                Uint32 nextPhase;
-
-                g_softStartMs++;
-                nextMs = g_softStartMs;
-
-                if(nextMs >= SOFTSTART_TIME_MS)
+                g_phaseTicks -= PHASE_STEP_TICKS;   // 앞당김 = phase 감소
+                if (g_phaseTicks < PHASE_FINAL_TICKS)
                 {
-                    nextMs = SOFTSTART_TIME_MS;
-                    g_softStartDone = 1U;
+                    g_phaseTicks = PHASE_FINAL_TICKS;
                 }
 
-                // Linear ramp: 0 -> FINAL_TBPHS_COUNT over 320 ms
-                nextPhase = ((Uint32)FINAL_TBPHS_COUNT * nextMs) / SOFTSTART_TIME_MS;
-                SetEPwm2Phase((Uint16)nextPhase);
+                EPwm2Regs.TBPHS.bit.TBPHS = g_phaseTicks;
+                EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
             }
         }
     }
-    else
-    {
-        if(g_pwmEnabled == 1U)
-        {
-            StopPwmSequence();
-        }
-    }
 
-    CpuTimer0Regs.TCR.bit.TIF = 1;
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+    EPwm2Regs.ETCLR.bit.INT = 1;
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
 }
