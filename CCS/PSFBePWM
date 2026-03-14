@@ -14,16 +14,16 @@
 // Q4: ePWM2B  (lagging lower)
 // GPIO62: 외부 스위치 입력
 //
-// 초기 상태:
-// - leading leg: 기준 위상
-// - lagging leg: 180도 지연
+// 목표 위상:
+// - 초기: Q1 상승 후 5.0 us 뒤에 Q4 상승  -> 180 deg
+// - 최종: Q1 상승 후 1.7 us 뒤에 Q4 상승  -> deadtime 보정 포함
 //
 // 동작:
 // - GPIO62 ON  -> ePWM2 interrupt 시작
-// - 10 ms마다 lagging leg 위상을 0.1 us(=10 tick)씩 앞당김
-// - 총 320 ms 동안 32번 업데이트 -> 총 3.2 us 앞당김
+// - 10 ms마다 lagging leg 위상을 0.1 us씩 앞당김
+// - deadtime 보정을 위해 총 33번 업데이트 -> 총 3.3 us 앞당김
 // - 이후 위상 유지
-// - GPIO62 OFF -> interrupt 종료
+// - GPIO62 OFF -> interrupt 종료 + 초기 위상으로 복귀
 //
 //###########################################################################
 
@@ -44,15 +44,25 @@ void InitEPwm2Interrupt(void);
 #define EPWMCLK_HZ          (SYSCLKOUT/2UL)      // 100 MHz
 #define TBCLK_HZ            (EPWMCLK_HZ)         // 100 MHz
 
-#define TBPRD_VALUE         ((Uint16)((Uint32)TBCLK_HZ / PWM_FREQ) - 1U)    // 999
+#define TBPRD_VALUE         ((Uint16)((Uint32)TBCLK_HZ / PWM_FREQ) - 1U)   // 999
 #define CMPA_VALUE          ((Uint16)((((Uint32)TBPRD_VALUE + 1UL) * DUTY_CYCLE) / 100UL)) // 500
 #define DEAD_TIME_TICKS     10U                  // 100 ns @ 100 MHz
 
 // ===== Soft-start 설정 =====
-#define PHASE_INIT_TICKS    500U                 // 180도 지연 (5 us)
+// Q1 rising 기준으로 Q4 rising delay:
+// delay ≈ 500 - TBPHS   (deadtime 무시한 이상적 값)
+// 실제는 deadtime 10 tick 영향이 있으므로 1 step 추가 보정
+//
+// 초기 delay = 500 tick (5.0 us, 180 deg)  -> TBPHS = 0
+// 최종 delay = 170 tick (1.7 us)           -> TBPHS = 330
+#define PHASE_INIT_TICKS    0U
+#define PHASE_FINAL_TICKS   330U
 #define PHASE_STEP_TICKS    10U                  // 0.1 us = 10 tick
-#define PHASE_FINAL_TICKS   180U                 // 500 - 320 = 180
-#define UPDATE_PERIOD_COUNT 1000U                // 100 kHz PWM -> 1000주기 = 10 ms
+#define UPDATE_PERIOD_COUNT 1000U                // 1000 PWM period = 10 ms
+
+// GPIO62 active-low 스위치 기준
+// active-high면 0으로 바꾸면 됨
+#define SW_ACTIVE_LOW       1U
 
 // ===== 전역 변수 =====
 volatile Uint16 g_phaseTicks      = PHASE_INIT_TICKS;
@@ -118,7 +128,7 @@ void InitEPwm2(void)
     EDIS;
 
     EPwm2Regs.TBPRD = TBPRD_VALUE;
-    EPwm2Regs.TBPHS.bit.TBPHS = PHASE_INIT_TICKS;    // 초기 180도 지연
+    EPwm2Regs.TBPHS.bit.TBPHS = PHASE_INIT_TICKS;
     EPwm2Regs.TBCTR = 0;
 
     EPwm2Regs.TBCTL.bit.CTRMODE   = TB_COUNT_UP;
@@ -180,13 +190,17 @@ void InitEPwm2Interrupt(void)
 
 void main(void)
 {
+    Uint16 swRaw;
+
     InitSysCtrl();
     InitGpio();
 
     // GPIO62 입력 설정
     EALLOW;
-    GpioCtrlRegs.GPBMUX2.bit.GPIO62 = 0;
-    GpioCtrlRegs.GPBDIR.bit.GPIO62  = 0;
+    GpioCtrlRegs.GPBMUX2.bit.GPIO62  = 0;   // GPIO 기능
+    GpioCtrlRegs.GPBDIR.bit.GPIO62   = 0;   // 입력
+    GpioCtrlRegs.GPBPUD.bit.GPIO62   = 0;   // internal pull-up enable
+    GpioCtrlRegs.GPBQSEL2.bit.GPIO62 = 2;   // 6-sample qualification
     EDIS;
 
     // ePWM time-base clock stop
@@ -206,9 +220,23 @@ void main(void)
     // 초기 sync 한 번
     EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
 
+    // 초기 스위치 상태 동기화
+    swRaw = GpioDataRegs.GPBDAT.bit.GPIO62;
+#if SW_ACTIVE_LOW
+    g_swPrev = (swRaw == 0U) ? 1U : 0U;
+#else
+    g_swPrev = (swRaw != 0U) ? 1U : 0U;
+#endif
+
     while(1)
     {
-        g_swNow = GpioDataRegs.GPBDAT.bit.GPIO62;
+        swRaw = GpioDataRegs.GPBDAT.bit.GPIO62;
+
+#if SW_ACTIVE_LOW
+        g_swNow = (swRaw == 0U) ? 1U : 0U;
+#else
+        g_swNow = (swRaw != 0U) ? 1U : 0U;
+#endif
 
         // GPIO62 ON: interrupt 시작
         if ((g_swPrev == 0U) && (g_swNow == 1U))
@@ -224,14 +252,18 @@ void main(void)
             EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
         }
 
-        // GPIO62 OFF: interrupt 종료
+        // GPIO62 OFF: interrupt 종료 + 초기 위상 복귀
         if ((g_swPrev == 1U) && (g_swNow == 0U))
         {
             g_softStartActive = 0U;
             g_periodCount     = 0U;
+            g_phaseTicks      = PHASE_INIT_TICKS;
 
             EPwm2Regs.ETSEL.bit.INTEN = 0;
             EPwm2Regs.ETCLR.bit.INT   = 1;
+            EPwm2Regs.TBPHS.bit.TBPHS = g_phaseTicks;
+
+            EPwm1Regs.TBCTL.bit.SWFSYNC = 1;
         }
 
         g_swPrev = g_swNow;
@@ -241,6 +273,7 @@ void main(void)
 
 // ISR #######################################################################
 // 10 ms마다 lagging leg phase를 0.1 us씩 앞당김
+// deadtime 100 ns 보정을 위해 최종 330 tick까지 진행
 
 interrupt void epwm2_isr(void)
 {
@@ -252,10 +285,11 @@ interrupt void epwm2_isr(void)
         {
             g_periodCount = 0U;
 
-            if (g_phaseTicks > PHASE_FINAL_TICKS)
+            if (g_phaseTicks < PHASE_FINAL_TICKS)
             {
-                g_phaseTicks -= PHASE_STEP_TICKS;   // 앞당김 = phase 감소
-                if (g_phaseTicks < PHASE_FINAL_TICKS)
+                g_phaseTicks += PHASE_STEP_TICKS;   // 0 -> 330
+
+                if (g_phaseTicks > PHASE_FINAL_TICKS)
                 {
                     g_phaseTicks = PHASE_FINAL_TICKS;
                 }
