@@ -28,6 +28,8 @@ $$
 \omega_r=\sqrt{L_rC_r}
 $$
 
+모드 1
+
 공진 인덕터 전류
 
 $$
@@ -37,7 +39,7 @@ $$
 공진 커패시터 전압
 
 $$
-v_{Cr}(t)=
+v_{Cr}(t)=V_{in}-nV_o+I_{Lr0}\sqrt{\frac{L_r}{C_r}}\sin\left(\omega_rt\right)-\left(V_{in}-nV_o-V_{Cr0}\right)\cos\left(\omega_rt\right)
 $$
 
 자화 전류
@@ -45,3 +47,5 @@ $$
 $$
 i_m(t)=\frac{nV_o}{L_m}t+I_{m0}
 $$
+
+모드 2
