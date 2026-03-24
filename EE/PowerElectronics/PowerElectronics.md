@@ -27,6 +27,7 @@
 - [전압 레귤레이션](./VoltageRegulation.md)
 - [선형 레귤레이터](./LinearRegulator.md)
 - [스위칭 레귤레이터(컨버터)](./Converter.md)
+- [SMPS](./SMPS.md)
 
 ### 비절연형 컨버터
 
@@ -42,7 +43,6 @@
 
 입력단과 출력단이 전기적으로 절연된 컨버터입니다.
 
-- [SMPS](./SMPS.md)
 - [플라이백 컨버터](./FlybackConverter.md)
 - [포워드 컨버터]
 - [풀-브릿지 컨버터]
@@ -54,9 +54,7 @@
 
 공진 현상을 이용한 컨버터입니다.
 
-- [공진 스위치]
-- [LLC 공진형 컨버터]
-- [준-공진형 컨버터]
+- [공진형 컨버터](./ResonantConverter.md)
 
 ### LTI 시스템 구축
 
