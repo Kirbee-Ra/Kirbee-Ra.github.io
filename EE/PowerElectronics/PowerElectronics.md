@@ -92,6 +92,12 @@
 - [동기 정류](./SynchronousRectification.md)
 - [소프트 스위칭](./SoftSwitching.md)
 
+### 대화형 전력 변환
+
+전력 변환 장치를 통해 통신하는 기법입니다.
+
+- [대화형 전력 변환]
+
 ---
 
 ## AC-DC 변환
