@@ -88,7 +88,7 @@ $$
 $$
 \begin{align*}
 	H(j\omega)&=\frac{\displaystyle\frac{1}{j\omega C}}{R+\displaystyle\frac{1}{j\omega C}}\\
-	&=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\angle\left(-\tan^{-1}\left(\omega RC\right)\right)
+	&=\frac{\displaystyle\frac{1}{RC}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\angle\left(-\tan^{-1}\left(\omega RC\right)\right)
 \end{align*}
 $$
 
@@ -97,7 +97,7 @@ $$
 $$
 \begin{align*}
 	\left\vert H\right\vert_{max}&=\left\vert H(j0)\right\vert\\
-	&=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\displaystyle\frac{1}{\left(RC\right)^2}}}\\
+	&=\frac{\displaystyle\frac{1}{RC}}{\sqrt{\displaystyle\frac{1}{\left(RC\right)^2}}}\\
 	&=1
 \end{align*}
 $$
@@ -148,7 +148,7 @@ $$
 $$
 	\begin{align*}
 	H(j\omega)&=\displaystyle\frac{R}{R+j\omega L}\\
-	&=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega L}{R}\right)\right)
+	&=\frac{\displaystyle\frac{R}{L}}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\angle\left(-\tan^{-1}\left(\frac{\omega L}{R}\right)\right)
 \end{align*}
 $$
 
@@ -157,7 +157,7 @@ $$
 $$
 \begin{align*}
 	\left\vert H\right\vert_{max}&=\left\vert H(j0)\right\vert\\
-	&=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\left(\displaystyle\frac{R}{L}\right)^2}}\\
+	&=\frac{\displaystyle\frac{R}{L}}{\sqrt{\left(\displaystyle\frac{R}{L}\right)^2}}\\
 	&=1
 \end{align*}
 $$
