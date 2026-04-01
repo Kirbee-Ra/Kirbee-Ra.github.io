@@ -107,7 +107,7 @@ $$
 
 $$
 \begin{align*}
-			&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\displaystyle\frac{1}{\left(RC\right)^2}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\\
+			&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\displaystyle\frac{1}{RC}}{\sqrt{\omega^2+\displaystyle\frac{1}{\left(RC\right)^2}}}\\
 			&\rightarrow\omega_c=\frac{1}{RC}
 	\end{align*}
 $$
@@ -166,7 +166,7 @@ $$
 
 $$
 \begin{align*}
-			&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\left(\displaystyle\frac{R}{L}\right)^2}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
+			&\frac{\left\vert H\right\vert_{max}}{\sqrt{2}}=\frac{1}{\sqrt{2}}=\frac{\displaystyle\frac{R}{L}}{\sqrt{\omega^2+\left(\displaystyle\frac{R}{L}\right)^2}}\\
 			&\rightarrow\omega_c=\frac{R}{L}
 	\end{align*}
 $$
