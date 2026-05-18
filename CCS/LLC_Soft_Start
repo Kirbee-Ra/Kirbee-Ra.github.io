@@ -1,0 +1,333 @@
+// ============================================================
+// F28379xD EPWM1A/B Soft Start with GPIO62 Enable
+//
+// GPIO62 = 1 : Soft start run
+// GPIO62 = 0 : PWM force off, soft-start reset
+//
+// EPWM1A : GPIO0
+// EPWM1B : GPIO1
+//
+// Soft-start profile:
+// 0.0 ~ 0.5 s : fs = 200 kHz, duty 0 -> 0.5
+// 0.5 ~ 1.0 s : duty = 0.5, fs 200 kHz -> 100 kHz
+// 1.0 s 이후  : duty = 0.5, fs = 100 kHz
+//
+// Assumption:
+// SYSCLK = 200 MHz
+// EPWMCLK = 100 MHz
+// TBCLK = 100 MHz
+// Up-down count mode
+// ============================================================
+
+#include "F28x_Project.h"
+
+// ---------------- User parameters ----------------
+#define SYSCLK_HZ           200000000UL
+#define EPWM_TBCLK_HZ       100000000UL
+
+#define FS_START_HZ         200000.0f
+#define FS_END_HZ           100000.0f
+
+#define DUTY_MAX            0.5f
+
+#define DUTY_RAMP_TIME_S    0.5f
+#define FREQ_RAMP_TIME_S    0.5f
+#define TOTAL_SS_TIME_S     1.0f
+
+#define DEADTIME_S          100e-9f
+
+// Soft-start update period
+#define UPDATE_PERIOD_US    100.0f
+#define UPDATE_PERIOD_S     (UPDATE_PERIOD_US * 1e-6f)
+
+// GPIO62 input
+#define START_GPIO          62
+
+// ---------------- Global variables ----------------
+volatile float ss_time = 0.0f;
+volatile Uint16 pwm_enabled = 0;
+
+// ---------------- Function prototypes ----------------
+void InitEPwm1SoftStart(void);
+void InitCpuTimer0ForSoftStart(void);
+void UpdateEPwm1(float fs, float duty);
+void ForceEPwm1Off(void);
+void ReleaseEPwm1Trip(void);
+
+__interrupt void cpu_timer0_isr(void);
+
+// ============================================================
+// main
+// ============================================================
+void main(void)
+{
+    InitSysCtrl();
+
+    DINT;
+
+    InitPieCtrl();
+
+    IER = 0x0000;
+    IFR = 0x0000;
+
+    InitPieVectTable();
+
+    EALLOW;
+    PieVectTable.TIMER0_INT = &cpu_timer0_isr;
+    EDIS;
+
+    InitGpio();
+
+    // ---------------- GPIO0 / GPIO1 : EPWM1A / EPWM1B ----------------
+    GPIO_SetupPinMux(0, GPIO_MUX_CPU1, 1);   // GPIO0 = EPWM1A
+    GPIO_SetupPinMux(1, GPIO_MUX_CPU1, 1);   // GPIO1 = EPWM1B
+
+    // ---------------- GPIO62 : external start switch ----------------
+    GPIO_SetupPinMux(START_GPIO, GPIO_MUX_CPU1, 0);
+    GPIO_SetupPinOptions(START_GPIO, GPIO_INPUT, GPIO_SYNC);
+
+    EALLOW;
+    CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0;
+    EDIS;
+
+    InitEPwm1SoftStart();
+
+    EALLOW;
+    CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1;
+    EDIS;
+
+    InitCpuTimer0ForSoftStart();
+
+    // Enable CPU Timer0 interrupt
+    IER |= M_INT1;
+    PieCtrlRegs.PIEIER1.bit.INTx7 = 1;
+
+    EINT;
+    ERTM;
+
+    // 초기 상태: PWM off
+    ForceEPwm1Off();
+
+    while(1)
+    {
+        // main loop에서는 별도 동작 없음
+        // soft-start 제어는 Timer0 ISR에서 수행
+    }
+}
+
+// ============================================================
+// EPWM1 initialization
+// ============================================================
+void InitEPwm1SoftStart(void)
+{
+    Uint16 tbprd_200k;
+    Uint16 deadtime_count;
+
+    tbprd_200k = (Uint16)((float)EPWM_TBCLK_HZ / (2.0f * FS_START_HZ));
+    deadtime_count = (Uint16)((float)EPWM_TBCLK_HZ * DEADTIME_S);
+
+    EALLOW;
+
+    // ---------------- Time-base ----------------
+    EPwm1Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN;
+    EPwm1Regs.TBCTL.bit.PHSEN = TB_DISABLE;
+    EPwm1Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+    EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
+    EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV1;
+
+    EPwm1Regs.TBPRD = tbprd_200k;
+    EPwm1Regs.TBCTR = 0;
+
+    // ---------------- Compare ----------------
+    EPwm1Regs.CMPA.bit.CMPA = 0;
+
+    EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
+    EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
+
+    // ---------------- Action qualifier ----------------
+    // EPWM1A duty = CMPA / TBPRD
+    EPwm1Regs.AQCTLA.bit.ZRO = AQ_SET;
+    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;
+    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;
+
+    // EPWM1B는 Dead-band module에서 생성
+    EPwm1Regs.AQCTLB.all = 0;
+
+    // ---------------- Dead-band ----------------
+    // EPWM1A/B complementary output
+    // DB_ACTV_HIC: A active high, B active low complementary
+    EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
+    EPwm1Regs.DBCTL.bit.IN_MODE = DBA_ALL;
+    EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC;
+
+    EPwm1Regs.DBRED.bit.DBRED = deadtime_count;
+    EPwm1Regs.DBFED.bit.DBFED = deadtime_count;
+
+    // ---------------- Trip-zone ----------------
+    // Trip 발생 시 EPWM1A/B 모두 Low
+    EPwm1Regs.TZCTL.bit.TZA = TZ_FORCE_LO;
+    EPwm1Regs.TZCTL.bit.TZB = TZ_FORCE_LO;
+
+    // 초기에는 강제 off
+    EPwm1Regs.TZFRC.bit.OST = 1;
+
+    EDIS;
+}
+
+// ============================================================
+// CPU Timer0 initialization
+// ============================================================
+void InitCpuTimer0ForSoftStart(void)
+{
+    InitCpuTimers();
+
+    // CPU Timer0 period = UPDATE_PERIOD_US
+    ConfigCpuTimer(&CpuTimer0, 200, UPDATE_PERIOD_US);
+
+    CpuTimer0Regs.TCR.bit.TSS = 0;   // Start timer
+}
+
+// ============================================================
+// Timer0 ISR
+// ============================================================
+__interrupt void cpu_timer0_isr(void)
+{
+    Uint16 start_signal;
+    float fs;
+    float duty;
+    float t2;
+
+    start_signal = GPIO_ReadPin(START_GPIO);
+
+    // ========================================================
+    // GPIO62 = 0 : PWM 강제 종료 + soft-start reset
+    // ========================================================
+    if(start_signal == 0)
+    {
+        ss_time = 0.0f;
+        pwm_enabled = 0;
+
+        ForceEPwm1Off();
+
+        PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+        return;
+    }
+
+    // ========================================================
+    // GPIO62 = 1 : soft-start 진행
+    // ========================================================
+    pwm_enabled = 1;
+
+    // ---------------- Soft-start profile ----------------
+    if(ss_time < DUTY_RAMP_TIME_S)
+    {
+        fs = FS_START_HZ;
+        duty = DUTY_MAX * (ss_time / DUTY_RAMP_TIME_S);
+    }
+    else if(ss_time < TOTAL_SS_TIME_S)
+    {
+        t2 = ss_time - DUTY_RAMP_TIME_S;
+
+        duty = DUTY_MAX;
+        fs = FS_START_HZ - (FS_START_HZ - FS_END_HZ)
+             * (t2 / FREQ_RAMP_TIME_S);
+    }
+    else
+    {
+        fs = FS_END_HZ;
+        duty = DUTY_MAX;
+    }
+
+    // duty가 너무 작을 때는 불완전 펄스 방지를 위해 off 유지
+    if(duty <= 0.001f)
+    {
+        ForceEPwm1Off();
+    }
+    else
+    {
+        UpdateEPwm1(fs, duty);
+        ReleaseEPwm1Trip();
+    }
+
+    // soft-start time update
+    if(ss_time < TOTAL_SS_TIME_S)
+    {
+        ss_time += UPDATE_PERIOD_S;
+
+        if(ss_time > TOTAL_SS_TIME_S)
+        {
+            ss_time = TOTAL_SS_TIME_S;
+        }
+    }
+
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+}
+
+// ============================================================
+// Update EPWM1 frequency and duty
+// ============================================================
+void UpdateEPwm1(float fs, float duty)
+{
+    Uint16 tbprd;
+    Uint16 cmpa;
+
+    if(fs < FS_END_HZ)
+    {
+        fs = FS_END_HZ;
+    }
+
+    if(fs > FS_START_HZ)
+    {
+        fs = FS_START_HZ;
+    }
+
+    if(duty < 0.0f)
+    {
+        duty = 0.0f;
+    }
+
+    if(duty > DUTY_MAX)
+    {
+        duty = DUTY_MAX;
+    }
+
+    // Up-down count:
+    // fs = TBCLK / (2 * TBPRD)
+    tbprd = (Uint16)((float)EPWM_TBCLK_HZ / (2.0f * fs));
+
+    // duty = CMPA / TBPRD
+    cmpa = (Uint16)((float)tbprd * duty);
+
+    if(cmpa >= tbprd)
+    {
+        cmpa = tbprd - 1;
+    }
+
+    EALLOW;
+
+    EPwm1Regs.TBPRD = tbprd;
+    EPwm1Regs.CMPA.bit.CMPA = cmpa;
+
+    EDIS;
+}
+
+// ============================================================
+// Force EPWM1A/B off using Trip-Zone
+// ============================================================
+void ForceEPwm1Off(void)
+{
+    EALLOW;
+    EPwm1Regs.TZFRC.bit.OST = 1;     // One-shot trip force
+    EDIS;
+}
+
+// ============================================================
+// Release Trip-Zone
+// ============================================================
+void ReleaseEPwm1Trip(void)
+{
+    EALLOW;
+    EPwm1Regs.TZCLR.bit.OST = 1;
+    EPwm1Regs.TZCLR.bit.INT = 1;
+    EDIS;
+}
