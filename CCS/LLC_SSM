@@ -1,9 +1,9 @@
 // ============================================================
-// F28379xD EPWM1A/B Soft Start with GPIO62 Enable
+// F28379xD EPWM1A/B Soft Start with SW Variable Enable
 // + Frequency Modulation after Soft Start
 //
-// GPIO62 = 1 : Soft start run
-// GPIO62 = 0 : PWM force off, soft-start reset
+// SW = 1 : Soft start run
+// SW = 0 : PWM force off, soft-start reset
 //
 // EPWM1A : GPIO0
 // EPWM1B : GPIO1
@@ -50,31 +50,31 @@
 #define DEADTIME_S             100e-9f
 
 // Frequency modulation
-#define FMOD_DEV_HZ            10000.0f     // ±10 kHz
+#define FMOD_DEV_HZ            10000.0f
 #define FMOD_400_HZ            400.0f
 #define FMOD_800_HZ            800.0f
 
-#define PHASE_90_CYCLE         0.25f        // 90 deg / 360 deg
-#define PHASE_270_CYCLE        0.75f        // 270 deg / 360 deg
+#define PHASE_90_CYCLE         0.25f
+#define PHASE_270_CYCLE        0.75f
 
-// fmod = 5에서 mode 변경 주기
 #define FMOD_SEQUENCE_FREQ_HZ   400.0f
 #define FMOD_SEQUENCE_PERIOD_S  (1.0f / FMOD_SEQUENCE_FREQ_HZ)
 
 // Soft-start update period
-// 800 Hz 삼각파 변조를 충분히 반영하기 위해 10 us 사용
 #define UPDATE_PERIOD_US        10.0f
 #define UPDATE_PERIOD_S         (UPDATE_PERIOD_US * 1e-6f)
-
-// GPIO62 input
-#define START_GPIO              62
 
 // ---------------- Global variables ----------------
 volatile float ss_time = 0.0f;
 volatile float run_time = 0.0f;
 volatile Uint16 pwm_enabled = 0;
 
-// CCS Expressions 창에서 fmod 값을 바꿔가며 실험 가능
+// CCS Expressions 창에서 SW 값을 변경
+// SW = 0 : PWM off + soft-start reset
+// SW = 1 : soft-start run
+volatile Uint16 SW = 0;
+
+// CCS Expressions 창에서 fmod 값을 변경
 volatile Uint16 fmod = 0;
 
 // Monitoring variables
@@ -121,9 +121,8 @@ void main(void)
     GPIO_SetupPinMux(0, GPIO_MUX_CPU1, 1);   // GPIO0 = EPWM1A
     GPIO_SetupPinMux(1, GPIO_MUX_CPU1, 1);   // GPIO1 = EPWM1B
 
-    // ---------------- GPIO62 : external start switch ----------------
-    GPIO_SetupPinMux(START_GPIO, GPIO_MUX_CPU1, 0);
-    GPIO_SetupPinOptions(START_GPIO, GPIO_INPUT, GPIO_SYNC);
+    // GPIO62 외부 스위치 입력 설정 제거
+    // SW 변수로 soft-start 동작을 제어함
 
     EALLOW;
     CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0;
@@ -150,6 +149,7 @@ void main(void)
     while(1)
     {
         // main loop에서는 별도 동작 없음
+        // SW, fmod 값은 CCS Expressions 창에서 변경 가능
         // soft-start 및 주파수 변조는 Timer0 ISR에서 수행
     }
 }
@@ -231,18 +231,15 @@ void InitCpuTimer0ForSoftStart(void)
 // ============================================================
 __interrupt void cpu_timer0_isr(void)
 {
-    Uint16 start_signal;
     float fs_base;
     float fs_cmd;
     float duty;
     float t2;
 
-    start_signal = GPIO_ReadPin(START_GPIO);
-
     // ========================================================
-    // GPIO62 = 0 : PWM 강제 종료 + soft-start reset
+    // SW = 0 : PWM 강제 종료 + soft-start reset
     // ========================================================
-    if(start_signal == 0)
+    if(SW == 0)
     {
         ss_time = 0.0f;
         run_time = 0.0f;
@@ -259,7 +256,7 @@ __interrupt void cpu_timer0_isr(void)
     }
 
     // ========================================================
-    // GPIO62 = 1 : soft-start 진행
+    // SW = 1 : soft-start 진행
     // ========================================================
     pwm_enabled = 1;
 
@@ -285,8 +282,6 @@ __interrupt void cpu_timer0_isr(void)
 
     // ========================================================
     // Frequency modulation
-    //
-    // 수정된 부분:
     // soft-start 중에는 modulation 적용 안 함.
     // ss_time >= 1.0 s 이후에만 fmod 적용.
     // ========================================================
