@@ -1,0 +1,729 @@
+// ============================================================
+// F28379xD EPWM1A/B Soft Start with SW Variable Enable
+// + Frequency Modulation after Soft Start
+// + TBPRD Shadow Load
+// + Modulation time reset after soft-start
+// + Random modulation mode using 16-bit LFSR
+//
+// SW = 1 : Soft start run
+// SW = 0 : PWM force off, soft-start reset
+//
+// EPWM1A : GPIO0
+// EPWM1B : GPIO1
+//
+// Soft-start profile:
+// 0.0 ~ 0.5 s : fs = 200 kHz, duty 0 -> 0.5
+// 0.5 ~ 1.0 s : duty = 0.5, fs 200 kHz -> 100 kHz
+// 1.0 s 이후  : duty = 0.5, fs_base = 100 kHz
+//
+// Frequency modulation after soft start only:
+// fmod = 0 : no modulation
+// fmod = 1 : 200 Hz triangular, phase 0 deg
+// fmod = 2 : 200 Hz triangular, phase 180 deg
+// fmod = 3 : 400 Hz triangular, phase 0 deg
+// fmod = 4 : 400 Hz triangular, phase 180 deg
+// fmod = 5 : every 2.5 ms, mode changes 2 -> 1 -> 4 -> 3
+// fmod = 6 : every 2.5 ms, random mode among 1, 2, 3, 4
+//
+// fmod = 5 sequence:
+// 0.0  ~ 2.5 ms   : mode 2, 200 Hz, 180 deg
+// 2.5  ~ 5.0 ms   : mode 1, 200 Hz, 0 deg
+// 5.0  ~ 7.5 ms   : mode 4, 400 Hz, 180 deg
+// 7.5  ~ 10.0 ms  : mode 3, 400 Hz, 0 deg
+//
+// Important:
+// For fmod = 5 and fmod = 6, phase is calculated using local_time
+// inside each 2.5 ms interval. This prevents 200 Hz phase cancellation
+// caused by the 2.5 ms interval being equal to half period of 200 Hz.
+//
+// Frequency deviation:
+// peak-to-peak = 20 kHz
+// amplitude    = ±10 kHz
+//
+// Assumption:
+// SYSCLK = 200 MHz
+// EPWMCLK = 100 MHz
+// TBCLK = 100 MHz
+// Up-down count mode
+// ============================================================
+
+#include "F28x_Project.h"
+
+// ---------------- User parameters ----------------
+#define SYSCLK_HZ              200000000UL
+#define EPWM_TBCLK_HZ          100000000UL
+
+#define FS_START_HZ            200000.0f
+#define FS_END_HZ              100000.0f
+
+#define DUTY_MAX               0.5f
+
+#define DUTY_RAMP_TIME_S       0.5f
+#define FREQ_RAMP_TIME_S       0.5f
+#define TOTAL_SS_TIME_S        1.0f
+
+#define DEADTIME_S             100e-9f
+
+// Frequency modulation
+#define FMOD_DEV_HZ            10000.0f
+#define FMOD_200_HZ            200.0f
+#define FMOD_400_HZ            400.0f
+
+// Phase in cycle unit
+// 0 deg   = 0.0 cycle
+// 180 deg = 0.5 cycle
+#define PHASE_0_CYCLE          0.0f
+#define PHASE_180_CYCLE        0.5f
+
+// fmod = 5, 6 mode transition interval
+// mode 전환 간격은 2.5 ms 유지
+#define FMOD_SEQUENCE_PERIOD_S  0.0025f
+#define FMOD_SEQUENCE_RESET_S   0.010f
+
+// Soft-start update period
+#define UPDATE_PERIOD_US        10.0f
+#define UPDATE_PERIOD_S         (UPDATE_PERIOD_US * 1e-6f)
+
+// ---------------- Global variables ----------------
+volatile float ss_time  = 0.0f;
+volatile float run_time = 0.0f;
+
+// 변조 전용 시간축
+// soft-start 완료 후 0부터 시작
+volatile float mod_time = 0.0f;
+
+volatile Uint16 pwm_enabled = 0;
+
+// CCS Expressions 창에서 SW 값을 변경
+// SW = 0 : PWM off + soft-start reset
+// SW = 1 : soft-start run
+volatile Uint16 SW = 0;
+
+// CCS Expressions 창에서 fmod 값을 변경
+volatile Uint16 fmod = 0;
+
+// Monitoring variables
+volatile float fs_base_mon = 0.0f;   // 변조 전 기준 스위칭 주파수
+volatile float fs_cmd_mon  = 0.0f;   // 실제 적용되는 스위칭 주파수 명령
+volatile float duty_mon    = 0.0f;   // duty 모니터링
+
+// Frequency modulation monitoring variables
+volatile float fm_mon      = 0.0f;   // 실제 적용된 변조 주파수
+volatile float tri_mon     = 0.0f;   // -1 ~ +1 삼각파 값
+volatile float phase_mon   = 0.0f;   // modulo 적용 전 phase
+volatile Uint16 mode_mon   = 0;      // 실제 적용 mode
+
+// fmod = 6 random mode monitoring variables
+volatile Uint16 random_mode_current = 1;
+volatile Uint16 random_seq_index_prev = 0xFFFF;
+volatile Uint16 lfsr_state = 0xACE1;
+
+// Debug monitoring
+volatile Uint16 tbprd_mon  = 0;
+volatile Uint16 cmpa_mon   = 0;
+
+// ---------------- Function prototypes ----------------
+void InitEPwm1SoftStart(void);
+void InitCpuTimer0ForSoftStart(void);
+void UpdateEPwm1(float fs, float duty);
+void ForceEPwm1Off(void);
+void ReleaseEPwm1Trip(void);
+
+float Mod1(float x);
+float TriangleWaveNorm(float phase);
+float ApplyFrequencyModulation(float fs_base, float time_s);
+Uint16 LfsrNextMode1to4(void);
+
+__interrupt void cpu_timer0_isr(void);
+
+// ============================================================
+// main
+// ============================================================
+void main(void)
+{
+    InitSysCtrl();
+
+    DINT;
+
+    InitPieCtrl();
+
+    IER = 0x0000;
+    IFR = 0x0000;
+
+    InitPieVectTable();
+
+    EALLOW;
+    PieVectTable.TIMER0_INT = &cpu_timer0_isr;
+    EDIS;
+
+    InitGpio();
+
+    // ---------------- GPIO0 / GPIO1 : EPWM1A / EPWM1B ----------------
+    GPIO_SetupPinMux(0, GPIO_MUX_CPU1, 1);   // GPIO0 = EPWM1A
+    GPIO_SetupPinMux(1, GPIO_MUX_CPU1, 1);   // GPIO1 = EPWM1B
+
+    EALLOW;
+    CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0;
+    EDIS;
+
+    InitEPwm1SoftStart();
+
+    EALLOW;
+    CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 1;
+    EDIS;
+
+    InitCpuTimer0ForSoftStart();
+
+    // Enable CPU Timer0 interrupt
+    IER |= M_INT1;
+    PieCtrlRegs.PIEIER1.bit.INTx7 = 1;
+
+    EINT;
+    ERTM;
+
+    // 초기 상태: PWM off
+    ForceEPwm1Off();
+
+    while(1)
+    {
+        // main loop에서는 별도 동작 없음
+        // SW, fmod 값은 CCS Expressions 창에서 변경 가능
+        // soft-start 및 주파수 변조는 Timer0 ISR에서 수행
+    }
+}
+
+// ============================================================
+// EPWM1 initialization
+// ============================================================
+void InitEPwm1SoftStart(void)
+{
+    Uint16 tbprd_200k;
+    Uint16 deadtime_count;
+
+    tbprd_200k = (Uint16)((float)EPWM_TBCLK_HZ / (2.0f * FS_START_HZ));
+    deadtime_count = (Uint16)((float)EPWM_TBCLK_HZ * DEADTIME_S);
+
+    EALLOW;
+
+    // ---------------- Time-base ----------------
+    EPwm1Regs.TBCTL.bit.CTRMODE = TB_COUNT_UPDOWN;
+    EPwm1Regs.TBCTL.bit.PHSEN = TB_DISABLE;
+    EPwm1Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+    EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;
+    EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV1;
+
+    // TBPRD shadow load
+    // 주파수 변조 중 TBPRD가 카운터 중간에서 바로 바뀌는 것을 방지
+    EPwm1Regs.TBCTL.bit.PRDLD = TB_SHADOW;
+
+    EPwm1Regs.TBPRD = tbprd_200k;
+    EPwm1Regs.TBCTR = 0;
+
+    // ---------------- Compare ----------------
+    EPwm1Regs.CMPA.bit.CMPA = 0;
+
+    EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
+    EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;
+
+    // ---------------- Action qualifier ----------------
+    // Up-down count 기준:
+    // duty = CMPA / TBPRD
+    EPwm1Regs.AQCTLA.bit.ZRO = AQ_SET;
+    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;
+    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;
+
+    // EPWM1B는 Dead-band module에서 생성
+    EPwm1Regs.AQCTLB.all = 0;
+
+    // ---------------- Dead-band ----------------
+    // EPWM1A/B complementary output
+    EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
+    EPwm1Regs.DBCTL.bit.IN_MODE = DBA_ALL;
+    EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC;
+
+    EPwm1Regs.DBRED.bit.DBRED = deadtime_count;
+    EPwm1Regs.DBFED.bit.DBFED = deadtime_count;
+
+    // ---------------- Trip-zone ----------------
+    // Trip 발생 시 EPWM1A/B 모두 Low
+    EPwm1Regs.TZCTL.bit.TZA = TZ_FORCE_LO;
+    EPwm1Regs.TZCTL.bit.TZB = TZ_FORCE_LO;
+
+    // 초기에는 강제 off
+    EPwm1Regs.TZFRC.bit.OST = 1;
+
+    EDIS;
+}
+
+// ============================================================
+// CPU Timer0 initialization
+// ============================================================
+void InitCpuTimer0ForSoftStart(void)
+{
+    InitCpuTimers();
+
+    // CPU Timer0 period = UPDATE_PERIOD_US
+    ConfigCpuTimer(&CpuTimer0, 200, UPDATE_PERIOD_US);
+
+    CpuTimer0Regs.TCR.bit.TSS = 0;   // Start timer
+}
+
+// ============================================================
+// Timer0 ISR
+// ============================================================
+__interrupt void cpu_timer0_isr(void)
+{
+    float fs_base;
+    float fs_cmd;
+    float duty;
+    float t2;
+
+    // ========================================================
+    // SW = 0 : PWM 강제 종료 + soft-start reset
+    // ========================================================
+    if(SW == 0)
+    {
+        ss_time  = 0.0f;
+        run_time = 0.0f;
+        mod_time = 0.0f;
+
+        pwm_enabled = 0;
+
+        fs_base_mon = 0.0f;
+        fs_cmd_mon  = 0.0f;
+        duty_mon    = 0.0f;
+
+        fm_mon      = 0.0f;
+        tri_mon     = 0.0f;
+        phase_mon   = 0.0f;
+        mode_mon    = 0;
+
+        random_mode_current = 1;
+        random_seq_index_prev = 0xFFFF;
+        lfsr_state = 0xACE1;
+
+        tbprd_mon   = 0;
+        cmpa_mon    = 0;
+
+        ForceEPwm1Off();
+
+        PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+        return;
+    }
+
+    // ========================================================
+    // SW = 1 : soft-start 진행
+    // ========================================================
+    pwm_enabled = 1;
+
+    // ---------------- Soft-start base profile ----------------
+    if(ss_time < DUTY_RAMP_TIME_S)
+    {
+        fs_base = FS_START_HZ;
+        duty = DUTY_MAX * (ss_time / DUTY_RAMP_TIME_S);
+    }
+    else if(ss_time < TOTAL_SS_TIME_S)
+    {
+        t2 = ss_time - DUTY_RAMP_TIME_S;
+
+        duty = DUTY_MAX;
+        fs_base = FS_START_HZ - (FS_START_HZ - FS_END_HZ)
+                  * (t2 / FREQ_RAMP_TIME_S);
+    }
+    else
+    {
+        fs_base = FS_END_HZ;
+        duty = DUTY_MAX;
+    }
+
+    // ========================================================
+    // Frequency modulation
+    // soft-start 중에는 modulation 적용 안 함.
+    // ss_time >= 1.0 s 이후에만 fmod 적용.
+    // ========================================================
+    if(ss_time < TOTAL_SS_TIME_S)
+    {
+        fs_cmd = fs_base;
+
+        fm_mon    = 0.0f;
+        tri_mon   = 0.0f;
+        phase_mon = 0.0f;
+        mode_mon  = 0;
+
+        // soft-start 중에는 변조 시간축 reset
+        mod_time = 0.0f;
+        random_seq_index_prev = 0xFFFF;
+    }
+    else
+    {
+        fs_cmd = ApplyFrequencyModulation(fs_base, mod_time);
+    }
+
+    // Monitoring
+    fs_base_mon = fs_base;
+    fs_cmd_mon  = fs_cmd;
+    duty_mon    = duty;
+
+    // duty가 너무 작을 때는 불완전 펄스 방지를 위해 off 유지
+    if(duty <= 0.001f)
+    {
+        ForceEPwm1Off();
+    }
+    else
+    {
+        UpdateEPwm1(fs_cmd, duty);
+        ReleaseEPwm1Trip();
+    }
+
+    // ---------------- Time update ----------------
+    if(ss_time < TOTAL_SS_TIME_S)
+    {
+        ss_time += UPDATE_PERIOD_S;
+
+        if(ss_time > TOTAL_SS_TIME_S)
+        {
+            ss_time = TOTAL_SS_TIME_S;
+        }
+    }
+    else
+    {
+        // soft-start 완료 이후에만 변조 시간축 증가
+        mod_time += UPDATE_PERIOD_S;
+
+        // fmod = 5, 6 sequence는 10 ms마다 반복됨.
+        // 10 ms 단위로 reset하면 float 누적 오차를 줄일 수 있음.
+        if(mod_time >= FMOD_SEQUENCE_RESET_S)
+        {
+            mod_time -= FMOD_SEQUENCE_RESET_S;
+        }
+    }
+
+    // run_time은 전체 동작 시간 모니터링용
+    run_time += UPDATE_PERIOD_S;
+
+    if(run_time > 1000.0f)
+    {
+        run_time = 0.0f;
+    }
+
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+}
+
+// ============================================================
+// Update EPWM1 frequency and duty
+// ============================================================
+void UpdateEPwm1(float fs, float duty)
+{
+    Uint16 tbprd;
+    Uint16 cmpa;
+
+    // 변조 포함 보호 범위
+    if(fs < 50000.0f)
+    {
+        fs = 50000.0f;
+    }
+
+    if(fs > 250000.0f)
+    {
+        fs = 250000.0f;
+    }
+
+    if(duty < 0.0f)
+    {
+        duty = 0.0f;
+    }
+
+    if(duty > DUTY_MAX)
+    {
+        duty = DUTY_MAX;
+    }
+
+    // Up-down count:
+    // fs = TBCLK / (2 * TBPRD)
+    tbprd = (Uint16)((float)EPWM_TBCLK_HZ / (2.0f * fs));
+
+    // duty = CMPA / TBPRD
+    cmpa = (Uint16)((float)tbprd * duty);
+
+    if(cmpa >= tbprd)
+    {
+        cmpa = tbprd - 1;
+    }
+
+    EALLOW;
+
+    // TBPRD는 TB_SHADOW 설정에 의해 shadow register로 들어감
+    EPwm1Regs.TBPRD = tbprd;
+
+    // CMPA도 shadow 설정에 의해 CTR = ZERO에서 active로 load됨
+    EPwm1Regs.CMPA.bit.CMPA = cmpa;
+
+    EDIS;
+
+    tbprd_mon = tbprd;
+    cmpa_mon  = cmpa;
+}
+
+// ============================================================
+// Force EPWM1A/B off using Trip-Zone
+// ============================================================
+void ForceEPwm1Off(void)
+{
+    EALLOW;
+    EPwm1Regs.TZFRC.bit.OST = 1;     // One-shot trip force
+    EDIS;
+}
+
+// ============================================================
+// Release Trip-Zone
+// ============================================================
+void ReleaseEPwm1Trip(void)
+{
+    EALLOW;
+    EPwm1Regs.TZCLR.bit.OST = 1;
+    EPwm1Regs.TZCLR.bit.INT = 1;
+    EDIS;
+}
+
+// ============================================================
+// Modulo 1 function
+// x -> 0 <= x < 1
+// ============================================================
+float Mod1(float x)
+{
+    while(x >= 1.0f)
+    {
+        x -= 1.0f;
+    }
+
+    while(x < 0.0f)
+    {
+        x += 1.0f;
+    }
+
+    return x;
+}
+
+// ============================================================
+// Normalized triangular wave
+//
+// input  : phase, cycle unit
+// output : -1 ~ +1
+//
+// phase = 0.00 ->  0
+// phase = 0.25 -> +1
+// phase = 0.50 ->  0
+// phase = 0.75 -> -1
+// phase = 1.00 ->  0
+// ============================================================
+float TriangleWaveNorm(float phase)
+{
+    float p;
+    float y;
+
+    p = Mod1(phase);
+
+    if(p < 0.25f)
+    {
+        y = 4.0f * p;
+    }
+    else if(p < 0.75f)
+    {
+        y = 2.0f - 4.0f * p;
+    }
+    else
+    {
+        y = -4.0f + 4.0f * p;
+    }
+
+    return y;
+}
+
+// ============================================================
+// 16-bit LFSR pseudo-random generator
+//
+// Output:
+// mode 1, 2, 3, or 4
+//
+// Polynomial example:
+// x^16 + x^14 + x^13 + x^11 + 1
+// feedback mask = 0xB400
+// ============================================================
+Uint16 LfsrNextMode1to4(void)
+{
+    Uint16 lsb;
+
+    lsb = lfsr_state & 1U;
+    lfsr_state >>= 1;
+
+    if(lsb)
+    {
+        lfsr_state ^= 0xB400U;
+    }
+
+    // 하위 2 bit를 이용하여 1~4 mode 생성
+    return (Uint16)((lfsr_state & 0x0003U) + 1U);
+}
+
+// ============================================================
+// Apply frequency modulation
+// ============================================================
+float ApplyFrequencyModulation(float fs_base, float time_s)
+{
+    Uint16 mode;
+    Uint16 seq_index;
+    Uint16 seq_index_raw;
+
+    float fm;
+    float phase_offset;
+    float phase;
+    float tri;
+    float fs_out;
+
+    float local_time;
+    float phase_time;
+
+    mode = fmod;
+
+    // 기본값:
+    // fmod = 1~4 단독 모드에서는 전체 mod_time을 사용
+    phase_time = time_s;
+
+    // --------------------------------------------------------
+    // fmod = 5:
+    // mode 전환 간격은 2.5 ms로 유지
+    // mode 2 -> 1 -> 4 -> 3 순서로 변경
+    //
+    // 0.0  ~ 2.5 ms   : mode 2, 200 Hz, 180 deg
+    // 2.5  ~ 5.0 ms   : mode 1, 200 Hz, 0 deg
+    // 5.0  ~ 7.5 ms   : mode 4, 400 Hz, 180 deg
+    // 7.5  ~ 10.0 ms  : mode 3, 400 Hz, 0 deg
+    //
+    // local_time을 사용하므로 200 Hz의 0 deg / 180 deg가
+    // 동일하게 보이지 않고 반전된 형태로 나타남.
+    // --------------------------------------------------------
+    if(mode == 5)
+    {
+        seq_index_raw = (Uint16)(time_s / FMOD_SEQUENCE_PERIOD_S);
+        seq_index = seq_index_raw % 4;
+
+        local_time = time_s - ((float)seq_index_raw * FMOD_SEQUENCE_PERIOD_S);
+        phase_time = local_time;
+
+        if(seq_index == 0)
+        {
+            mode = 2;
+        }
+        else if(seq_index == 1)
+        {
+            mode = 1;
+        }
+        else if(seq_index == 2)
+        {
+            mode = 4;
+        }
+        else
+        {
+            mode = 3;
+        }
+
+        // fmod = 5에서는 random sequence index를 초기화
+        random_seq_index_prev = 0xFFFF;
+    }
+    // --------------------------------------------------------
+    // fmod = 6:
+    // mode 전환 간격은 2.5 ms로 유지
+    // 매 interval마다 mode 1~4 중 하나를 pseudo-random 선택
+    //
+    // local_time을 사용하므로 200 Hz의 0 deg / 180 deg가
+    // 동일하게 보이지 않고 반전된 형태로 나타남.
+    // --------------------------------------------------------
+    else if(mode == 6)
+    {
+        seq_index_raw = (Uint16)(time_s / FMOD_SEQUENCE_PERIOD_S);
+        seq_index = seq_index_raw % 4;
+
+        local_time = time_s - ((float)seq_index_raw * FMOD_SEQUENCE_PERIOD_S);
+        phase_time = local_time;
+
+        // 2.5 ms interval이 바뀔 때만 새로운 random mode 선택
+        if(seq_index != random_seq_index_prev)
+        {
+            random_mode_current = LfsrNextMode1to4();
+            random_seq_index_prev = seq_index;
+        }
+
+        mode = random_mode_current;
+    }
+    else
+    {
+        // fmod = 6이 아닐 때는 다음 fmod = 6 진입 시 바로 새 mode가 뽑히도록 초기화
+        random_seq_index_prev = 0xFFFF;
+    }
+
+    // 실제 적용 mode 모니터링
+    mode_mon = mode;
+
+    // --------------------------------------------------------
+    // mode별 변조 주파수 및 위상 설정
+    // --------------------------------------------------------
+    if(mode == 0)
+    {
+        fm_mon    = 0.0f;
+        tri_mon   = 0.0f;
+        phase_mon = 0.0f;
+        mode_mon  = 0;
+
+        return fs_base;
+    }
+    else if(mode == 1)
+    {
+        fm = FMOD_200_HZ;
+        phase_offset = PHASE_0_CYCLE;
+    }
+    else if(mode == 2)
+    {
+        fm = FMOD_200_HZ;
+        phase_offset = PHASE_180_CYCLE;
+    }
+    else if(mode == 3)
+    {
+        fm = FMOD_400_HZ;
+        phase_offset = PHASE_0_CYCLE;
+    }
+    else if(mode == 4)
+    {
+        fm = FMOD_400_HZ;
+        phase_offset = PHASE_180_CYCLE;
+    }
+    else
+    {
+        // 정의되지 않은 값이면 변조 없음
+        fm_mon    = 0.0f;
+        tri_mon   = 0.0f;
+        phase_mon = 0.0f;
+        mode_mon  = 0;
+
+        return fs_base;
+    }
+
+    // --------------------------------------------------------
+    // Triangular modulation
+    //
+    // fmod = 1~4 : phase_time = 전체 mod_time
+    // fmod = 5,6 : phase_time = 각 2.5 ms interval 내부 local_time
+    // --------------------------------------------------------
+    phase = fm * phase_time + phase_offset;
+    tri = TriangleWaveNorm(phase);
+
+    fs_out = fs_base + FMOD_DEV_HZ * tri;
+
+    // --------------------------------------------------------
+    // Monitoring
+    // --------------------------------------------------------
+    fm_mon    = fm;
+    tri_mon   = tri;
+    phase_mon = phase;
+
+    return fs_out;
+}
