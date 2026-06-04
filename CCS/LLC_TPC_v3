@@ -1,15 +1,26 @@
 // ============================================================
-// F28379xD EPWM1A/B Soft Start with SW Variable Enable
+// F28379xD EPWM1A/B Soft Start with SW_force + GPIO62 Enable
 // + Frequency Modulation after Soft Start
 // + TBPRD Shadow Load
 // + Modulation time reset after soft-start
 // + Random modulation mode using 16-bit LFSR
 //
-// SW = 1 : Soft start run
-// SW = 0 : PWM force off, soft-start reset
+// SW_force = 1 : GPIO62 switch enable allowed
+// SW_force = 0 : PWM force off regardless of GPIO62
+//
+// GPIO62 input: active-low external switch
+// GPIO62 = 0 -> SW = 1, external switch ON
+// GPIO62 = 1 -> SW = 0, external switch OFF
+//
+// SW는 외부 스위치 상태만 표시함.
+// SW_force와 관계없이 GPIO62에 따라 SW 값은 변경됨.
+//
+// Actual PWM condition:
+// SW_pwm_enable = SW_force AND SW
 //
 // EPWM1A : GPIO0
 // EPWM1B : GPIO1
+// GPIO62 : External switch input
 //
 // Soft-start profile:
 // 0.0 ~ 0.5 s : fs = 200 kHz, duty 0 -> 0.5
@@ -24,17 +35,6 @@
 // fmod = 4 : 800 Hz triangular, phase 180 deg
 // fmod = 5 : every 2.5 ms, mode changes 2 -> 1 -> 4 -> 3
 // fmod = 6 : every 2.5 ms, random mode among 1, 2, 3, 4
-//
-// fmod = 5 sequence:
-// 0.0  ~ 2.5 ms   : mode 2, 200 Hz, 180 deg
-// 2.5  ~ 5.0 ms   : mode 1, 200 Hz, 0 deg
-// 5.0  ~ 7.5 ms   : mode 4, 800 Hz, 180 deg
-// 7.5  ~ 10.0 ms  : mode 3, 800 Hz, 0 deg
-//
-// Important:
-// For fmod = 5 and fmod = 6, phase is calculated using local_time
-// inside each 2.5 ms interval. This prevents 200 Hz phase cancellation
-// caused by the 2.5 ms interval being equal to half period of 200 Hz.
 //
 // Frequency deviation:
 // peak-to-peak = 20 kHz
@@ -70,19 +70,19 @@
 #define FMOD_800_HZ            800.0f
 
 // Phase in cycle unit
-// 0 deg   = 0.0 cycle
-// 180 deg = 0.5 cycle
 #define PHASE_0_CYCLE          0.0f
 #define PHASE_180_CYCLE        0.5f
 
 // fmod = 5, 6 mode transition interval
-// mode 전환 간격은 2.5 ms 유지
 #define FMOD_SEQUENCE_PERIOD_S  0.0025f
 #define FMOD_SEQUENCE_RESET_S   0.010f
 
 // Soft-start update period
 #define UPDATE_PERIOD_US        10.0f
 #define UPDATE_PERIOD_S         (UPDATE_PERIOD_US * 1e-6f)
+
+// GPIO
+#define EXT_SW_GPIO             62U
 
 // ---------------- Global variables ----------------
 volatile float ss_time  = 0.0f;
@@ -94,24 +94,38 @@ volatile float mod_time = 0.0f;
 
 volatile Uint16 pwm_enabled = 0;
 
-// CCS Expressions 창에서 SW 값을 변경
-// SW = 0 : PWM off + soft-start reset
-// SW = 1 : soft-start run
+// CCS Expressions 창에서 변경하는 강제 허가 변수
+// SW_force = 0 : PWM off, GPIO62와 관계없이 동작 금지
+// SW_force = 1 : GPIO62 입력에 따라 PWM 동작 허용
+volatile Uint16 SW_force = 0;
+
+// 외부 스위치 상태 표시용 변수
+// SW_force와 무관하게 GPIO62 상태만 반영
+//
+// GPIO62 = 0 -> SW = 1
+// GPIO62 = 1 -> SW = 0
 volatile Uint16 SW = 0;
+
+// 실제 PWM 동작 판단용 변수
+// SW_pwm_enable = SW_force && SW
+volatile Uint16 SW_pwm_enable = 0;
+
+// GPIO62 raw 상태 모니터링용
+volatile Uint16 SW_gpio62_raw = 0;
 
 // CCS Expressions 창에서 fmod 값을 변경
 volatile Uint16 fmod = 0;
 
 // Monitoring variables
-volatile float fs_base_mon = 0.0f;   // 변조 전 기준 스위칭 주파수
-volatile float fs_cmd_mon  = 0.0f;   // 실제 적용되는 스위칭 주파수 명령
-volatile float duty_mon    = 0.0f;   // duty 모니터링
+volatile float fs_base_mon = 0.0f;
+volatile float fs_cmd_mon  = 0.0f;
+volatile float duty_mon    = 0.0f;
 
 // Frequency modulation monitoring variables
-volatile float fm_mon      = 0.0f;   // 실제 적용된 변조 주파수
-volatile float tri_mon     = 0.0f;   // -1 ~ +1 삼각파 값
-volatile float phase_mon   = 0.0f;   // modulo 적용 전 phase
-volatile Uint16 mode_mon   = 0;      // 실제 적용 mode
+volatile float fm_mon      = 0.0f;
+volatile float tri_mon     = 0.0f;
+volatile float phase_mon   = 0.0f;
+volatile Uint16 mode_mon   = 0;
 
 // fmod = 6 random mode monitoring variables
 volatile Uint16 random_mode_current = 1;
@@ -125,9 +139,11 @@ volatile Uint16 cmpa_mon   = 0;
 // ---------------- Function prototypes ----------------
 void InitEPwm1SoftStart(void);
 void InitCpuTimer0ForSoftStart(void);
+void InitExternalSwitchGpio(void);
 void UpdateEPwm1(float fs, float duty);
 void ForceEPwm1Off(void);
 void ReleaseEPwm1Trip(void);
+void ResetSoftStartState(void);
 
 float Mod1(float x);
 float TriangleWaveNorm(float phase);
@@ -162,6 +178,9 @@ void main(void)
     GPIO_SetupPinMux(0, GPIO_MUX_CPU1, 1);   // GPIO0 = EPWM1A
     GPIO_SetupPinMux(1, GPIO_MUX_CPU1, 1);   // GPIO1 = EPWM1B
 
+    // ---------------- GPIO62 : External switch input ----------------
+    InitExternalSwitchGpio();
+
     EALLOW;
     CpuSysRegs.PCLKCR0.bit.TBCLKSYNC = 0;
     EDIS;
@@ -187,9 +206,35 @@ void main(void)
     while(1)
     {
         // main loop에서는 별도 동작 없음
-        // SW, fmod 값은 CCS Expressions 창에서 변경 가능
+        // SW_force, fmod 값은 CCS Expressions 창에서 변경 가능
+        //
+        // SW는 GPIO62 입력 상태를 표시
+        // SW_pwm_enable은 실제 PWM 동작 조건 표시
+        //
         // soft-start 및 주파수 변조는 Timer0 ISR에서 수행
     }
+}
+
+// ============================================================
+// GPIO62 initialization
+// ============================================================
+void InitExternalSwitchGpio(void)
+{
+    EALLOW;
+
+    // GPIO62 = GPIO function
+    GPIO_SetupPinMux(EXT_SW_GPIO, GPIO_MUX_CPU1, 0);
+
+    // GPIO62 input
+    //
+    // 현재 실험 결과상 active-low로 판단:
+    // 스위치 신호 공급 시 GPIO62 = 0
+    // 스위치 신호 차단 시 GPIO62 = 1
+    //
+    // 따라서 ISR에서 GPIO62 raw 값을 반전하여 SW에 반영함.
+    GPIO_SetupPinOptions(EXT_SW_GPIO, GPIO_INPUT, GPIO_SYNC);
+
+    EDIS;
 }
 
 // ============================================================
@@ -213,7 +258,6 @@ void InitEPwm1SoftStart(void)
     EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV1;
 
     // TBPRD shadow load
-    // 주파수 변조 중 TBPRD가 카운터 중간에서 바로 바뀌는 것을 방지
     EPwm1Regs.TBCTL.bit.PRDLD = TB_SHADOW;
 
     EPwm1Regs.TBPRD = tbprd_200k;
@@ -269,6 +313,34 @@ void InitCpuTimer0ForSoftStart(void)
 }
 
 // ============================================================
+// Reset soft-start and monitoring state
+// ============================================================
+void ResetSoftStartState(void)
+{
+    ss_time  = 0.0f;
+    run_time = 0.0f;
+    mod_time = 0.0f;
+
+    pwm_enabled = 0;
+
+    fs_base_mon = 0.0f;
+    fs_cmd_mon  = 0.0f;
+    duty_mon    = 0.0f;
+
+    fm_mon      = 0.0f;
+    tri_mon     = 0.0f;
+    phase_mon   = 0.0f;
+    mode_mon    = 0;
+
+    random_mode_current = 1;
+    random_seq_index_prev = 0xFFFF;
+    lfsr_state = 0xACE1;
+
+    tbprd_mon   = 0;
+    cmpa_mon    = 0;
+}
+
+// ============================================================
 // Timer0 ISR
 // ============================================================
 __interrupt void cpu_timer0_isr(void)
@@ -279,32 +351,49 @@ __interrupt void cpu_timer0_isr(void)
     float t2;
 
     // ========================================================
-    // SW = 0 : PWM 강제 종료 + soft-start reset
+    // GPIO62 읽기
+    //
+    // SW_gpio62_raw:
+    // GPIO62 pin의 실제 raw 값
+    //
+    // SW:
+    // 외부 스위치 상태 표시용
+    // SW_force와 무관하게 GPIO62 상태만 반영
+    //
+    // 현재 실험 결과에 맞춘 active-low 조건:
+    // GPIO62 = 0 -> SW = 1, switch ON
+    // GPIO62 = 1 -> SW = 0, switch OFF
+    //
+    // SW_pwm_enable:
+    // 실제 PWM 동작 판단용
+    // SW_pwm_enable = SW_force && SW
     // ========================================================
-    if(SW == 0)
+    SW_gpio62_raw = GpioDataRegs.GPBDAT.bit.GPIO62;
+
+    if(SW_gpio62_raw == 0U)
     {
-        ss_time  = 0.0f;
-        run_time = 0.0f;
-        mod_time = 0.0f;
+        SW = 1U;
+    }
+    else
+    {
+        SW = 0U;
+    }
 
-        pwm_enabled = 0;
+    if((SW_force == 1U) && (SW == 1U))
+    {
+        SW_pwm_enable = 1U;
+    }
+    else
+    {
+        SW_pwm_enable = 0U;
+    }
 
-        fs_base_mon = 0.0f;
-        fs_cmd_mon  = 0.0f;
-        duty_mon    = 0.0f;
-
-        fm_mon      = 0.0f;
-        tri_mon     = 0.0f;
-        phase_mon   = 0.0f;
-        mode_mon    = 0;
-
-        random_mode_current = 1;
-        random_seq_index_prev = 0xFFFF;
-        lfsr_state = 0xACE1;
-
-        tbprd_mon   = 0;
-        cmpa_mon    = 0;
-
+    // ========================================================
+    // SW_pwm_enable = 0 : PWM 강제 종료 + soft-start reset
+    // ========================================================
+    if(SW_pwm_enable == 0U)
+    {
+        ResetSoftStartState();
         ForceEPwm1Off();
 
         PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
@@ -312,7 +401,7 @@ __interrupt void cpu_timer0_isr(void)
     }
 
     // ========================================================
-    // SW = 1 : soft-start 진행
+    // SW_pwm_enable = 1 : soft-start 진행
     // ========================================================
     pwm_enabled = 1;
 
@@ -593,14 +682,6 @@ float ApplyFrequencyModulation(float fs_base, float time_s)
     // fmod = 5:
     // mode 전환 간격은 2.5 ms로 유지
     // mode 2 -> 1 -> 4 -> 3 순서로 변경
-    //
-    // 0.0  ~ 2.5 ms   : mode 2, 200 Hz, 180 deg
-    // 2.5  ~ 5.0 ms   : mode 1, 200 Hz, 0 deg
-    // 5.0  ~ 7.5 ms   : mode 4, 800 Hz, 180 deg
-    // 7.5  ~ 10.0 ms  : mode 3, 800 Hz, 0 deg
-    //
-    // local_time을 사용하므로 200 Hz의 0 deg / 180 deg가
-    // 동일하게 보이지 않고 반전된 형태로 나타남.
     // --------------------------------------------------------
     if(mode == 5)
     {
@@ -634,9 +715,6 @@ float ApplyFrequencyModulation(float fs_base, float time_s)
     // fmod = 6:
     // mode 전환 간격은 2.5 ms로 유지
     // 매 interval마다 mode 1~4 중 하나를 pseudo-random 선택
-    //
-    // local_time을 사용하므로 200 Hz의 0 deg / 180 deg가
-    // 동일하게 보이지 않고 반전된 형태로 나타남.
     // --------------------------------------------------------
     else if(mode == 6)
     {
