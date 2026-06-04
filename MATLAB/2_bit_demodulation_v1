@@ -1,0 +1,1409 @@
+clear; clc; close all;
+
+%% ============================================================
+%  TXT Load + Original Signal + Envelope Detection + Envelope LPF
+%
+%  Manual sync based demodulation
+%  - Known actual information change:
+%       t = 0.0096065 s, 10 -> 11
+%  - Known demodulated symbol update timing:
+%       t = 0.0102654 s
+%  - After this timing, internal symbol clock is used.
+% ============================================================
+
+%% txt 파일 선택
+[file, path] = uigetfile('*.txt', 'Select txt file');
+
+if isequal(file, 0)
+    return;
+end
+
+filename = fullfile(path, file);
+
+%% 데이터 읽기
+data = readmatrix(filename);
+
+%% ============================================================
+%  User settings
+% ============================================================
+
+Fs_used = 20e6;             % Sampling frequency [Hz]
+totalTimeExpected = 0.05;   % Expected total time [s]
+
+tStart = 0;
+tEnd   = 0.05;
+
+%% Figure zoom ranges
+tFig5Start = 0.015;
+tFig5End   = 0.035;
+
+tFig8Start = 0.015;
+tFig8End   = 0.035;
+
+%% Figure 10 zoom range
+tFig10Start = 0.015;
+tFig10End   = 0.035;
+
+%% Demodulation range
+tDemodStart = tStart;
+tDemodEnd   = tEnd;
+
+%% ============================================================
+%  T312 symbol-clock demodulation settings
+% ============================================================
+
+T_312 = 312.5e-6;           % Base window [s]
+NsymWindow = 8;             % 1 symbol = 8*T312
+T_symbol = NsymWindow * T_312;
+
+%% Manual known timing
+tKnownInfoChange = 0.0035771;     % 실제 정보 변경 시점
+tManualDecision  = 0.0038754;     % 복조 갱신 시점
+
+knownBeforeS1 = 1;
+knownBeforeS0 = 0;                % 변경 전 정보 = 00
+
+knownAfterS1  = 1;
+knownAfterS0  = 1;                % 변경 후 정보 = 10
+
+tFig8Start = tManualDecision;     % Fig 8 시작
+tFig8End   = tEnd;
+
+%% 내부 symbol start
+%  tManualDecision은 첫 T312 window가 끝나고 출력이 갱신되는 시점으로 둠.
+%  따라서 해당 심볼의 시작점은 tManualDecision - T312.
+tManualSymbolStart = tManualDecision - T_312;
+
+%% Peak detection tolerance inside first T312 window
+firstWindowPeakTol = 0.20 * T_312;
+
+%% Interval classification settings
+T_625  = 625e-6;
+T_1250 = 1250e-6;
+T_1562 = 1562.5e-6;
+T_2500 = 2500e-6;
+
+intervalTargets = [T_312, T_625, T_1250, T_1562, T_2500];
+intervalLabels  = ["T312", "T625", "T1250", "T1562", "T2500"];
+
+intervalToleranceRatio = 0.30;
+
+%% Envelope detection settings
+minPeakDistanceTime = 80e-6;
+minPeakProminenceRatio = 0.001;
+
+%% Envelope LPF settings
+envLpfCutoff = 2000;
+envLpfOrder  = 2;
+
+%% Extrema detection on LPF output
+lpfExtremaDistanceTime = 80e-6;
+lpfExtremaProminenceRatio = 0.001;
+
+%% Plot decimation
+maxPlotPoints = 20000;
+
+%% ============================================================
+%  유효한 신호 열 자동 선택
+% ============================================================
+
+if size(data, 2) == 1
+
+    signal_raw = data(:, 1);
+    selectedCols = 1;
+
+else
+
+    signal_candidate = data(:, 2:end);
+
+    finiteRatio = sum(isfinite(signal_candidate), 1) / size(signal_candidate, 1);
+    validSignalCols = finiteRatio > 0.5;
+
+    if ~any(validSignalCols)
+        error('No valid signal column found.');
+    end
+
+    signal_raw = signal_candidate(:, validSignalCols);
+    selectedCols = find(validSignalCols) + 1;
+
+end
+
+%% ============================================================
+%  유효한 행만 선택
+% ============================================================
+
+validRows = all(isfinite(signal_raw), 2);
+y = signal_raw(validRows, :);
+
+if isempty(y)
+    error('No valid signal data found.');
+end
+
+N = size(y, 1);
+
+if N < 2
+    error('Not enough samples.');
+end
+
+%% ============================================================
+%  시간축 생성
+% ============================================================
+
+x = (0:N-1).' / Fs_used;
+totalTimeActual = x(end);
+
+if abs(totalTimeActual - totalTimeExpected) > 1/Fs_used
+    warning('Actual data time span is %.9f s, not exactly %.9f s. Check sample count.', ...
+        totalTimeActual, totalTimeExpected);
+end
+
+legendStrings = "Column " + string(selectedCols);
+
+%% ============================================================
+%  Time window 설정
+% ============================================================
+
+if tEnd > x(end)
+    tEnd = x(end);
+end
+
+if tStart >= tEnd
+    error('Invalid time range.');
+end
+
+idxWin = (x >= tStart) & (x <= tEnd);
+
+x_win = x(idxWin);
+y_win = y(idxWin, :);
+
+if isempty(x_win)
+    error('No data in fixed time window.');
+end
+
+%% ============================================================
+%  Plot decimation
+% ============================================================
+
+plotStep = max(1, floor(length(x_win) / maxPlotPoints));
+
+x_plot = x_win(1:plotStep:end);
+y_plot = y_win(1:plotStep:end, :);
+
+%% ============================================================
+%  Envelope LPF 설계
+% ============================================================
+
+if Fs_used <= 2 * envLpfCutoff
+    error('Fs_used must be larger than %.1f Hz for %.1f Hz envelope LPF.', ...
+        2 * envLpfCutoff, envLpfCutoff);
+end
+
+Wn_env = envLpfCutoff / (Fs_used / 2);
+[b_env, a_env] = butter(envLpfOrder, Wn_env, 'low');
+
+%% ============================================================
+%  Envelope detection + Envelope LPF + LPF Extrema Detection
+% ============================================================
+
+minPeakDistanceN = max(1, round(minPeakDistanceTime * Fs_used));
+lpfExtremaDistanceN = max(1, round(lpfExtremaDistanceTime * Fs_used));
+
+envelopeResult = struct([]);
+
+for k = 1:size(y_win, 2)
+
+    yk = y_win(:, k);
+
+    amp_pp = max(yk) - min(yk);
+    minPeakProminence = minPeakProminenceRatio * amp_pp;
+
+    [pksMax, locsMax] = findpeaks(yk, ...
+        'MinPeakDistance', minPeakDistanceN, ...
+        'MinPeakProminence', minPeakProminence);
+
+    tMax = x_win(locsMax);
+
+    if length(tMax) < 2
+
+        warning('%s: Not enough local maxima for envelope interpolation.', legendStrings(k));
+
+        envelope = NaN(size(x_win));
+        envelope_lpf = NaN(size(x_win));
+
+        tLpfExtrema = [];
+        pksLpfExtrema = [];
+        typeLpfExtrema = strings(0, 1);
+
+    else
+
+        tEnvPoints = [x_win(1); tMax; x_win(end)];
+        yEnvPoints = [yk(1); pksMax; yk(end)];
+
+        [tEnvPoints, uniqueIdx] = unique(tEnvPoints, 'stable');
+        yEnvPoints = yEnvPoints(uniqueIdx);
+
+        envelope = interp1(tEnvPoints, yEnvPoints, x_win, 'pchip');
+
+        envelope_lpf = filter(b_env, a_env, envelope);
+        % envelope_lpf = filtfilt(b_env, a_env, envelope);
+
+        amp_pp_lpf = max(envelope_lpf) - min(envelope_lpf);
+        lpfExtremaProminence = lpfExtremaProminenceRatio * amp_pp_lpf;
+
+        [pksLpfMax, locsLpfMax] = findpeaks(envelope_lpf, ...
+            'MinPeakDistance', lpfExtremaDistanceN, ...
+            'MinPeakProminence', lpfExtremaProminence);
+
+        [pksLpfMinNeg, locsLpfMin] = findpeaks(-envelope_lpf, ...
+            'MinPeakDistance', lpfExtremaDistanceN, ...
+            'MinPeakProminence', lpfExtremaProminence);
+
+        pksLpfMin = -pksLpfMinNeg;
+
+        idxLpfExtrema = [locsLpfMax; locsLpfMin];
+        pksLpfExtrema = [pksLpfMax; pksLpfMin];
+
+        typeLpfExtrema = [ ...
+            repmat("Max", length(locsLpfMax), 1); ...
+            repmat("Min", length(locsLpfMin), 1)];
+
+        [idxLpfExtrema, sortIdx] = sort(idxLpfExtrema);
+        pksLpfExtrema = pksLpfExtrema(sortIdx);
+        typeLpfExtrema = typeLpfExtrema(sortIdx);
+
+        tLpfExtrema = x_win(idxLpfExtrema);
+
+    end
+
+    envelopeResult(k).tMax = tMax;
+    envelopeResult(k).pksMax = pksMax;
+    envelopeResult(k).envelope = envelope;
+    envelopeResult(k).envelope_lpf = envelope_lpf;
+
+    envelopeResult(k).tLpfExtrema = tLpfExtrema;
+    envelopeResult(k).pksLpfExtrema = pksLpfExtrema;
+    envelopeResult(k).typeLpfExtrema = typeLpfExtrema;
+
+    fprintf('\n%s\n', legendStrings(k));
+    fprintf('Detected envelope local maxima = %d\n', length(pksMax));
+    fprintf('MinPeakDistance                = %.9f s\n', minPeakDistanceTime);
+    fprintf('MinPeakProminence              = %.9f\n', minPeakProminence);
+    fprintf('Envelope LPF cutoff frequency  = %.3f Hz\n', envLpfCutoff);
+    fprintf('Envelope LPF order             = %d\n', envLpfOrder);
+    fprintf('Detected LPF extrema           = %d\n', length(pksLpfExtrema));
+
+end
+
+%% ============================================================
+%  LPF extrema interval classification + manual symbol-clock demodulation
+% ============================================================
+
+demodResult = struct([]);
+
+for k = 1:size(y_win, 2)
+
+    tLpfExtrema = envelopeResult(k).tLpfExtrema;
+    pksLpfExtrema = envelopeResult(k).pksLpfExtrema;
+    typeLpfExtrema = envelopeResult(k).typeLpfExtrema;
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+
+    idxDemodRange = (tLpfExtrema >= tDemodStart) & (tLpfExtrema <= tDemodEnd);
+
+    tExt = tLpfExtrema(idxDemodRange);
+    vExt = pksLpfExtrema(idxDemodRange);
+    typeExt = typeLpfExtrema(idxDemodRange);
+
+    if length(tExt) < 2
+
+        warning('%s: Not enough extrema in demodulation range.', legendStrings(k));
+
+        demodResult(k).tExt = tExt;
+        demodResult(k).vExt = vExt;
+        demodResult(k).typeExt = typeExt;
+        demodResult(k).intervalTable = table();
+
+        demodResult(k).tState = [];
+        demodResult(k).S1State = [];
+        demodResult(k).S0State = [];
+        demodResult(k).symbolTable = table();
+
+        continue;
+
+    end
+
+    %% --------------------------------------------------------
+    %  Interval classification table
+    %% --------------------------------------------------------
+
+    intervalNo = (1:length(tExt)-1).';
+
+    Time1 = tExt(1:end-1);
+    Time2 = tExt(2:end);
+    Value1 = vExt(1:end-1);
+    Value2 = vExt(2:end);
+    Type1 = typeExt(1:end-1);
+    Type2 = typeExt(2:end);
+
+    dt = Time2 - Time1;
+
+    Class = strings(length(dt), 1);
+    Valid = false(length(dt), 1);
+    RelErr = NaN(length(dt), 1);
+
+    for i = 1:length(dt)
+
+        relErrNow = abs(dt(i) - intervalTargets) ./ intervalTargets;
+        [relErrMin, idxMin] = min(relErrNow);
+
+        RelErr(i) = relErrMin;
+
+        if relErrMin <= intervalToleranceRatio
+            Class(i) = intervalLabels(idxMin);
+            Valid(i) = true;
+        else
+            Class(i) = "Invalid";
+            Valid(i) = false;
+        end
+
+    end
+
+    intervalTable = table( ...
+        intervalNo, Time1, Time2, Value1, Value2, Type1, Type2, dt, Class, Valid, RelErr, ...
+        'VariableNames', { ...
+        'No', 'Time1', 'Time2', 'Value1', 'Value2', 'Type1', 'Type2', ...
+        'dt', 'Class', 'Valid', 'RelErr'});
+
+    %% --------------------------------------------------------
+    %  Manual state + symbol-clock driven demodulation
+    %% --------------------------------------------------------
+
+    curS1 = knownAfterS1;
+    curS0 = knownAfterS0;
+
+    tState = [];
+    S1State = [];
+    S0State = [];
+
+    %% 출력 상태:
+    %  - tDemodStart부터 tManualDecision 전까지는 10으로 표시
+    %  - tManualDecision에서 11로 갱신
+    [tState, S1State, S0State] = appendState( ...
+        tState, S1State, S0State, ...
+        tDemodStart, knownBeforeS1, knownBeforeS0);
+
+    [tState, S1State, S0State] = appendState( ...
+        tState, S1State, S0State, ...
+        tManualDecision, knownAfterS1, knownAfterS0);
+
+    SymbolNoLog = [];
+    SymbolStartLog = [];
+    DecisionTimeLog = [];
+    SymbolEndLog = [];
+    PeakInFirstWindowLog = [];
+    FirstValueLog = [];
+    LaterValueLog = [];
+    PatternEstimateLog = strings(0, 1);
+    S1Log = [];
+    S0Log = [];
+
+    %% 다음 심볼부터 자동 복조
+    tSymStart = tManualSymbolStart + T_symbol;
+    symbolNo = 1;
+
+    while tSymStart + T_312 <= tDemodEnd
+
+        tDecision = tSymStart + T_312;
+        tSymEnd   = tSymStart + T_symbol;
+
+        if tDecision > tDemodEnd
+            break;
+        end
+
+        if tSymEnd > tDemodEnd
+            tSymEnd = tDemodEnd;
+        end
+
+        %% 첫 T312 window 안의 peak 유무 확인
+        idxPeakInFirstWindow = ...
+            (tExt >  tSymStart + firstWindowPeakTol) & ...
+            (tExt <= tDecision + firstWindowPeakTol);
+
+        hasPeakFirstWindow = any(idxPeakInFirstWindow);
+
+        if hasPeakFirstWindow
+            curS1 = 1;
+            patternEstimate = "First-window peak -> 1-2-2-2-1";
+        else
+            curS1 = 0;
+            patternEstimate = "No first-window peak -> 4-4";
+        end
+
+        %% S0: 첫 T312 window 양 끝값 비교
+        yFirst = interp1(x_win, envelope_lpf, tSymStart, 'linear', 'extrap');
+        yLater = interp1(x_win, envelope_lpf, tDecision, 'linear', 'extrap');
+
+        if yLater > yFirst
+            curS0 = 0;
+        else
+            curS0 = 1;
+        end
+
+        %% 출력은 첫 T312 window 끝에서 갱신
+        [tState, S1State, S0State] = appendState( ...
+            tState, S1State, S0State, ...
+            tDecision, curS1, curS0);
+
+        SymbolNoLog = [SymbolNoLog; symbolNo];
+        SymbolStartLog = [SymbolStartLog; tSymStart];
+        DecisionTimeLog = [DecisionTimeLog; tDecision];
+        SymbolEndLog = [SymbolEndLog; tSymEnd];
+        PeakInFirstWindowLog = [PeakInFirstWindowLog; hasPeakFirstWindow];
+        FirstValueLog = [FirstValueLog; yFirst];
+        LaterValueLog = [LaterValueLog; yLater];
+        PatternEstimateLog = [PatternEstimateLog; patternEstimate];
+        S1Log = [S1Log; curS1];
+        S0Log = [S0Log; curS0];
+
+        tSymStart = tSymStart + T_symbol;
+        symbolNo = symbolNo + 1;
+
+    end
+
+    %% 마지막까지 hold
+    if ~isempty(tState)
+        [tState, S1State, S0State] = appendState( ...
+            tState, S1State, S0State, ...
+            tDemodEnd, S1State(end), S0State(end));
+    end
+
+    symbolTable = table( ...
+        SymbolNoLog, SymbolStartLog, DecisionTimeLog, SymbolEndLog, ...
+        PeakInFirstWindowLog, FirstValueLog, LaterValueLog, ...
+        PatternEstimateLog, S1Log, S0Log, ...
+        'VariableNames', { ...
+        'SymbolNo', 'SymbolStart', 'DecisionTime', 'SymbolEnd', ...
+        'PeakInFirstWindow', 'FirstValue', 'LaterValue', ...
+        'PatternEstimate', 'S1', 'S0'});
+
+    demodResult(k).tExt = tExt;
+    demodResult(k).vExt = vExt;
+    demodResult(k).typeExt = typeExt;
+    demodResult(k).intervalTable = intervalTable;
+
+    demodResult(k).tState = tState;
+    demodResult(k).S1State = S1State;
+    demodResult(k).S0State = S0State;
+    demodResult(k).symbolTable = symbolTable;
+
+    %% 명령창 출력
+    fprintf('\n============================================================\n');
+    fprintf('%s: LPF Extrema Interval Classification\n', legendStrings(k));
+    fprintf('============================================================\n');
+    fprintf('Target T312  = %.9f s\n', T_312);
+    fprintf('Target T625  = %.9f s\n', T_625);
+    fprintf('Tolerance    = ±%.1f %%\n\n', intervalToleranceRatio * 100);
+
+    fprintf('t1 [s]\t\tt2 [s]\t\tdt [s]\t\tClass\n');
+
+    for ii = 1:height(intervalTable)
+        fprintf('%.9f\t%.9f\t%.9f\t%s\n', ...
+            intervalTable.Time1(ii), ...
+            intervalTable.Time2(ii), ...
+            intervalTable.dt(ii), ...
+            intervalTable.Class(ii));
+    end
+
+    fprintf('\n============================================================\n');
+    fprintf('%s: Manual Sync + Symbol-Clock Demodulation\n', legendStrings(k));
+    fprintf('============================================================\n');
+    fprintf('Known actual info change = %.9f s, 10 -> 11\n', tKnownInfoChange);
+    fprintf('Manual demod decision    = %.9f s, output -> 11\n', tManualDecision);
+    fprintf('Manual symbol start      = %.9f s\n', tManualSymbolStart);
+    fprintf('T312 window              = %.9f s\n', T_312);
+    fprintf('Symbol time              = %.9f s\n', T_symbol);
+    fprintf('First-window peak        -> S1 = 1\n');
+    fprintf('No first-window peak     -> S1 = 0\n');
+    fprintf('Later > first            -> S0 = 0, otherwise S0 = 1\n\n');
+
+    fprintf('Symbol\tStart [s]\tDecision [s]\tEnd [s]\tPeakFirst\tS1\tS0\tPattern\n');
+
+    for ii = 1:height(symbolTable)
+        fprintf('%d\t%.9f\t%.9f\t%.9f\t%d\t\t%d\t%d\t%s\n', ...
+            symbolTable.SymbolNo(ii), ...
+            symbolTable.SymbolStart(ii), ...
+            symbolTable.DecisionTime(ii), ...
+            symbolTable.SymbolEnd(ii), ...
+            symbolTable.PeakInFirstWindow(ii), ...
+            symbolTable.S1(ii), ...
+            symbolTable.S0(ii), ...
+            symbolTable.PatternEstimate(ii));
+    end
+
+    fprintf('\nDemodulated state changes:\n');
+    fprintf('t [s]\t\tS1\tS0\n');
+
+    for ii = 1:length(tState)
+        fprintf('%.9f\t%d\t%d\n', ...
+            tState(ii), S1State(ii), S0State(ii));
+    end
+
+end
+
+%% ============================================================
+%  Figure 1: Original
+% ============================================================
+
+figure(1);
+clf;
+
+plot(x_plot, y_plot, 'LineWidth', 1.0);
+grid on;
+
+title(['Figure 1: Original Signal - ', file], 'Interpreter', 'none');
+xlabel('Time [s]');
+ylabel('Value');
+
+xlim([tStart tEnd]);
+legend("Original " + legendStrings, 'Location', 'best');
+
+%% ============================================================
+%  Figure 2: Original + local maxima + envelope
+% ============================================================
+
+figure(2);
+clf;
+
+plot(x_plot, y_plot, 'LineWidth', 1.0);
+hold on;
+
+for k = 1:size(y_win, 2)
+
+    tMax = envelopeResult(k).tMax;
+    pksMax = envelopeResult(k).pksMax;
+    envelope = envelopeResult(k).envelope;
+
+    env_plot = envelope(1:plotStep:end);
+
+    plot(tMax, pksMax, ...
+        'ko', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+    plot(x_plot, env_plot, ...
+        'LineWidth', 2.0);
+
+end
+
+grid on;
+
+title('Figure 2: Original Signal with Local Maxima Envelope');
+xlabel('Time [s]');
+ylabel('Value');
+
+xlim([tStart tEnd]);
+
+if size(y_win, 2) == 1
+    legend('Original', 'Local Maxima', 'Envelope', 'Location', 'best');
+else
+    legend('Original Signals', 'Local Maxima', 'Envelope', 'Location', 'best');
+end
+
+%% ============================================================
+%  Figure 3: Envelope only
+% ============================================================
+
+figure(3);
+clf;
+
+hold on;
+
+for k = 1:size(y_win, 2)
+
+    envelope = envelopeResult(k).envelope;
+    env_plot = envelope(1:plotStep:end);
+
+    plot(x_plot, env_plot, ...
+        'LineWidth', 2.0);
+
+end
+
+grid on;
+
+title('Figure 3: Envelope Only');
+xlabel('Time [s]');
+ylabel('Envelope');
+
+xlim([tStart tEnd]);
+
+legend("Envelope " + legendStrings, 'Location', 'best');
+
+%% ============================================================
+%  Figure 4: Envelope + LPF output
+% ============================================================
+
+figure(4);
+clf;
+
+hold on;
+
+for k = 1:size(y_win, 2)
+
+    envelope = envelopeResult(k).envelope;
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+
+    env_plot = envelope(1:plotStep:end);
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(x_plot, env_plot, ...
+        'LineWidth', 1.2);
+
+    plot(x_plot, env_lpf_plot, ...
+        'LineWidth', 2.0);
+
+end
+
+grid on;
+
+title(sprintf('Figure 4: Envelope with LPF Output, Order = %d, f_c = %.1f Hz', ...
+    envLpfOrder, envLpfCutoff));
+
+xlabel('Time [s]');
+ylabel('Envelope / LPF Output');
+
+xlim([tStart tEnd]);
+
+if size(y_win, 2) == 1
+    legend('Envelope', 'Envelope LPF', 'Location', 'best');
+else
+    legend('Envelope Signals', 'Envelope LPF Signals', 'Location', 'best');
+end
+
+%% ============================================================
+%  Figure 5: Figure 4 zoom
+% ============================================================
+
+figure(5);
+clf;
+
+hold on;
+
+idxFig5Plot = (x_plot >= tFig5Start) & (x_plot <= tFig5End);
+
+for k = 1:size(y_win, 2)
+
+    envelope = envelopeResult(k).envelope;
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+
+    env_plot = envelope(1:plotStep:end);
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(x_plot(idxFig5Plot), env_plot(idxFig5Plot), ...
+        'LineWidth', 1.2);
+
+    plot(x_plot(idxFig5Plot), env_lpf_plot(idxFig5Plot), ...
+        'LineWidth', 2.0);
+
+end
+
+grid on;
+
+title(sprintf('Figure 5: Envelope with LPF Output, %.3f to %.3f s', ...
+    tFig5Start, tFig5End));
+
+xlabel('Time [s]');
+ylabel('Envelope / LPF Output');
+
+xlim([tFig5Start tFig5End]);
+
+if size(y_win, 2) == 1
+    legend('Envelope', 'Envelope LPF', 'Location', 'best');
+else
+    legend('Envelope Signals', 'Envelope LPF Signals', 'Location', 'best');
+end
+
+%% ============================================================
+%  Figure 6: Figure 5에서 LPF 결과 + extrema 표시
+% ============================================================
+
+figure(6);
+clf;
+
+hold on;
+
+for k = 1:size(y_win, 2)
+
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+    tLpfExtrema = envelopeResult(k).tLpfExtrema;
+    pksLpfExtrema = envelopeResult(k).pksLpfExtrema;
+    typeLpfExtrema = envelopeResult(k).typeLpfExtrema;
+
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(x_plot(idxFig5Plot), env_lpf_plot(idxFig5Plot), ...
+        'LineWidth', 2.0);
+
+    idxExtZoom = (tLpfExtrema >= tFig5Start) & (tLpfExtrema <= tFig5End);
+
+    tExtZoom = tLpfExtrema(idxExtZoom);
+    pksExtZoom = pksLpfExtrema(idxExtZoom);
+    typeExtZoom = typeLpfExtrema(idxExtZoom);
+
+    idxMaxZoom = typeExtZoom == "Max";
+    idxMinZoom = typeExtZoom == "Min";
+
+    plot(tExtZoom(idxMaxZoom), pksExtZoom(idxMaxZoom), ...
+        'ko', ...
+        'MarkerSize', 6, ...
+        'LineWidth', 1.3);
+
+    plot(tExtZoom(idxMinZoom), pksExtZoom(idxMinZoom), ...
+        'kv', ...
+        'MarkerSize', 6, ...
+        'LineWidth', 1.3);
+
+end
+
+grid on;
+
+title(sprintf('Figure 6: LPF Output with Extrema, %.3f to %.3f s', ...
+    tFig5Start, tFig5End));
+
+xlabel('Time [s]');
+ylabel('Envelope LPF Output');
+
+xlim([tFig5Start tFig5End]);
+
+if size(y_win, 2) == 1
+    legend('Envelope LPF', 'Local Maxima', 'Local Minima', 'Location', 'best');
+else
+    legend('Envelope LPF Signals', 'Local Maxima', 'Local Minima', 'Location', 'best');
+end
+
+%% ============================================================
+%  Figure 7: Full-time LPF + extrema + demodulation result
+% ============================================================
+
+fig7 = figure(7);
+clf(fig7);
+set(fig7, 'Color', 'w');
+
+tl7 = tiledlayout(fig7, 3, 1, ...
+    'TileSpacing', 'compact', ...
+    'Padding', 'compact');
+
+%% Fig. 7-1: LPF + extrema + manual timing
+ax7_0 = nexttile(tl7, 1);
+hold(ax7_0, 'on');
+
+for k = 1:size(y_win, 2)
+
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+    tLpfExtrema = envelopeResult(k).tLpfExtrema;
+    pksLpfExtrema = envelopeResult(k).pksLpfExtrema;
+    typeLpfExtrema = envelopeResult(k).typeLpfExtrema;
+
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(ax7_0, x_plot, env_lpf_plot, ...
+        'LineWidth', 1.5);
+
+    idxExtFull = (tLpfExtrema >= tStart) & (tLpfExtrema <= tEnd);
+
+    tExtFull = tLpfExtrema(idxExtFull);
+    pksExtFull = pksLpfExtrema(idxExtFull);
+    typeExtFull = typeLpfExtrema(idxExtFull);
+
+    idxMaxFull = typeExtFull == "Max";
+    idxMinFull = typeExtFull == "Min";
+
+    plot(ax7_0, tExtFull(idxMaxFull), pksExtFull(idxMaxFull), ...
+        'ko', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+    plot(ax7_0, tExtFull(idxMinFull), pksExtFull(idxMinFull), ...
+        'kv', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+end
+
+xline(ax7_0, tKnownInfoChange, '--', '10->11 actual', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+xline(ax7_0, tManualDecision, '-', 'manual decision', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+grid(ax7_0, 'on');
+xlim(ax7_0, [tStart tEnd]);
+ylabel(ax7_0, 'LPF Output');
+title(ax7_0, 'Figure 7: Manual Sync Demodulation, Full Time');
+
+if size(y_win, 2) == 1
+    legend(ax7_0, 'Envelope LPF', 'Local Maxima', 'Local Minima', 'Location', 'best');
+else
+    legend(ax7_0, 'Envelope LPF Signals', 'Local Maxima', 'Local Minima', 'Location', 'best');
+end
+
+%% Fig. 7-2: S1
+ax7_1 = nexttile(tl7, 2);
+hold(ax7_1, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax7_1, demodResult(k).tState, demodResult(k).S1State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax7_1, tKnownInfoChange, '--');
+xline(ax7_1, tManualDecision, '-');
+
+grid(ax7_1, 'on');
+ylim(ax7_1, [-0.2 1.2]);
+xlim(ax7_1, [tStart tEnd]);
+yticks(ax7_1, [0 1]);
+ylabel(ax7_1, 'S1');
+
+if size(y_win, 2) == 1
+    legend(ax7_1, 'S1', 'Location', 'best');
+else
+    legend(ax7_1, "S1 " + legendStrings, 'Location', 'best');
+end
+
+%% Fig. 7-3: S0
+ax7_2 = nexttile(tl7, 3);
+hold(ax7_2, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax7_2, demodResult(k).tState, demodResult(k).S0State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax7_2, tKnownInfoChange, '--');
+xline(ax7_2, tManualDecision, '-');
+
+grid(ax7_2, 'on');
+ylim(ax7_2, [-0.2 1.2]);
+xlim(ax7_2, [tStart tEnd]);
+yticks(ax7_2, [0 1]);
+
+xlabel(ax7_2, 'Time [s]');
+ylabel(ax7_2, 'S0');
+
+if size(y_win, 2) == 1
+    legend(ax7_2, 'S0', 'Location', 'best');
+else
+    legend(ax7_2, "S0 " + legendStrings, 'Location', 'best');
+end
+
+linkaxes([ax7_0 ax7_1 ax7_2], 'x');
+
+%% ============================================================
+%  Figure 8: From tManualDecision to tEnd
+% ============================================================
+
+fig8 = figure(8);
+clf(fig8);
+set(fig8, 'Color', 'w');
+
+tl8 = tiledlayout(fig8, 3, 1, ...
+    'TileSpacing', 'compact', ...
+    'Padding', 'compact');
+
+%% Fig. 8-1: LPF + extrema + manual timing
+ax8_0 = nexttile(tl8, 1);
+hold(ax8_0, 'on');
+
+idxFig8Plot = (x_plot >= tFig8Start) & (x_plot <= tFig8End);
+
+for k = 1:size(y_win, 2)
+
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+    tLpfExtrema = envelopeResult(k).tLpfExtrema;
+    pksLpfExtrema = envelopeResult(k).pksLpfExtrema;
+    typeLpfExtrema = envelopeResult(k).typeLpfExtrema;
+
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(ax8_0, x_plot(idxFig8Plot), env_lpf_plot(idxFig8Plot), ...
+        'LineWidth', 1.5);
+
+    idxExtFig8 = (tLpfExtrema >= tFig8Start) & (tLpfExtrema <= tFig8End);
+
+    tExtFig8 = tLpfExtrema(idxExtFig8);
+    pksExtFig8 = pksLpfExtrema(idxExtFig8);
+    typeExtFig8 = typeLpfExtrema(idxExtFig8);
+
+    idxMaxFig8 = typeExtFig8 == "Max";
+    idxMinFig8 = typeExtFig8 == "Min";
+
+    plot(ax8_0, tExtFig8(idxMaxFig8), pksExtFig8(idxMaxFig8), ...
+        'ko', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+    plot(ax8_0, tExtFig8(idxMinFig8), pksExtFig8(idxMinFig8), ...
+        'kv', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+end
+
+xline(ax8_0, tManualDecision, '-', 'manual decision', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+grid(ax8_0, 'on');
+xlim(ax8_0, [tFig8Start tFig8End]);
+ylabel(ax8_0, 'LPF Output');
+
+title(ax8_0, sprintf('Figure 8: Manual Sync Demodulation, %.6f to %.3f s', ...
+    tFig8Start, tFig8End));
+
+if size(y_win, 2) == 1
+    legend(ax8_0, 'Envelope LPF', 'Local Maxima', 'Local Minima', 'Location', 'best');
+else
+    legend(ax8_0, 'Envelope LPF Signals', 'Local Maxima', 'Local Minima', 'Location', 'best');
+end
+
+%% Fig. 8-2: S1
+ax8_1 = nexttile(tl8, 2);
+hold(ax8_1, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax8_1, demodResult(k).tState, demodResult(k).S1State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax8_1, tManualDecision, '-');
+
+grid(ax8_1, 'on');
+ylim(ax8_1, [-0.2 1.2]);
+xlim(ax8_1, [tFig8Start tFig8End]);
+yticks(ax8_1, [0 1]);
+
+ylabel(ax8_1, 'S1');
+
+if size(y_win, 2) == 1
+    legend(ax8_1, 'S1', 'Location', 'best');
+else
+    legend(ax8_1, "S1 " + legendStrings, 'Location', 'best');
+end
+
+%% Fig. 8-3: S0
+ax8_2 = nexttile(tl8, 3);
+hold(ax8_2, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax8_2, demodResult(k).tState, demodResult(k).S0State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax8_2, tManualDecision, '-');
+
+grid(ax8_2, 'on');
+ylim(ax8_2, [-0.2 1.2]);
+xlim(ax8_2, [tFig8Start tFig8End]);
+yticks(ax8_2, [0 1]);
+
+xlabel(ax8_2, 'Time [s]');
+ylabel(ax8_2, 'S0');
+
+if size(y_win, 2) == 1
+    legend(ax8_2, 'S0', 'Location', 'best');
+else
+    legend(ax8_2, "S0 " + legendStrings, 'Location', 'best');
+end
+
+linkaxes([ax8_0 ax8_1 ax8_2], 'x');
+
+%% ============================================================
+%  Figure 9: Zoom LPF + extrema + demodulation result
+% ============================================================
+
+fig9 = figure(9);
+clf(fig9);
+set(fig9, 'Color', 'w');
+
+tl9 = tiledlayout(fig9, 3, 1, ...
+    'TileSpacing', 'compact', ...
+    'Padding', 'compact');
+
+%% Fig. 9-1: LPF + extrema + symbol windows
+ax9_0 = nexttile(tl9, 1);
+hold(ax9_0, 'on');
+
+idxFig9Plot = (x_plot >= tFig8Start) & (x_plot <= tFig8End);
+
+for k = 1:size(y_win, 2)
+
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+    tLpfExtrema = envelopeResult(k).tLpfExtrema;
+    pksLpfExtrema = envelopeResult(k).pksLpfExtrema;
+    typeLpfExtrema = envelopeResult(k).typeLpfExtrema;
+
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(ax9_0, x_plot(idxFig9Plot), env_lpf_plot(idxFig9Plot), ...
+        'LineWidth', 1.5);
+
+    idxExtZoom = (tLpfExtrema >= tFig8Start) & (tLpfExtrema <= tFig8End);
+
+    tExtZoom = tLpfExtrema(idxExtZoom);
+    pksExtZoom = pksLpfExtrema(idxExtZoom);
+    typeExtZoom = typeLpfExtrema(idxExtZoom);
+
+    idxMaxZoom = typeExtZoom == "Max";
+    idxMinZoom = typeExtZoom == "Min";
+
+    plot(ax9_0, tExtZoom(idxMaxZoom), pksExtZoom(idxMaxZoom), ...
+        'ko', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+    plot(ax9_0, tExtZoom(idxMinZoom), pksExtZoom(idxMinZoom), ...
+        'kv', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+end
+
+%% symbol start / decision 표시
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'symbolTable') && ~isempty(demodResult(k).symbolTable)
+
+        st = demodResult(k).symbolTable;
+
+        for ii = 1:height(st)
+
+            if st.SymbolStart(ii) >= tFig8Start && st.SymbolStart(ii) <= tFig8End
+                xline(ax9_0, st.SymbolStart(ii), ':', ...
+                    sprintf('S%d start', st.SymbolNo(ii)), ...
+                    'LabelOrientation', 'horizontal', ...
+                    'FontSize', 7);
+            end
+
+            if st.DecisionTime(ii) >= tFig8Start && st.DecisionTime(ii) <= tFig8End
+                xline(ax9_0, st.DecisionTime(ii), '--', ...
+                    sprintf('S%d dec', st.SymbolNo(ii)), ...
+                    'LabelOrientation', 'horizontal', ...
+                    'FontSize', 7);
+            end
+
+        end
+
+    end
+
+end
+
+xline(ax9_0, tKnownInfoChange, '--', '10->11 actual', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+xline(ax9_0, tManualDecision, '-', 'manual decision', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+grid(ax9_0, 'on');
+xlim(ax9_0, [tFig8Start tFig8End]);
+ylabel(ax9_0, 'LPF Output');
+
+title(ax9_0, sprintf('Figure 9: Manual Sync Demodulation, %.3f to %.3f s', ...
+    tFig8Start, tFig8End));
+
+if size(y_win, 2) == 1
+    legend(ax9_0, 'Envelope LPF', 'Local Maxima', 'Local Minima', 'Location', 'best');
+else
+    legend(ax9_0, 'Envelope LPF Signals', 'Local Maxima', 'Local Minima', 'Location', 'best');
+end
+
+%% Fig. 9-2: S1
+ax9_1 = nexttile(tl9, 2);
+hold(ax9_1, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax9_1, demodResult(k).tState, demodResult(k).S1State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax9_1, tKnownInfoChange, '--');
+xline(ax9_1, tManualDecision, '-');
+
+grid(ax9_1, 'on');
+ylim(ax9_1, [-0.2 1.2]);
+xlim(ax9_1, [tFig8Start tFig8End]);
+yticks(ax9_1, [0 1]);
+
+ylabel(ax9_1, 'S1');
+
+if size(y_win, 2) == 1
+    legend(ax9_1, 'S1', 'Location', 'best');
+else
+    legend(ax9_1, "S1 " + legendStrings, 'Location', 'best');
+end
+
+%% Fig. 9-3: S0
+ax9_2 = nexttile(tl9, 3);
+hold(ax9_2, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax9_2, demodResult(k).tState, demodResult(k).S0State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax9_2, tKnownInfoChange, '--');
+xline(ax9_2, tManualDecision, '-');
+
+grid(ax9_2, 'on');
+ylim(ax9_2, [-0.2 1.2]);
+xlim(ax9_2, [tFig8Start tFig8End]);
+yticks(ax9_2, [0 1]);
+
+xlabel(ax9_2, 'Time [s]');
+ylabel(ax9_2, 'S0');
+
+if size(y_win, 2) == 1
+    legend(ax9_2, 'S0', 'Location', 'best');
+else
+    legend(ax9_2, "S0 " + legendStrings, 'Location', 'best');
+end
+
+linkaxes([ax9_0 ax9_1 ax9_2], 'x');
+
+%% ============================================================
+%  Figure 10: Figure 9 zoom, 0.015 to 0.035 s
+% ============================================================
+
+fig10 = figure(10);
+clf(fig10);
+set(fig10, 'Color', 'w');
+
+tl10 = tiledlayout(fig10, 3, 1, ...
+    'TileSpacing', 'compact', ...
+    'Padding', 'compact');
+
+%% Fig. 10-1: LPF + extrema + symbol windows
+ax10_0 = nexttile(tl10, 1);
+hold(ax10_0, 'on');
+
+idxFig10Plot = (x_plot >= tFig10Start) & (x_plot <= tFig10End);
+
+for k = 1:size(y_win, 2)
+
+    envelope_lpf = envelopeResult(k).envelope_lpf;
+    tLpfExtrema = envelopeResult(k).tLpfExtrema;
+    pksLpfExtrema = envelopeResult(k).pksLpfExtrema;
+    typeLpfExtrema = envelopeResult(k).typeLpfExtrema;
+
+    env_lpf_plot = envelope_lpf(1:plotStep:end);
+
+    plot(ax10_0, x_plot(idxFig10Plot), env_lpf_plot(idxFig10Plot), ...
+        'LineWidth', 1.5);
+
+    idxExtFig10 = (tLpfExtrema >= tFig10Start) & (tLpfExtrema <= tFig10End);
+
+    tExtFig10 = tLpfExtrema(idxExtFig10);
+    pksExtFig10 = pksLpfExtrema(idxExtFig10);
+    typeExtFig10 = typeLpfExtrema(idxExtFig10);
+
+    idxMaxFig10 = typeExtFig10 == "Max";
+    idxMinFig10 = typeExtFig10 == "Min";
+
+    plot(ax10_0, tExtFig10(idxMaxFig10), pksExtFig10(idxMaxFig10), ...
+        'ko', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+    plot(ax10_0, tExtFig10(idxMinFig10), pksExtFig10(idxMinFig10), ...
+        'kv', ...
+        'MarkerSize', 5, ...
+        'LineWidth', 1.2);
+
+end
+
+%% symbol start / decision 표시
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'symbolTable') && ~isempty(demodResult(k).symbolTable)
+
+        st = demodResult(k).symbolTable;
+
+        for ii = 1:height(st)
+
+            if st.SymbolStart(ii) >= tFig10Start && st.SymbolStart(ii) <= tFig10End
+                xline(ax10_0, st.SymbolStart(ii), ':', ...
+                    sprintf('S%d start', st.SymbolNo(ii)), ...
+                    'LabelOrientation', 'horizontal', ...
+                    'FontSize', 7);
+            end
+
+            if st.DecisionTime(ii) >= tFig10Start && st.DecisionTime(ii) <= tFig10End
+                xline(ax10_0, st.DecisionTime(ii), '--', ...
+                    sprintf('S%d dec', st.SymbolNo(ii)), ...
+                    'LabelOrientation', 'horizontal', ...
+                    'FontSize', 7);
+            end
+
+        end
+
+    end
+
+end
+
+xline(ax10_0, tKnownInfoChange, '--', 'actual change', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+xline(ax10_0, tManualDecision, '-', 'manual decision', ...
+    'LabelOrientation', 'horizontal', ...
+    'FontSize', 8);
+
+grid(ax10_0, 'on');
+xlim(ax10_0, [tFig10Start tFig10End]);
+ylabel(ax10_0, 'LPF Output');
+
+title(ax10_0, sprintf('Figure 10: Manual Sync Demodulation, %.3f to %.3f s', ...
+    tFig10Start, tFig10End));
+
+if size(y_win, 2) == 1
+    legend(ax10_0, 'Envelope LPF', 'Local Maxima', 'Local Minima', 'Location', 'best');
+else
+    legend(ax10_0, 'Envelope LPF Signals', 'Local Maxima', 'Local Minima', 'Location', 'best');
+end
+
+%% Fig. 10-2: S1
+ax10_1 = nexttile(tl10, 2);
+hold(ax10_1, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax10_1, demodResult(k).tState, demodResult(k).S1State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax10_1, tKnownInfoChange, '--');
+xline(ax10_1, tManualDecision, '-');
+
+grid(ax10_1, 'on');
+ylim(ax10_1, [-0.2 1.2]);
+xlim(ax10_1, [tFig10Start tFig10End]);
+yticks(ax10_1, [0 1]);
+
+ylabel(ax10_1, 'S1');
+
+if size(y_win, 2) == 1
+    legend(ax10_1, 'S1', 'Location', 'best');
+else
+    legend(ax10_1, "S1 " + legendStrings, 'Location', 'best');
+end
+
+%% Fig. 10-3: S0
+ax10_2 = nexttile(tl10, 3);
+hold(ax10_2, 'on');
+
+for k = 1:length(demodResult)
+
+    if isfield(demodResult(k), 'tState') && ~isempty(demodResult(k).tState)
+
+        stairs(ax10_2, demodResult(k).tState, demodResult(k).S0State, ...
+            'LineWidth', 2.0);
+
+    end
+
+end
+
+xline(ax10_2, tKnownInfoChange, '--');
+xline(ax10_2, tManualDecision, '-');
+
+grid(ax10_2, 'on');
+ylim(ax10_2, [-0.2 1.2]);
+xlim(ax10_2, [tFig10Start tFig10End]);
+yticks(ax10_2, [0 1]);
+
+xlabel(ax10_2, 'Time [s]');
+ylabel(ax10_2, 'S0');
+
+if size(y_win, 2) == 1
+    legend(ax10_2, 'S0', 'Location', 'best');
+else
+    legend(ax10_2, "S0 " + legendStrings, 'Location', 'best');
+end
+
+linkaxes([ax10_0 ax10_1 ax10_2], 'x');
+%% ============================================================
+%  Local function: append demodulation state
+% ============================================================
+
+function [tState, S1State, S0State] = appendState( ...
+    tState, S1State, S0State, tNew, S1New, S0New)
+
+    if isempty(tState)
+
+        tState = tNew;
+        S1State = S1New;
+        S0State = S0New;
+        return;
+
+    end
+
+    if tNew < tState(end)
+        return;
+    end
+
+    if abs(tNew - tState(end)) < eps
+
+        S1State(end) = S1New;
+        S0State(end) = S0New;
+
+    else
+
+        tState = [tState; tNew];
+        S1State = [S1State; S1New];
+        S0State = [S0State; S0New];
+
+    end
+
+end
