@@ -225,7 +225,7 @@ $$
 
 ## PN 접합
 
-PN 접합(PN junction)은 결정 내에서 P형 영역과 N형 영역이 인접한 상태에서 형성됩니다.
+**PN 접합(PN junction)**은 결정 내에서 P형 영역과 N형 영역이 인접한 상태에서 형성됩니다.
 P형 반도체에 주개 불순물을 확산시키거나 N형 반도체에 받개 불순물을 확산시켜 형성할 수 있습니다.
 불순물의 농도는 접합면을 기준으로 계단 함수 형태로 형성할 수도 있고, 선형적으로 변하도록 형성할 수도 있습니다.
 또한 P형 영역의 받개 불순물 농도가 N형 영역의 주개 불순물 농도에 비해 매우 크면 $$\text{P}^+\text{N}$$ 접합이라고 하고, 그 반대의 경우는 $$\text{PN}^+$$ 접합이라고 합니다.
@@ -246,7 +246,7 @@ $$
 \end{align*}
 $$
 
-$$\rho(x)$$는 전하 밀도(이온화된 불순물의 밀도와 동일)이며, 다음과 같습니다.
+$$\rho(x)$$는 전하 밀도(이온화된 불순물의 밀도와 동일)이며, P형 영역의 길이가 $$x_p$$, N형 영역의 길이가 $$x_n$$이면 다음과 같습니다.
 
 $$
 \begin{flalign*}
@@ -260,3 +260,18 @@ $$
 \end{flalign*}
 $$
 
+이때 전기장은 해당 식을 적분하여 얻어지며 다음과 같습니다.
+
+$$
+\begin{flalign*}
+	E(x)=
+	\left\{
+	\begin{array}{@{}l@{\qquad}r@{}}
+		-\displaystyle\frac{qN_a}{\epsilon}\left(x+x_p\right) & \left(-x_p \leq x \leq 0\right) \\
+		\displaystyle\frac{qN_d}{\epsilon}\left(x_n-x\right) & \left(0 \leq x \leq x_n\right)
+	\end{array}
+	\right.
+\end{flalign*}
+$$
+
+전기장을 한 번 더 적분하면 다음과 같이 공핍 영역의 퍼텐셜을 구할 수 있습니다.
