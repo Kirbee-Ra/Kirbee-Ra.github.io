@@ -11,7 +11,7 @@
 
 전력전자 분야에서 주로 쓰이는 소자에 대해 다룹니다.
 
-- [전력 반도체]
+- [전력 반도체](./PowerSemiconductors.md)
 - [전력 다이오드](./PowerDiode.md)
 - [BJT]
 - [전력 MOSFET](./PowerMOSFET.md)
